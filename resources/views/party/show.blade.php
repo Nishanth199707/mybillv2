@@ -352,9 +352,9 @@
                             <div class="mb-3">
                                 <label for="transactionType" class="form-label">Transaction Type</label>
                                 <div>
-                                    <input type="radio" id="sale" name="transaction_type" value="sale" readonly {{ $data->transaction_type == 'sale' ? 'checked' : '' }}>
+                                    <input type="radio" id="sale" name="transaction_type" value="sale"   {{ $data->transaction_type == 'purchase' ? 'disabled' : '' }} {{ $data->transaction_type == 'sale' ? 'checked' : '' }}>
                                     <label for="sale">Sale</label>
-                                    <input type="radio" id="purchase" name="transaction_type" value="purchase" disabled {{ $data->transaction_type == 'purchase' ? 'checked' : '' }}>
+                                    <input type="radio" id="purchase" name="transaction_type" value="purchase"   {{ $data->transaction_type == 'sale' ? 'disabled' : '' }} {{ $data->transaction_type == 'purchase' ? 'checked' : '' }}>
                                     <label for="purchase">Purchase</label>
                                 </div>
                             </div>
@@ -381,6 +381,17 @@
                                     <label for="adjustNo">No</label>
                                 </div>
                             </div>
+                
+                            <!-- Mode of Payment -->
+                            <div class="mb-3" id="modeOfPaymentContainer">
+                                <label for="modeOfPayment" class="form-label">Mode of Payment</label>
+                                <select id="modeOfPayment" name="mode_of_payment" class="form-select" onchange="toggleTransactionFields()"   title="Please Select Payment Type">
+                                    <option value="cash">Cash</option>
+                                    <option value="upi">UPI</option>
+                                    <option value="bank_transfer">Bank Transfer</option>
+                                    <option value="cheque">Cheque</option>
+                                </select>
+                            </div>
         
                             <!-- Amount -->
                             <div class="mb-3">
@@ -393,19 +404,6 @@
                                 <label for="remark" class="form-label">Remark</label>
                                 <input type="text" class="form-control" id="remark" name="remark">
                             </div>
-        
-                            <!-- Mode of Payment -->
-                            <div class="mb-3" id="modeOfPaymentContainer">
-                                <label for="modeOfPayment" class="form-label">Mode of Payment</label>
-                                <select id="modeOfPayment" name="mode_of_payment" class="form-select" required onchange="toggleTransactionFields()"   title="Please Select Payment Type">
-                                    <option value="">Select</option>
-                                    <option value="cash">Cash</option>
-                                    <option value="upi">UPI</option>
-                                    <option value="bank_transfer">Bank Transfer</option>
-                                    <option value="cheque">Cheque</option>
-                                </select>
-                            </div>
-        
                             <!-- Transaction Number (Hidden by Default) -->
                             <div class="mb-3" id="transactionNumberContainer" style="display: none;">
                                 <label for="transactionNumber" class="form-label">Transaction Number</label>
