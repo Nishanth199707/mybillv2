@@ -283,4 +283,13 @@ class BusinessController extends Controller
             return view('business.indexshow');
         }
     }
+
+    public function ebillsettings(Request $request){
+        $userId = $request->session()->get('user_id');
+
+        $business = Business::select('*')->where('user_id', $userId)->first();
+        return view('business.ebillsettings', compact('business'));
+    }
+
+
 }
