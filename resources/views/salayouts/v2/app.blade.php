@@ -447,7 +447,7 @@
         <!--  BEGIN FOOTER  -->
         {{-- <div class="footer-wrapper">
         <div class="footer-section f-section-1">
-            <p class="">Copyright © <span class="dynamic-year">{{ date('Y');}}</span> <a target="_blank" href="#">made with ❤️ by SHASTIKA SOFTWARE SOLUTIONS</a>, All rights reserved.</p>
+            <p class="">Copyright © <span class="dynamic-year">{{ date('Y');}}</span> <a target="_blank" href="#"></a></p>
         </div>
         
     </div> --}}

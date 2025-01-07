@@ -184,7 +184,8 @@ All Admin Routes List
 --------------------------------------------
 --------------------------------------------*/
 Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(function () {
-    Route::post('superadmin/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('superadmin.logout')->middleware('clear.all');
+    // Route::post('superadmin/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('superadmin.logout')->middleware('clear.all');
+    Route::post('superadmin/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('superadmin.logout');
 
     Route::get('/subscription/expired', [App\Http\Controllers\Auth\LoginController::class, 'expired'])->name('subscription.expired');
     Route::get('/pricing', function () {

@@ -10,8 +10,7 @@
                    <script>
                        document.write(new Date().getFullYear());
                    </script>
-                   , made with ❤️ by
-                   <a href="#" style="text-decoration: none;color:black;font-weight: bold !important;" target="_blank" class="footer-link fw-medium">SHASTIKA SOFTWARE SOLUTIONS</a>
+                   <a href="#" style="text-decoration: none;color:black;font-weight: bold !important;" target="_blank" class="footer-link fw-medium"></a>
                </div>
               
            </div>
