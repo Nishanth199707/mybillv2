@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class EmiReceived extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'business_id',
+        'sale_id',
+        'financier_id',
+        'loan_no',
+        'paid_date',
+        'credit',
+        'debit',
+        'payment_type',
+        'mode_of_payment',
+        'receipt_type',
+        'transaction_number',
+        'collection_date',
+        'opening_balance',
+        'closing_balance',
+        'status',
+    ];
+}

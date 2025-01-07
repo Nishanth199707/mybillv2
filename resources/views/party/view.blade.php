@@ -1,0 +1,273 @@
+@extends('layouts.v2.app')
+
+@section('content')
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <!-- Basic Layout -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">View Party</h5>
+                        <!-- <small class="text-muted float-end">Default label</small> -->
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                            <div class="col-4">
+                                <a class="btn btn-primary btn-sm mb-3" href="{{ route('party.create') }}">
+                                    <i class="fa fa-arrow-left"></i> Add Party
+                                </a>
+                            </div>
+                            <div class="col-4 filter-center">
+                                <select id="party-type-filter" class="form-select">
+                                    <option value="">All</option>
+                                    <option value="sale">Sale</option>
+                                    <option value="purchase">Purchase</option>
+                                </select>
+                            </div>
+                            <div class="col-4 text-end">
+                                {{-- <a class="btn btn-primary btn-sm mb-3 export" href="{{ route('gst.Partyreport') }}">
+                                    <i class="fa fa-arrow-right"></i> Export
+                                </a> --}}
+                                
+                                <div class="btn-group">
+                                <a href="{{ route('gst.Partyreport') }}" class="btn btn-outline-primary">Excel</a>
+                                <a href="javascript:void(0);" class="btn btn-outline-primary btn-download contenttopdf1">Pdf</a>
+                                    <a href="#" class="btn btn-outline-success">Share</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table id="zero-config" class="table  dt-table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Party Type</th>
+                                        <th>Category</th>
+                                        <th>Name</th>
+                                        <th>Gst</th>
+                                        <th>Phone</th>
+
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- / Content -->
+
+
+
+    <div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+
+<!-- <script type="text/javascript">
+    $(document).ready(function() {
+        // Destroy existing DataTable instance to avoid reinitialization warning
+        if ($.fn.DataTable.isDataTable('#zero-config')) {
+            $('#zero-config').DataTable().destroy();
+        }
+
+        // Initialize DataTable
+        var table = $('#zero-config').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('party.index') }}",
+                data: function(d) {
+                    d.party_type = $('#party-type-filter').val();
+                }
+            },
+            columns: [{
+                    data: null,
+                    render: function(data, type, row, meta) {
+                        return meta.row + 1;
+                    },
+                    title: '#'
+                },
+                {
+                    data: 'transaction_type',
+                    title: 'Party Type'
+                },
+                {
+                    data: 'party_type',
+                    title: 'Category'
+                },
+                {
+                    data: 'name',
+                    title: 'Name'
+                },
+                {
+                    data: 'gstin',
+                    title: 'GSTIN'
+                },
+                {
+                    data: 'phone_no',
+                    title: 'Phone No'
+                },
+                {
+                    data: 'action',
+                    title: 'Action',
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            dom: "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
+                "<'table-responsive'tr>" +
+                "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count mb-sm-0 mb-3'i><'dt--pagination'p>>",
+            oLanguage: {
+                oPaginate: {
+                    sPrevious: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
+                    sNext: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>'
+                },
+                sInfo: "Showing page _PAGE_ of _PAGES_",
+                sSearch: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                sSearchPlaceholder: "Search...",
+                sLengthMenu: "Results : _MENU_",
+            },
+            stripeClasses: [],
+            lengthMenu: [7, 10, 20, 50],
+            pageLength: 10
+        });
+
+        // Bind change event to filter dropdown
+        $('#party-type-filter').on('change', function() {
+            table.ajax.reload(); // Reload table data based on filter
+        });
+        $(".export").click(function(event) {
+            event.preventDefault();
+            const filter = $('#party-type-filter').val();
+            window.location.href = "{{ route('gst.Partyreport') }}" + "?filter=" + filter;
+        });
+    });
+</script> -->
+
+<script>
+    $(document).ready(function() {
+    var table = $('#zero-config').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "{{ route('party.index') }}",
+            data: function(d) {
+                d.party_type = $('#party-type-filter').val();
+            }
+        },
+        columns: [{
+                    data: null,
+                    render: function(data, type, row, meta) {
+                        return meta.row + 1;
+                    },
+                    title: '#'
+                },
+                {
+                    data: 'transaction_type',
+                    title: 'Party Type'
+                },
+                {
+                    data: 'party_type',
+                    title: 'Category'
+                },
+                {
+                    data: 'name',
+                    title: 'Name'
+                },
+                {
+                    data: 'gstin',
+                    title: 'GSTIN'
+                },
+                {
+                    data: 'phone_no',
+                    title: 'Phone No'
+                },
+                {
+                    data: 'action',
+                    title: 'Action',
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            dom: "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
+                "<'table-responsive'tr>" +
+                "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count mb-sm-0 mb-3'i><'dt--pagination'p>>",
+            oLanguage: {
+                oPaginate: {
+                    sPrevious: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
+                    sNext: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>'
+                },
+                sInfo: "Showing page _PAGE_ of _PAGES_",
+                sSearch: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                sSearchPlaceholder: "Search...",
+                sLengthMenu: "Results : _MENU_",
+            },
+            stripeClasses: [],
+            lengthMenu: [7, 10, 20, 50],
+            pageLength: 10
+        });
+    $('#party-type-filter').on('change', function() {
+            table.ajax.reload(); // Reload table data based on filter
+        });
+        $(".export").click(function(event) {
+            event.preventDefault();
+            const filter = $('#party-type-filter').val();
+            window.location.href = "{{ route('gst.Partyreport') }}" + "?filter=" + filter;
+        });
+
+    $(".contenttopdf1").click(function(event) {
+        event.preventDefault();
+        var filter = $('#party-type-filter').val();
+
+        // Fetch table data via AJAX
+        $.ajax({
+            url: "{{ route('party.index') }}",
+            type: "GET",
+            data: { party_type: filter },
+            success: function(response) {
+                // Use jsPDF and autoTable to generate the PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Extract data from AJAX response
+                const data = response.data.map((row, index) => [
+                    index + 1,
+                    row.transaction_type,
+                    row.party_type,
+                    row.name,
+                    row.gstin,
+                    row.phone_no
+                ]);
+
+                // Add title to PDF
+                doc.text("Party Report", 14, 10);
+
+                // Generate the table
+                doc.autoTable({
+                    head: [['#', 'Party Type', 'Category', 'Name', 'GSTIN', 'Phone No']],
+                    body: data,
+                    startY: 20
+                });
+
+                // Save the PDF
+                doc.save("party_report.pdf");
+            },
+            error: function() {
+                alert("Failed to generate PDF. Please try again.");
+            }
+        });
+    });
+});
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+@endsection
