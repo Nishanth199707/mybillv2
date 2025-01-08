@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'user-access' => \App\Http\Middleware\UserAccess::class,
             'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
             'superadmin' => \App\Http\Middleware\SuperAdminMiddleware::class,
+            'clear.all' => \App\Http\Middleware\ClearAllMiddleware::class,
             
         ]);
 

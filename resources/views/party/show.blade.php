@@ -241,8 +241,8 @@
                     
                             <!-- Button Group (Download, Print, Share) -->
                             <div class="btn-group">
-                                <a href="javascript:void(0);" class="btn btn-outline-primary btn-download contenttopdf1">Pdf</a>
-                                <a href="#" class="btn btn-outline-secondary print-table">Print</a>
+                                <a href="#" class="btn btn-outline-primary">Download</a>
+                                <a href="#" class="btn btn-outline-secondary">Print</a>
                                 <a href="#" class="btn btn-outline-success">Share</a>
                             </div>
                         </form>
@@ -268,7 +268,7 @@
                     
                         <section class="ledger-table">
                             <div class="table-responsive">
-                                <table class="table dt-table-hover ledgertable">
+                                <table class="table dt-table-hover">
                                     <thead>
                                         <tr>
                                             <th>Date</th>
@@ -352,9 +352,9 @@
                             <div class="mb-3">
                                 <label for="transactionType" class="form-label">Transaction Type</label>
                                 <div>
-                                    <input type="radio" id="sale" name="transaction_type" value="sale"   {{ $data->transaction_type == 'purchase' ? 'disabled' : '' }} {{ $data->transaction_type == 'sale' ? 'checked' : '' }}>
+                                    <input type="radio" id="sale" name="transaction_type" value="sale" readonly {{ $data->transaction_type == 'sale' ? 'checked' : '' }}>
                                     <label for="sale">Sale</label>
-                                    <input type="radio" id="purchase" name="transaction_type" value="purchase"   {{ $data->transaction_type == 'sale' ? 'disabled' : '' }} {{ $data->transaction_type == 'purchase' ? 'checked' : '' }}>
+                                    <input type="radio" id="purchase" name="transaction_type" value="purchase" disabled {{ $data->transaction_type == 'purchase' ? 'checked' : '' }}>
                                     <label for="purchase">Purchase</label>
                                 </div>
                             </div>
@@ -381,17 +381,6 @@
                                     <label for="adjustNo">No</label>
                                 </div>
                             </div>
-                
-                            <!-- Mode of Payment -->
-                            <div class="mb-3" id="modeOfPaymentContainer">
-                                <label for="modeOfPayment" class="form-label">Mode of Payment</label>
-                                <select id="modeOfPayment" name="mode_of_payment" class="form-select" onchange="toggleTransactionFields()"   title="Please Select Payment Type">
-                                    <option value="cash">Cash</option>
-                                    <option value="upi">UPI</option>
-                                    <option value="bank_transfer">Bank Transfer</option>
-                                    <option value="cheque">Cheque</option>
-                                </select>
-                            </div>
         
                             <!-- Amount -->
                             <div class="mb-3">
@@ -404,6 +393,19 @@
                                 <label for="remark" class="form-label">Remark</label>
                                 <input type="text" class="form-control" id="remark" name="remark">
                             </div>
+        
+                            <!-- Mode of Payment -->
+                            <div class="mb-3" id="modeOfPaymentContainer">
+                                <label for="modeOfPayment" class="form-label">Mode of Payment</label>
+                                <select id="modeOfPayment" name="mode_of_payment" class="form-select" required onchange="toggleTransactionFields()"   title="Please Select Payment Type">
+                                    <option value="">Select</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="upi">UPI</option>
+                                    <option value="bank_transfer">Bank Transfer</option>
+                                    <option value="cheque">Cheque</option>
+                                </select>
+                            </div>
+        
                             <!-- Transaction Number (Hidden by Default) -->
                             <div class="mb-3" id="transactionNumberContainer" style="display: none;">
                                 <label for="transactionNumber" class="form-label">Transaction Number</label>
@@ -644,68 +646,4 @@
             toggleModeOfPayment();
         });
     </script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-<script>
-    $(".contenttopdf1").click(function (event) {
-        event.preventDefault();
-
-        // Fetch data directly from the table
-        const table = document.querySelector(".ledgertable");
-        const doc = new jspdf.jsPDF();
-
-        // Title
-        doc.text("Ledger Report", 14, 10);
-
-        // Generate table
-        doc.autoTable({
-            html: table,
-            startY: 20,
-            styles: { fontSize: 8 }, // Optional: Adjust font size
-        });
-
-        // Save the PDF
-        doc.save("ledger_report.pdf");
-    });
-    
-    $(".print-table").click(function () {
-        const tableHtml = document.querySelector(".ledgertable").outerHTML;
-        const newWindow = window.open("", "_blank");
-
-        // Print table with simple HTML structure
-        newWindow.document.write(`
-            <html>
-            <head>
-                <title>Print Table</title>
-                <style>
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin: 20px 0;
-                        font-size: 14px;
-                        text-align: left;
-                    }
-                    table th, table td {
-                        border: 1px solid #ddd;
-                        padding: 8px;
-                    }
-                    table th {
-                        background-color: #f4f4f4;
-                        font-weight: bold;
-                    }
-                </style>
-            </head>
-            <body>
-                <h1>Transaction Report</h1>
-                ${tableHtml}
-                <script>
-                    window.print();
-                    window.close();
-                </script>
-            </body>
-            </html>
-        `);
-    });
-</script>
 @endsection
