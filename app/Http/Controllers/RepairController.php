@@ -6,21 +6,34 @@ use App\Models\Business;
 use App\Models\Repair;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Carbon\Carbon;
+
 
 class RepairController extends Controller
 {
 
     public function index(Request $request)
     {
+
         if ($request->ajax()) {
             try {
-                $repairs = Repair::select('id', 'service_no', 'customer_name', 'phone', 'complaint_remark', 'user_id', 'status')
+               
+                $fromDate = $request->input('date_from') . ' 00:00:00';
+                $toDate = $request->input('date_to') . ' 23:59:59';
+                
+                $repairs = Repair::select('id', 'service_no', 'customer_name', 'date', 'phone', 'complaint_remark', 'user_id', 'status')
                     ->where('user_id', $request->session()->get('user_id'))
                     ->when($request->status, function ($query) use ($request) {
                         $query->where('status', $request->status);
                     })
+                    ->when($request->filled('date_from') && $request->filled('date_to'), function ($query) use ($fromDate, $toDate) {
+                        $query->whereBetween('created_at', [$fromDate, $toDate]);
+                    })
                     ->orderBy('id', 'DESC')
                     ->get();
+                
+                
+
 
                 return DataTables::of($repairs)
                     ->addColumn('status', function ($row) {
@@ -221,24 +234,23 @@ class RepairController extends Controller
     {
         $userId = $request->session()->get('user_id');
         $from_Date = date_create($request->from_date);
-        $fromDate = date_format($from_Date,"d-m-Y");
+        $fromDate = date_format($from_Date, "d-m-Y");
         $to_Date = date_create($request->to_date);
-        $toDate = date_format($to_Date,"d-m-Y");
-      
+        $toDate = date_format($to_Date, "d-m-Y");
+
         // Initialize the query
         $cashReceivedQuery = Repair::where('repairs.user_id', $userId)
             ->select('repairs.service_no', 'repairs.customer_name', 'repairs.cash_received', 'repairs.date')
             ->whereNotNull('repairs.cash_received')
             ->orderBy('repairs.date', 'DESC');
-    
-           
+
+
         // Apply date range filters if provided
         if ($request->filled('from_date') && $request->filled('to_date')) {
 
-                $cashReceivedQuery->whereBetween('repairs.date', [$fromDate, $toDate]);
-           
+            $cashReceivedQuery->whereBetween('repairs.date', [$fromDate, $toDate]);
         }
-    
+
         // Execute the query
         $cashReceived = $cashReceivedQuery->get();
         // dd( $cashReceived);
@@ -251,12 +263,12 @@ class RepairController extends Controller
         // Prepare the from and to dates for the view
         $fromDateForView = $fromDate;
         $toDateForView = $toDate;
-    
+
         // Return the view with the necessary data
         return view('repairs.cash', compact('cashReceived', 'totalCashReceived', 'fromDateForView', 'toDateForView'));
     }
-    
-    
+
+
 
 
     public function updateStatus(Request $request, $id)

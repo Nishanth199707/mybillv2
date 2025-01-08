@@ -8,6 +8,10 @@
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center mb-3">
                         <h5 class="mb-0">Cash Ledger</h5>
+                        <div>
+                            <button id="print-ledger" class="btn btn-outline-secondary me-2">Print</button>
+                            <button id="download-pdf" class="btn btn-outline-primary">Download PDF</button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <form method="GET" action="{{ route('sales.cash_received_ledger') }}" class="row mb-4">
@@ -26,36 +30,84 @@
                                 <button type="submit" class="btn btn-primary w-100">Filter</button>
                             </div>
 
-                            <div class="col-md-3 d-flex align-items-end"><a href="{{route('sales.cash_received_ledger')}}" class="btn btn-danger w-50">Clear</a></div>
-
+                            <div class="col-md-3 d-flex align-items-end">
+                                <a href="{{ route('sales.cash_received_ledger') }}" class="btn btn-danger w-50">Clear</a>
+                            </div>
                         </form>
                         <div class="mt-3 text-end">
                             <h4><strong>Total Cash:</strong> ₹ {{ number_format($totalCashReceived, 2) }}</h4>
                         </div>
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Invoice No</th>
-                                    <th>Date</th>
-                                    <th>Party Name</th>
-                                    <th>Cash Received</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($cashReceivedLedger as $transaction)
-                                <tr>
-                                    <td>{{ $transaction->invoice }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($transaction->date)->format('d M, Y') }}</td>
-                                    <td>{{ $transaction->party_name }}</td>
-                                    <td>₹ {{ number_format($transaction->amount, 2) }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        <div id="ledger-table-wrapper">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice No</th>
+                                        <th>Date</th>
+                                        <th>Party Name</th>
+                                        <th>Cash Received</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($cashReceivedLedger as $transaction)
+                                    <tr>
+                                        <td>{{ $transaction->invoice }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($transaction->date)->format('d M, Y') }}</td>
+                                        <td>{{ $transaction->party_name }}</td>
+                                        <td>₹ {{ number_format($transaction->amount, 2) }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.24/jspdf.plugin.autotable.min.js"></script>
+<script>
+    // Print Ledger
+    document.getElementById('print-ledger').addEventListener('click', function () {
+        const printContents = document.getElementById('ledger-table-wrapper').innerHTML;
+        const originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    });
+
+    document.getElementById('download-pdf').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf; // Ensure jsPDF is loaded
+        const doc = new jsPDF();
+
+        // Add Title
+        doc.text('Cash Ledger Report', 14, 10);
+
+        // Prepare Table Data
+        const data = @json($cashReceivedLedger).map((transaction, index) => [
+            index + 1,
+            transaction.invoice,
+            transaction.date,
+            transaction.party_name,
+            `₹ ${parseFloat(transaction.amount).toFixed(2)}`
+        ]);
+
+        // Add Table
+        doc.autoTable({
+            head: [['#', 'Invoice No', 'Date', 'Party Name', 'Cash Received']],
+            body: data,
+            startY: 20,
+            styles: { overflow: 'linebreak', fontSize: 10 },
+            theme: 'grid',
+        });
+
+        // Save PDF
+        doc.save('cash_ledger_report.pdf');
+    });
+</script>
+@endpush
+
 @endsection

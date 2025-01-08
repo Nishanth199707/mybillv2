@@ -184,11 +184,11 @@ All Admin Routes List
 --------------------------------------------
 --------------------------------------------*/
 Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(function () {
-    // Route::post('superadmin/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('superadmin.logout')->middleware('clear.all');
-    Route::post('superadmin/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('superadmin.logout');
+    Route::post('superadmin/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('superadmin.logout')->middleware('clear.all');
 
     Route::get('/subscription/expired', [App\Http\Controllers\Auth\LoginController::class, 'expired'])->name('subscription.expired');
     Route::get('/pricing', function () {
+        
         $plan = Plan::all();
         return view('front.payment_home', compact('plan'));
     })->name('pricing');
@@ -197,7 +197,6 @@ Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(
     Route::get('/superadmin/home', [HomeController::class, 'superadminHome'])->name('superadmin.home');
     Route::resource('/superadmin/business', BusinessController::class);
     Route::get('/superadmin/myprofile', [BusinessController::class, 'indexshow'])->name('business.indexshow');
-    Route::get('/superadmin/settings', [BusinessController::class, 'ebillsettings'])->name('ebill.settings');
     Route::resource('/superadmin/users', UserController::class);
     Route::get('/superadmin/users/', [UserController::class, 'index'])->name('users.index');
     Route::resource('/superadmin/productcategory', ProductCategoryController::class);

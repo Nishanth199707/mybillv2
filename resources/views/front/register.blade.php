@@ -25,7 +25,6 @@ echo '
                         <div class="col-md-6 mb-3">
                             <label class="form-label">GSTIN</label>
                             <div class="form-check form-check-inline">
-                                
                                 <input class="form-check-input" type="radio" name="gstavailable" id="inlineRadio1" value="yes">
                                 <label class="form-check-label" for="inlineRadio1">Yes</label>
                             </div>
@@ -328,7 +327,7 @@ echo '
                     type: 'GET',
                     success: function (data) {
                         var response = JSON.parse(data);
-                        console.log(response);
+                        console.log(response.data);
                         if (response.data) {
                             $('#company_name').val(response.data.lgnm);
                             $('#address').val(

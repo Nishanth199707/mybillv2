@@ -408,7 +408,7 @@ class SaleController extends Controller
             $invoice_id = PartyPayment::where('user_id', $user_id)
                 ->where('debit', '!=', '0.00')
                 ->where('invoice_no', 'LIKE', "$prefix%")
-                ->orderBy('invoice_no', 'DESC')
+                ->orderBy('id', 'DESC')
                 ->first();
 
             if ($invoice_id) {
@@ -457,7 +457,7 @@ class SaleController extends Controller
             $invoice_id = PartyPayment::where('user_id', $user_id)
                 ->where('debit', '!=', '0.00')
                 ->where('invoice_no', 'LIKE', "$prefix%")
-                ->orderBy('invoice_no', 'DESC')
+                ->orderBy('id', 'DESC')
                 ->first();
 
             if ($invoice_id) {

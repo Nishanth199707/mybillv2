@@ -84,7 +84,7 @@
 						<!-- Copyright text -->
 						<div class="copyright-text">
 							<p>
-								Copyright © <a href="#"></a>. All Rights Reserved.
+								Copyright © <a href="#">Shastika Software Solutions</a>. All Rights Reserved.
 							</p>
 						</div>
 						<!-- Copyright text -->
