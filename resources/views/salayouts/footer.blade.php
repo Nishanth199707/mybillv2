@@ -10,10 +10,10 @@
                    <script>
                        document.write(new Date().getFullYear());
                    </script>
-                   , made with ❤️ by
-                   <a href="#" style="text-decoration: none;color:black;font-weight: bold !important;" target="_blank" class="footer-link fw-medium">SHASTIKA SOFTWARE SOLUTIONS</a>
+                   ,
+                   <a href="#" style="text-decoration: none;color:black;font-weight: bold !important;" target="_blank" class="footer-link fw-medium"></a>
                </div>
-              
+
            </div>
        </footer>
    </div>
@@ -25,10 +25,10 @@
       <!-- Overlay -->
       {{-- <div class="layout-overlay layout-menu-toggle"></div> --}}
 
-      
+
     </div>
     <!-- / Layout wrapper -->
-{{-- 
+{{--
 
 
     <!-- Core JS -->
@@ -54,8 +54,8 @@
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-   
-    
-    
+
+
+
   </body>
 </html> --}}

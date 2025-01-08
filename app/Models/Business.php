@@ -24,6 +24,8 @@ class Business extends Model
         'city',
         'country',
         'description',
-        'signature'
+        'signature',
+        'gst_auth',
+        'auth_response',
     ];
 }

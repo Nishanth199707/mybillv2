@@ -54,6 +54,7 @@ Route::post('partnersignin', [PartnerController::class, 'partnersignin'])->name(
 Route::post('partnersignup', [PartnerController::class, 'partnersignup'])->name('partner.signup');
 
 Route::get('/search/{gstin}', [ApiController::class, 'search']);
+Route::get('/gst-auth', [ApiController::class, 'gstAuth']);
 Route::middleware(['web'])->group(function () {
     Route::get('account/verify/{token}', [FrontendLoginController::class, 'verifyAccount'])->name('front.user.verify');
 });
@@ -188,7 +189,7 @@ Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(
 
     Route::get('/subscription/expired', [App\Http\Controllers\Auth\LoginController::class, 'expired'])->name('subscription.expired');
     Route::get('/pricing', function () {
-        
+
         $plan = Plan::all();
         return view('front.payment_home', compact('plan'));
     })->name('pricing');
@@ -198,6 +199,7 @@ Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(
     Route::resource('/superadmin/business', BusinessController::class);
     Route::get('/superadmin/myprofile', [BusinessController::class, 'indexshow'])->name('business.indexshow');
     Route::resource('/superadmin/users', UserController::class);
+    Route::get('/superadmin/settings', [BusinessController::class, 'ebillsettings'])->name('ebill.settings');
     Route::get('/superadmin/users/', [UserController::class, 'index'])->name('users.index');
     Route::resource('/superadmin/productcategory', ProductCategoryController::class);
     Route::resource('/superadmin/productsubcategory', ProductSubCategoryController::class);
