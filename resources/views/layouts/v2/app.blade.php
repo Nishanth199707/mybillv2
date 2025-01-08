@@ -543,7 +543,7 @@
                                 <svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                     width="800px" height="800px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
                                     <g>
-                                        <polygon fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" points="21.903,5 55,38.097 34.097,59 1,25.903 
+                                        <polygon fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" points="21.903,5 55,38.097 34.097,59 1,25.903
 	                                    	1,5 	" />
                                         <polyline fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" points="29.903,5 63,38.097 42.097,59 	" />
                                         <circle fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" cx="14" cy="18" r="5" />
@@ -851,6 +851,13 @@
                                     Profile Settings
                                 </a>
                             </li>
+                            @if ($business->gstavailable == 'yes')
+                            <li class="{{ Route::is('ebill.settings') ? 'active' : '' }}">
+                                <a href="{{ route('ebill.settings') }}">
+                                    E-way Bill Settings
+                                </a>
+                            </li>
+                            @endif
                         </ul>
                     </li>
 

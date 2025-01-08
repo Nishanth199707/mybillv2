@@ -154,14 +154,14 @@
                                 <option value="30_days" {{ request('time_period') == '30_days' ? 'selected' : '' }}>Last 30 Days</option>
                                 <option value="7_days" {{ request('time_period') == '7_days' ? 'selected' : '' }}>Last 7 Days</option>
                             </select>
-                        
+
                             <select class="form-select ms-2" style="max-width: 150px" id="transactionTypeSelectTransactions" name="transaction_type" aria-label="Select Transaction Type">
                                 <option value="{{ $data->transaction_type }}">{{ $data->transaction_type }}</option>
                             </select>
-                        
+
                             <button type="button" class="btn btn-primary ms-2" id="filterTransactionsButton">Filter</button>
                         </form>
-                        
+
 
 
 
@@ -212,7 +212,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            
+
                         </section>
 
 
@@ -230,15 +230,15 @@
                                 <option value="30_days" {{ request('time_period') == '30_days' ? 'selected' : '' }}>Last 30 Days</option>
                                 <option value="7_days" {{ request('time_period') == '7_days' ? 'selected' : '' }}>Last 7 Days</option>
                             </select>
-                    
+
                             <!-- Transaction Type Select -->
                             <select class="form-control me-2" style="max-width: 200px;" id="transactionTypeSelectLedger" name="transaction_type" aria-label="Select Transaction Type">
                                 <option value="{{ $data->transaction_type }}">{{ $data->transaction_type }}</option>
                             </select>
-                    
+
                             <!-- Filter Button -->
                             <button type="button"  class="btn btn-primary me-2" id="filterLedgerButton">Filter</button>
-                    
+
                             <!-- Button Group (Download, Print, Share) -->
                             <div class="btn-group">
                                 <a href="#" class="btn btn-outline-primary">Download</a>
@@ -246,8 +246,8 @@
                                 <a href="#" class="btn btn-outline-success">Share</a>
                             </div>
                         </form>
-                        
-                    
+
+
                         <section class="mb-4">
                             <h2>
                                 @if (Auth::user())
@@ -265,7 +265,7 @@
                                 </p>
                             </div>
                         </section>
-                    
+
                         <section class="ledger-table">
                             <div class="table-responsive">
                                 <table class="table dt-table-hover">
@@ -315,8 +315,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                            
-                            
+
+
                         </section>
                     </div>
 
@@ -347,30 +347,30 @@
                                 <input type="text" class="form-control" id="partyName" name="partyname" value="{{ strtoupper($data->name) }}" readonly>
                                 <input type="hidden" name="partyid" value="{{ $data->id }}">
                             </div>
-        
+
                             <!-- Transaction Type (Radio Buttons) -->
                             <div class="mb-3">
                                 <label for="transactionType" class="form-label">Transaction Type</label>
                                 <div>
-                                    <input type="radio" id="sale" name="transaction_type" value="sale" readonly {{ $data->transaction_type == 'sale' ? 'checked' : '' }}>
+                                    <input type="radio" id="sale" name="transaction_type" value="sale"   {{ $data->transaction_type == 'purchase' ? 'disabled' : '' }} {{ $data->transaction_type == 'sale' ? 'checked' : '' }}>
                                     <label for="sale">Sale</label>
-                                    <input type="radio" id="purchase" name="transaction_type" value="purchase" disabled {{ $data->transaction_type == 'purchase' ? 'checked' : '' }}>
+                                    <input type="radio" id="purchase" name="transaction_type" value="purchase"   {{ $data->transaction_type == 'sale' ? 'disabled' : '' }} {{ $data->transaction_type == 'purchase' ? 'checked' : '' }}>
                                     <label for="purchase">Purchase</label>
                                 </div>
                             </div>
-        
+
                             <!-- Date -->
                             <div class="mb-3">
                                 <label for="date" class="form-label">Date</label>
                                 <input type="date" class="form-control" name="paid_date" id="date" required>
                             </div>
-        
+
                             <!-- Balance -->
                             <div class="mb-3">
                                 <label for="balance" class="form-label">Balance</label>
                                 <input type="number" class="form-control" id="balance" value="{{ $closingBalance }}" readonly required>
                             </div>
-        
+
                             <!-- Adjust Payment -->
                             <div class="mb-3">
                                 <label for="adjustPayment" class="form-label">Adjust Payment</label>
@@ -381,19 +381,19 @@
                                     <label for="adjustNo">No</label>
                                 </div>
                             </div>
-        
+
                             <!-- Amount -->
                             <div class="mb-3">
                                 <label for="amount" class="form-label">Amount</label>
                                 <input type="number" class="form-control" name="cash_received" id="amount" required>
                             </div>
-        
+
                             <!-- Remark -->
                             <div class="mb-3">
                                 <label for="remark" class="form-label">Remark</label>
                                 <input type="text" class="form-control" id="remark" name="remark">
                             </div>
-        
+
                             <!-- Mode of Payment -->
                             <div class="mb-3" id="modeOfPaymentContainer">
                                 <label for="modeOfPayment" class="form-label">Mode of Payment</label>
@@ -405,13 +405,13 @@
                                     <option value="cheque">Cheque</option>
                                 </select>
                             </div>
-        
+
                             <!-- Transaction Number (Hidden by Default) -->
                             <div class="mb-3" id="transactionNumberContainer" style="display: none;">
                                 <label for="transactionNumber" class="form-label">Transaction Number</label>
                                 <input type="text" class="form-control" name="transaction_number" id="transactionNumber">
                             </div>
-        
+
                             <!-- Cheque Fields (Hidden by Default) -->
                             <div class="mb-3" id="chequeFields" style="display: none;">
                                 <div class="row">
@@ -425,7 +425,7 @@
                                     </div>
                                 </div>
                             </div>
-        
+
                             <!-- Buttons -->
                             <div class="d-flex justify-content-end">
                                 <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
