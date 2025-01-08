@@ -538,18 +538,20 @@
 
 
                                     <div class="col-md-4 fv-plugins-icon-container">
-                                        <label class="form-label">Cash Type</label>
-                                        <select name="cash_type" required id="cash_type" class="form-select">
+                                        <label class="form-label">Remarks</label>
+                                        {{-- <select name="cash_type" required id="cash_type" class="form-select">
                                             <option value="">Select Cash Type</option>
                                             <option value="debit_note" >
                                                 Debit Note</option>
-                                          
-                                        </select>
-                                        @if ($errors->has('cash_type'))
+
+                                        </select> --}}
+                                        <textarea class="form-control" name="remarks" id="remarks"></textarea>
+                                        <input type="hidden" name="cash_type" id="cash_type" value="debit_note">
+                                        {{-- @if ($errors->has('cash_type'))
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $errors->first('cash_type') }}</strong>
                                             </span>
-                                        @enderror
+                                        @enderror --}}
                                 </div>
                                 {{-- <div class="col-md-4 fv-plugins-icon-container">
                                     <div id="cash_received_field" style="display: none;">
@@ -602,9 +604,10 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="col-md-12 d-flex justify-content-end mb-3">
                         <button id="saleFormSubmit" type="submit"
                             class="btn btn-primary float-right mb-2">Bill</button>
+                        </div>
 
                 </form>
             </div>
@@ -1384,10 +1387,10 @@ aria-hidden="true">
 
 
                                     return {
-                                        label: product.item_name 
+                                        label: product.item_name
                                              + imeiValue ,
                                         purchase_price: product
-                                            .purchase_price 
+                                            .purchase_price
                                             || '0',
                                         gst_rate: product
                                             .gst_rate || '0',
@@ -1520,7 +1523,7 @@ aria-hidden="true">
 
     function initCalculation() {
 
- 
+
 
         document.querySelectorAll('.qtybox').forEach(function(element) {
             element.addEventListener('keyup', function() {
@@ -1619,22 +1622,22 @@ aria-hidden="true">
                              if(businessState != "Tamil Nadu"){
                                     if (gstValue == 28) {
                                         $('.twentyeight').show();
-                        
+
                                         document.getElementById("taxAmount_28_igst").value = totalIgstAmount.toFixed(2);
                                     }
                                     if (gstValue == 18) {
                                         $('.eighteen').show();
-                          
+
                                         document.getElementById("taxAmount_18_igst").value = totalIgstAmount.toFixed(2);
                                     }
                                     if (gstValue == 12) {
                                         $('.twelve').show();
-                                    
+
                                         document.getElementById("taxAmount_12_igst").value = totalIgstAmount.toFixed(2);
                                     }
                                     if (gstValue == 5) {
                                         $('.five').show();
-                                        
+
                                         document.getElementById("taxAmount_5_igst").value = totalIgstAmount.toFixed(2);
                                     }
                                 }else{
@@ -1744,22 +1747,22 @@ aria-hidden="true">
                              if(businessState != "Tamil Nadu"){
                                     if (gstValue == 28) {
                                         $('.twentyeight').show();
-                        
+
                                         document.getElementById("taxAmount_28_igst").value = gstvaldataValue.toFixed(2);
                                     }
                                     if (gstValue == 18) {
                                         $('.eighteen').show();
-                          
+
                                         document.getElementById("taxAmount_18_igst").value = gstvaldataValue.toFixed(2);
                                     }
                                     if (gstValue == 12) {
                                         $('.twelve').show();
-                                    
+
                                         document.getElementById("taxAmount_12_igst").value = gstvaldataValue.toFixed(2);
                                     }
                                     if (gstValue == 5) {
                                         $('.five').show();
-                                        
+
                                         document.getElementById("taxAmount_5_igst").value = gstvaldataValue.toFixed(2);
                                     }
                                 }else{
@@ -2320,7 +2323,7 @@ aria-hidden="true">
 
             if (gstRate > 0 && includingTax > 0) {
                 const salePrice = includingTax / (1 + gstRate / 100);
-                
+
 
                 const gstAmount = includingTax - salePrice;
                 salePriceField.value = salePrice.toFixed(2);

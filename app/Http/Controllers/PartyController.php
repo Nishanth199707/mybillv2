@@ -107,6 +107,8 @@ class PartyController extends Controller
             'shipping_address_2' => $request->shipping_address_2,
             'shipping_pincode' => $request->shipping_pincode,
             'opening_balance' => $request->opening_balance,
+            'gst_profile' => $request->gstin_status,
+            'gst_response' => $request->gstin_reponse,
         ];
 
         $party = Party::create($partyArr);
@@ -970,7 +972,7 @@ class PartyController extends Controller
             DB::raw('MAX(party_payments.invoice_no) as latest_invoice')
         )
         ->groupBy('parties.name')
-        ->orderBy('party_name', 'ASC') 
+        ->orderBy('party_name', 'ASC')
         ->get();
 
     return view('party.creditors', compact('data'));

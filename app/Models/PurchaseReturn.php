@@ -39,6 +39,7 @@ class PurchaseReturn extends Model
         'bill_type',
         'created_at',
         'updated_at',
+        'remarks',
     ];
 
     public function details()

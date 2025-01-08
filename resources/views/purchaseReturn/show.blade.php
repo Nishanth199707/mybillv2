@@ -139,7 +139,9 @@
         </main>
         <!-- Footer -->
         <footer class="mt-5">
-
+            <div class="text-start mb-4">
+                Remark : <span class="text-danger">{{ $purchasereturn->remarks }}</span>
+            </div>
 
             <div class="text-end mb-4">
                 <img id="logo" src="{{asset('uploads/' . $business->logo)}}" title="MyDailyBill" alt="MyDailyBill" /><br>

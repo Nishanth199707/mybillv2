@@ -41,6 +41,8 @@ echo '
                             <div id="gstin-container" style="display: none;">
                                 <!-- <label class="form-label">GSTIN</label> -->
                                 <input type="text" class="form-control" name="gstin" id="gstin" value="{{ old('gstin') }}" placeholder="Enter the Company GSTIN" />
+                                <input type="hidden" class="form-control" name="gstin_status" id="gstin_status" value=""  />
+                                <input type="hidden" class="form-control" name="gstin_reponse" id="gstin_reponse" value=""  />
                                 @if ($errors->has('gstin'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('gstin') }}</strong>
@@ -134,7 +136,7 @@ echo '
 
 
                     <!-- <div class="row mb-3">
-                     
+
                         </div> -->
 
                     {{-- <div class="row mb-3"> --}}
@@ -341,6 +343,8 @@ echo '
                             $('#pincode').val(response.data.pradr.addr.pncd);
                             $('#state').val(response.data.pradr.addr.stcd);
                             $('#country').val('India');
+                            $('#gstin_status').val(response.status_cd);
+                            $('#gstin_reponse').val(data);
                         } else {
                             console.error("Unexpected response structure: ", response);
                         }

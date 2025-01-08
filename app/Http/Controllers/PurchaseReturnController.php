@@ -114,6 +114,7 @@ class PurchaseReturnController extends Controller
                 "totQues" => $request->totQues,
                 "cash_type" => $request->cash_type,
                 "bill_type" => 'purchase',
+                "remarks" => $request->remarks,
             ];
 
             $purchaseReturn = PurchaseReturn::create($purchaseReturnData);
@@ -134,7 +135,7 @@ class PurchaseReturnController extends Controller
                     // PurchaseCustomDetails::where('user_id', $user_id)
                     // ->where('field_value', '=', $code)
                     // ->update(['stock' => 0]);
-                
+
                     $purchaseReturnDetailData = [
                         'user_id' => $user_id,
                         'business_id' => $business_id->id,

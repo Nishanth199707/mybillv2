@@ -24,7 +24,9 @@ class User extends Authenticatable
         'phone',
         'usertype',
         'is_email_verified',
-        'is_active'
+        'is_active',
+        'gst_profile',
+        'gst_response'
     ];
 
     /**

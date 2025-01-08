@@ -25,5 +25,7 @@ class Party extends Model
             'shipping_address_2',
             'shipping_pincode',
             'opening_balance',
+            'gst_profile',
+            'gst_response',
     ];
 }

@@ -39,9 +39,9 @@ class FrontLoginController extends Controller
                 'state' => 'required|string',
                 'country' => 'required|string',
                 'city' => 'required|string',
-                
+
             ]);
-    
+
             // Create user
             $user = User::create([
                 'name' => $validatedData['company_name'],
@@ -49,24 +49,26 @@ class FrontLoginController extends Controller
                 'password' => Hash::make($validatedData['password']),
                 'phone' => $validatedData['phone_no'],
                 'usertype' => 'superadmin',
+                'gst_profile' => $request->gstin_status,
+                'gst_response' => $request->gstin_reponse,
             ]);
-            
+
             // Auth::login($user);
 
             // Handle file uploads
             $logoFileName = null;
             $signatureFileName = null;
-    
+
             if ($request->hasFile('logo')) {
                 $logoFileName = 'clogo_' . time() . '.' . $request->file('logo')->extension();
                 $request->file('logo')->move(public_path('uploads'), $logoFileName);
             }
-    
+
             if ($request->hasFile('signature')) {
                 $signatureFileName = 'signature_' . time() . '.' . $request->file('signature')->extension();
                 $request->file('signature')->move(public_path('uploads'), $signatureFileName);
             }
-    
+
             // Create business
             $business = Business::create([
                 'user_id' => $user->id,
@@ -83,9 +85,9 @@ class FrontLoginController extends Controller
                 'state' => $validatedData['state'],
                 'country' => $validatedData['country'],
                 'city' => $validatedData['city'],
-              
+
             ]);
-    
+
             // Create settings and setting details
             $setting = Setting::create([
                 'business_id' => $business->id,
@@ -101,20 +103,20 @@ class FrontLoginController extends Controller
                 'shipping_address' => 'no',
                 'invoice' => 'show',
             ]);
-    
+
             SettingDetail::create([
                 'business_id' => $business->id,
                 'user_id' => $user->id,
                 'settings_id' => $setting->id,
             ]);
-    
+
             // Email verification
             $token = Str::random(64);
             UserVerify::create([
                 'user_id' => $user->id,
                 'token' => $token,
             ]);
-    
+
             try {
                 Mail::send('emails.TemailVerificationEmail', ['token' => $token,'p_register_verify'=>'1'], function($message) use($request){
                     $message->to($request->email);
@@ -123,16 +125,16 @@ class FrontLoginController extends Controller
             } catch (\Exception $e) {
                 return response()->json(['error' => 'Failed to send verification email.'], 500);
             }
-    
+
             return redirect()->route('superadmin.home')->with('success', 'User registered successfully! Please check your email for verification.');
-    
+
         } catch (QueryException $exception) {
             Log::error('Database Error:', [
                 'message' => $exception->getMessage(),
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine(),
             ]);
-    
+
             return redirect()->back()->withErrors(['database' => 'A database error occurred.'])->withInput();
         } catch (\Exception $exception) {
             Log::error('General Error:', [
@@ -140,11 +142,11 @@ class FrontLoginController extends Controller
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine(),
             ]);
-    
+
             return redirect()->back()->withErrors(['message' => $exception->getMessage()])->withInput();
         }
     }
-    
+
 
     public function sendOtp(Request $request)
     {
@@ -190,11 +192,11 @@ class FrontLoginController extends Controller
                     'mobileno' => $mobileno,
                     'response' => $response->body(),
                     'send_date' => Carbon::now(),
-                    'track_id' => $response->json()['track_id'] ?? null, 
+                    'track_id' => $response->json()['track_id'] ?? null,
                     'user_id' => $userExists->id,
                     'expires_at' => Carbon::now()->addMinutes(10),
                 ]);
-                
+
                 DB::table('users')
                 ->where('id', $userExists->id)
                 ->update(['otp' => $otp]);
