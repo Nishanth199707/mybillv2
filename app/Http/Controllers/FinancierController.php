@@ -99,9 +99,10 @@ class FinancierController extends Controller
             ->where('financier_id',$financier->id)
             ->get();
 
-        $pendings = EmiReceived::where('business_id', $financier->business_id)
-            ->where('financier_id',$financier->id)
-            ->where('user_id', $request->session()->get('user_id'))
+        $pendings = EmiReceived:: join('sales', 'sales.id', '=', 'emi_receiveds.sale_id')
+            ->where('emi_receiveds.business_id', $financier->business_id)
+            ->where('emi_receiveds.financier_id',$financier->id)
+            ->where('emi_receiveds.user_id', $request->session()->get('user_id'))
             ->get();
         // dd($pendings);
         // Calculate totals for display

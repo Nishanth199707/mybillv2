@@ -286,7 +286,7 @@
                             <!-- Purchase Details -->
                             <h5 class="mt-4 mb-4">Purchase Details</h5>
                             @if($businessCategory->gstavailable != 'no')
-                            <div class="row">
+                            <div class="row" id="purchase-details">
                                 <div class="col-md-3 mb-1">
                                     <label class="form-label" for="purchase_type">Price Type</label>
                                     <select class="form-select" id="purchase_type" name="purchase_type">
@@ -296,7 +296,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row" id="purchasedetails">
                                 <!-- Purchase Price (Including Tax) Field -->
                                 <div class="col-md-3 mb-1" id="purchase-including-tax-container">
                                     <label class="form-label">Purchase Price (Including Tax)</label>
@@ -609,5 +609,49 @@ document.addEventListener('DOMContentLoaded', () => {
 <!-- Bootstrap CSS -->
 <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
 
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+    // Fetch the necessary elements
+    const itemTypeField = document.getElementById('item_type');
+    const stockField = document.querySelector('#stock')?.closest('.col-md-3');
+    const imeiCheckboxField = document.querySelector('#imeiCheckbox')?.closest('.col-md-3');
+    const imeiModal = document.getElementById('imeiModal');
+    const purchaseDetail = document.getElementById('purchase-details');
+    const purchaseDetailRow = document.getElementById('purchasedetails');
+
+    // Function to toggle fields visibility
+    function toggleFields() {
+        if (itemTypeField && itemTypeField.value === 'service') {
+            // Hide stock and IMEI-related fields
+            if (stockField) stockField.style.display = 'none';
+            if (imeiCheckboxField) imeiCheckboxField.style.display = 'none';
+
+            if (purchaseDetail) purchaseDetail.style.display = 'none';
+            if (purchaseDetailRow) purchaseDetailRow.style.display = 'none';
+
+            // Ensure IMEI modal is closed if open
+            if (imeiModal) {
+                const modalInstance = bootstrap.Modal.getOrCreateInstance(imeiModal);
+                modalInstance.hide();
+            }
+        } else {
+            // Show stock and IMEI-related fields
+            if (stockField) stockField.style.display = '';
+            if (imeiCheckboxField) imeiCheckboxField.style.display = '';
+            if (purchaseDetail) purchaseDetail.style.display = '';
+            if (purchaseDetailRow) purchaseDetailRow.style.display = '';
+        }
+    }
+
+    // Initial toggle check on page load
+    toggleFields();
+
+    // Add event listener to dropdown for dynamic updates
+    if (itemTypeField) {
+        itemTypeField.addEventListener('change', toggleFields);
+    }
+});
+
+</script>
 
 @endsection
