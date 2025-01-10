@@ -16,25 +16,25 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('bill/all.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('bill/stylesheet.css') }}" />
 
-    <style>   
+    <style>
             .invoice-container {
                 position: relative;
-                overflow: hidden; 
+                overflow: hidden;
             }
             .invoice-container::before {
                 content: "";
                 position: absolute;
-                top: 50%; 
-                left: 50%; 
-                width: 50%; 
-                height: 50%; 
-                background-image: url('{{ asset('uploads/' . $business->logo) }}'); 
-                background-size: contain; 
+                top: 50%;
+                left: 50%;
+                width: 50%;
+                height: 50%;
+                background-image: url('{{ asset('uploads/' . $business->logo) }}');
+                background-size: contain;
                 background-repeat: no-repeat;
-                background-position: center center; 
-                opacity: 0.2; 
-                z-index: 1; 
-                transform: translate(-50%, -50%); 
+                background-position: center center;
+                opacity: 0.2;
+                z-index: 1;
+                transform: translate(-50%, -50%);
             }
     </style>
 
@@ -162,8 +162,8 @@
 
             <hr class="my-2">
             <div class="text-center">
-                <div class="btn-group btn-group-sm d-print-none"> 
-                    <a href="javascript:window.print()" class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-print"></i> Print & Download</a> 
+                <div class="btn-group btn-group-sm d-print-none">
+                    <a href="javascript:window.print()" class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-print"></i> Print & Download</a>
                 </div>
             </div>
         </footer>
