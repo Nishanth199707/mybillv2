@@ -24,6 +24,7 @@ use App\Http\Controllers\userController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ExpenseController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -233,6 +234,19 @@ Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(
     Route::resource('/superadmin/purchasereturns', PurchaseReturnController::class);
 
     Route::resource('/superadmin/quotations', QuotationController::class);
+    Route::get('/expense/index', [ExpenseController::class, 'index'])->name('expense.index');
+    Route::get('/superadmin/expense', [ExpenseController::class, 'create'])->name('expense.create');
+    Route::post('/superadmin/store', [ExpenseController::class, 'store'])->name('expense.store');
+
+    Route::get('/superadmin/category', [ExpenseController::class, 'category'])->name('expense.category');
+    Route::post('/expense/store', [ExpenseController::class, 'categorystore'])->name('expensecategory.store');
+    Route::post('/expense/distroy', [ExpenseController::class, 'categorydestroy'])->name('expensecategory.distroy');
+    Route::get('/expense/categoryedit/{id}', [ExpenseController::class, 'categoryedit'])->name('expense.categoryedit');
+    Route::get('/expense/view/{id}', [ExpenseController::class, 'view'])->name('expense.view');
+    Route::get('/expense/edit/{id}', [ExpenseController::class, 'edit'])->name('expense.edit');
+    Route::get('/expense/delete/{id}', [ExpenseController::class, 'delete'])->name('expense.delete');
+    Route::post('/expense/update', [ExpenseController::class, 'update'])->name('expense.update');
+    // Route::get('/report/profit', [ExpenseController::class, 'profit_report'])->name('expense.profit');
     Route::resource('repairs', RepairController::class);
     Route::get('/cash-received', [RepairController::class, 'cashReceived'])->name('repairs.cashReceived');
     Route::get('repairs/{repair}/bill', [RepairController::class, 'showBill'])->name('repairs.bill');
