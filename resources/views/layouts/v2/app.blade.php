@@ -701,7 +701,6 @@
                                     href="{{ route('payment.cheque') }}"> View Cheque </a></li>
                         </ul>
                     </li>
-
                     <!-- Cash & Bank Menu -->
                     <li
                         class="menu {{ Route::is('sales.cash_received_ledger') || Route::is('sales.bankLedger') ? 'active' : '' }}">
@@ -742,7 +741,52 @@
                         </ul>
                     </li>
 
+                    <li class="menu {{ Route::is('expense') || Route::is('expense') ? 'active' : '' }}">
+                        <a href="#expense" data-bs-toggle="collapse"
+                            aria-expanded="{{ Route::is('expense') || Route::is('expense') ? 'true' : 'false' }}"
+                            class="dropdown-toggle">
+                            <div class="d-flex align-items-center">
+                                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"
+                                    width="800px" height="800px" viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve">
+                                    <g>
+                                        <path d="M45.1,10.9H6.9c-2.4,0-4.4,2-4.4,4.4v21.3c0,2.4,2,4.4,4.4,4.4h38.2c2.4,0,4.4-2,4.4-4.4V15.4
+                                                C49.5,12.9,47.5,10.9,45.1,10.9z M12,36.6c0-2.9-2.3-5.1-5.1-5.1v-11c2.9,0,5.1-2.3,5.1-5.1H40c0,2.9,2.3,5.1,5.1,5.1v11
+                                                c-2.9,0-5.1,2.3-5.1,5.1H12z" />
+                                        <circle cx="26" cy="25.6" r="7.3" />
+                                    </g>
+                                </svg>
+                                <span>Expense</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-chevron-right">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </div>
+                        </a>
+                        <ul class="collapse submenu list-unstyled {{ Route::is('expense.category') || Route::is('expense.category') ? 'show' : '' }}"
+                            id="expense" data-bs-parent="#accordionExample">
 
+                            <li class="{{ Route::is('expense.category') ? 'active' : '' }}">
+                                <a href="{{ route('expense.category') }}">
+                                    Expense Category
+                                </a>
+                            </li>
+
+                            <li class="{{ Route::is('expense.create') ? 'active' : '' }}">
+                                <a href="{{ route('expense.create') }}">
+                                    Expense Create
+                                </a>
+                            </li>
+
+                            <li class="{{ Route::is('expense.index') ? 'active' : '' }}">
+                                <a href="{{ route('expense.index') }}">
+                                    Expense List
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
                     <!-- Finance Menu -->
                     @if ($business != null)
@@ -843,6 +887,8 @@
                                     href="{{ route('purchase.gstreport') }}"> Purchase Report </a></li>
                             <li class="{{ Route::is('stock.gstreport') ? 'active' : '' }}"><a
                                     href="{{ route('stock.gstreport') }}"> Stock Report </a></li>
+                                    {{-- <li class="{{ Route::is('expense.profit') ? 'active' : '' }}"><a
+                                        href="{{ route('expense.profit') }}"> Profit Report </a></li> --}}
                         </ul>
                     </li>
 
