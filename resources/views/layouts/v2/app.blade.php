@@ -365,7 +365,7 @@
 
 
                 <div class="navbar-nav theme-brand flex-row  text-center">
-                    
+
 
                 </div>
                 <!-- <div class="shadow-bottom"></div> -->
@@ -500,41 +500,46 @@
 
 
                     <!-- Purchase Menu -->
-                    <li
-                        class="menu {{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') ? 'active' : '' }}">
-                        <a href="#purchase" data-bs-toggle="collapse"
-                            aria-expanded="{{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') ? 'true' : 'false' }}"
-                            class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" xml:space="preserve">
-                                    <path
-                                        d="M104.6 44.3c-.5-.7-1.3-1.1-2.1-1.1L36 42.7l-3.6-15.5c-.3-1.2-1.4-2-2.7-2.1L13.4 25c-1.6 0-2.8 1.1-2.7 2.7 0 1.6 1.1 2.8 2.7 2.7l14.2.1L45.8 106c.3 1.2 1.4 2 2.7 2.1l39.4.4c.3-.1.4 0 .7 0 1.2-.3 2-1.4 2-2.6 0-1.6-1.1-2.8-2.7-2.7l-37.3-.3-2.8-11.2L92.9 87c1.1-.1 2-.9 2.3-2l9.9-38c.1-1.1-.1-2.1-.5-2.7m-67.3 3.9 15.5.2-.2 16.1-11.6-.1zm15.2 37.2-6.1.7-4-16.4 10.1.1zM74.4 83 58 84.8l.1-14.9 16.5.1zM58.2 64.4l.2-16.1 16.2.2-.1 16zm32.2 17-10.6.8.1-12.2h13.3zm4.3-16.7-14.6-.1.2-16.1 18.7.2z" />
-                                    <circle transform="matrix(.00897 -1 1 .00897 -68.454 163.429)" cx="48.2"
-                                        cy="116.2" r="5.4" />
-                                    <circle transform="matrix(.00897 -1 1 .00897 -29.734 203.24)" cx="87.7"
-                                        cy="116.6" r="5.4" />
-                                </svg>
-                                <span>Purchase</span>
-                            </div>
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-chevron-right">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="collapse submenu list-unstyled {{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') ? 'show' : '' }}"
-                            id="purchase" data-bs-parent="#accordionExample">
-                            <li class="{{ Route::is('purchase.create') ? 'active' : '' }}"><a
-                                    href="{{ route('purchase.create') }}">Add Purchase</a></li>
-                            <li class="{{ Route::is('purchase.index') ? 'active' : '' }}"><a
-                                    href="{{ route('purchase.index') }}">View Purchase</a></li>
-                            <li class="{{ Route::is('purchasereturns.index') ? 'active' : '' }}"><a
-                                    href="{{ route('purchasereturns.index') }}">Purchase Return</a></li>
-                        </ul>
-                    </li>
+                    @if ($business != null)
+                        @if ($business->business_category != 'Accounting & CA')
+                            <li
+                                class="menu {{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') ? 'active' : '' }}">
+                                <a href="#purchase" data-bs-toggle="collapse"
+                                    aria-expanded="{{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') ? 'true' : 'false' }}"
+                                    class="dropdown-toggle">
+                                    <div class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"
+                                            xml:space="preserve">
+                                            <path
+                                                d="M104.6 44.3c-.5-.7-1.3-1.1-2.1-1.1L36 42.7l-3.6-15.5c-.3-1.2-1.4-2-2.7-2.1L13.4 25c-1.6 0-2.8 1.1-2.7 2.7 0 1.6 1.1 2.8 2.7 2.7l14.2.1L45.8 106c.3 1.2 1.4 2 2.7 2.1l39.4.4c.3-.1.4 0 .7 0 1.2-.3 2-1.4 2-2.6 0-1.6-1.1-2.8-2.7-2.7l-37.3-.3-2.8-11.2L92.9 87c1.1-.1 2-.9 2.3-2l9.9-38c.1-1.1-.1-2.1-.5-2.7m-67.3 3.9 15.5.2-.2 16.1-11.6-.1zm15.2 37.2-6.1.7-4-16.4 10.1.1zM74.4 83 58 84.8l.1-14.9 16.5.1zM58.2 64.4l.2-16.1 16.2.2-.1 16zm32.2 17-10.6.8.1-12.2h13.3zm4.3-16.7-14.6-.1.2-16.1 18.7.2z" />
+                                            <circle transform="matrix(.00897 -1 1 .00897 -68.454 163.429)"
+                                                cx="48.2" cy="116.2" r="5.4" />
+                                            <circle transform="matrix(.00897 -1 1 .00897 -29.734 203.24)"
+                                                cx="87.7" cy="116.6" r="5.4" />
+                                        </svg>
+                                        <span>Purchase</span>
+                                    </div>
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-chevron-right">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </div>
+                                </a>
+                                <ul class="collapse submenu list-unstyled {{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') ? 'show' : '' }}"
+                                    id="purchase" data-bs-parent="#accordionExample">
+                                    <li class="{{ Route::is('purchase.create') ? 'active' : '' }}"><a
+                                            href="{{ route('purchase.create') }}">Add Purchase</a></li>
+                                    <li class="{{ Route::is('purchase.index') ? 'active' : '' }}"><a
+                                            href="{{ route('purchase.index') }}">View Purchase</a></li>
+                                    <li class="{{ Route::is('purchasereturns.index') ? 'active' : '' }}"><a
+                                            href="{{ route('purchasereturns.index') }}">Purchase Return</a></li>
+                                </ul>
+                            </li>
+                        @endif
+                    @endif
 
                     <!-- Sales Menu -->
                     <li
