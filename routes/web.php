@@ -295,15 +295,14 @@ Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(
     Route::resource('settings', SettingController::class);
 
     // Sub-User Management Routes
-Route::group(['prefix' => 'subusers', 'as' => 'subusers.'], function () {
-    Route::get('/', [SubUserController::class, 'index'])->name('index'); // View Sub-Users List
-    Route::get('/create', [SubUserController::class, 'create'])->name('create'); // Create Sub-User Form
-    Route::post('/', [SubUserController::class, 'store'])->name('store'); // Store New Sub-User
-    Route::get('/{subuser}/edit', [SubUserController::class, 'edit'])->name('edit'); // Edit Sub-User Form
-    Route::put('/{subuser}', [SubUserController::class, 'update'])->name('update'); // Update Sub-User
-    Route::delete('/{subuser}', [SubUserController::class, 'destroy'])->name('destroy'); // Delete Sub-User
-});
-
+    Route::group(['prefix' => 'subusers', 'as' => 'subusers.'], function () {
+        Route::get('/', [SubUserController::class, 'index'])->name('index');
+        Route::get('/create', [SubUserController::class, 'create'])->name('create');
+        Route::post('/', [SubUserController::class, 'store'])->name('store');
+        Route::get('/{subuser}/edit', [SubUserController::class, 'edit'])->name('edit');
+        Route::put('/{subuser}', [SubUserController::class, 'update'])->name('update');
+        Route::delete('/{subuser}', [SubUserController::class, 'destroy'])->name('destroy');
+    });
 });
 
 Route::middleware(['auth', 'user-access:partner'])->group(function () {
