@@ -25,6 +25,7 @@ use App\Http\Controllers\PlanController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\SubUserController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -292,6 +293,17 @@ Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(
 
     // Route::get('/search', [ApiController::class, 'search']);
     Route::resource('settings', SettingController::class);
+
+    // Sub-User Management Routes
+Route::group(['prefix' => 'subusers', 'as' => 'subusers.'], function () {
+    Route::get('/', [SubUserController::class, 'index'])->name('index'); // View Sub-Users List
+    Route::get('/create', [SubUserController::class, 'create'])->name('create'); // Create Sub-User Form
+    Route::post('/', [SubUserController::class, 'store'])->name('store'); // Store New Sub-User
+    Route::get('/{subuser}/edit', [SubUserController::class, 'edit'])->name('edit'); // Edit Sub-User Form
+    Route::put('/{subuser}', [SubUserController::class, 'update'])->name('update'); // Update Sub-User
+    Route::delete('/{subuser}', [SubUserController::class, 'destroy'])->name('destroy'); // Delete Sub-User
+});
+
 });
 
 Route::middleware(['auth', 'user-access:partner'])->group(function () {

@@ -61,7 +61,12 @@ class User extends Authenticatable
     protected function usertype(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  ["superadmin", "user", "manager", "staff", "admin", "partner"][$value],
+            get: fn($value) =>  ["superadmin", "user", "manager", "staff", "admin", "partner"][$value],
         );
+    }
+
+    public function subUsers()
+    {
+        return $this->hasMany(SubUser::class);
     }
 }
