@@ -232,6 +232,7 @@ class ExpenseController extends Controller
 
     public function store(Request $request)
     {
+        $invoice_no = '';
         // print_r($request->totQues); die();
         $userId = $request->session()->get('user_id');
         $expense = new Expense();
@@ -273,7 +274,7 @@ class ExpenseController extends Controller
                 $nextInvoiceNumber = 1;
             }
 
-        $invoice_no = $this->invoice_num($nextInvoiceNumber, 7, 'PMT');
+        $invoice_no = $this->invoice_num($nextInvoiceNumber, 4, 'PMT');
             $partyPaymentArr = [
                 'user_id' => $userId,
                 'party_id' => 0,

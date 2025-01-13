@@ -45,7 +45,7 @@ class ProductController extends Controller
     {
         if ($request->ajax()) {
             $data = ProductCategory::where('user_id', $request->session()->get('user_id'))->get();
-    
+
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('image', function($row) {
@@ -55,7 +55,7 @@ class ProductController extends Controller
                     $editUrl = url('superadmin/productcategory/' . $row->id . '/edit');
                     $showUrl = url('superadmin/productcategory/' . $row->id);
                     $deleteUrl = url('superadmin/productcategory/' . $row->id);
-    
+
                     return '
                         <form action="' . $deleteUrl . '" method="POST" style="display:inline; ">
                             <input type="hidden" name="_method" value="DELETE">
@@ -74,7 +74,7 @@ class ProductController extends Controller
                 ->rawColumns(['image', 'action'])
                 ->make(true);
         }
-    
+
         return view('productcategory.view');
 
     }
@@ -180,7 +180,7 @@ class ProductController extends Controller
             'item_type' => $request->item_type,
             'category' => $request->category,
             'sub_category_id' => $request->sub_category,
-            'item_code_barcode' => $itemCodeBarcodes, 
+            'item_code_barcode' => $itemCodeBarcodes,
             'item_name' => $request->item_name,
             'price_type' => $request->price_type,
             'sale_price' => $request->sale_price,
@@ -212,8 +212,8 @@ class ProductController extends Controller
                             'business_id' => $business_id->id,
                             'party_id' => '00',
                             'purchase_id' => '00',
-                            'product_id' => $product->id, 
-                            'field_name' => 'IMEI', 
+                            'product_id' => $product->id,
+                            'field_name' => 'IMEI',
                             'field_value' => $imei,
                             'stock' => 1,
                         ];
@@ -222,7 +222,7 @@ class ProductController extends Controller
                 }
             }
         }
-        
+
         return redirect()->route('product.index')
             ->with('success', 'Products created successfully.');
     }
@@ -257,7 +257,7 @@ class ProductController extends Controller
             'item_type' => $request->item_type,
             'category' => $request->category,
             'sub_category_id' => $request->sub_category,
-            'item_code_barcode' => $itemCodeBarcodes, 
+            'item_code_barcode' => $itemCodeBarcodes,
             'item_name' => $request->item_name,
             'price_type' => $request->price_type,
             'sale_price' => $request->sale_price,
@@ -300,13 +300,13 @@ class ProductController extends Controller
         $ProductsubCategory = ProductsubCategory::select('*')->where('user_id', $request->session()->get('user_id'))->get();
 
         $unsoldProducts = Product::join('purchase_custom_details', 'products.id', '=', 'purchase_custom_details.product_id')
-        ->where('products.user_id', $request->session()->get('user_id'))  
-        ->where('purchase_custom_details.stock', '!=', 0) 
-        ->where('purchase_custom_details.product_id',$product->id) 
+        ->where('products.user_id', $request->session()->get('user_id'))
+        ->where('purchase_custom_details.stock', '!=', 0)
+        ->where('purchase_custom_details.product_id',$product->id)
         ->select(
             'products.id as product_id',
-            'products.item_name',  
-            'purchase_custom_details.field_value',   
+            'products.item_name',
+            'purchase_custom_details.field_value',
             'purchase_custom_details.stock as purchase_stock'
         )
         ->get();
@@ -327,13 +327,13 @@ class ProductController extends Controller
         $productCategory = productCategory::select('*')->where('user_id', $request->session()->get('user_id'))->get();
         $ProductsubCategory = ProductsubCategory::select('*')->where('user_id', $request->session()->get('user_id'))->get();
         $unsoldProducts = Product::join('purchase_custom_details', 'products.id', '=', 'purchase_custom_details.product_id')
-        ->where('products.user_id', $request->session()->get('user_id'))  
-        ->where('purchase_custom_details.stock', '!=', 0) 
-        ->where('purchase_custom_details.product_id',$product->id) 
+        ->where('products.user_id', $request->session()->get('user_id'))
+        ->where('purchase_custom_details.stock', '!=', 0)
+        ->where('purchase_custom_details.product_id',$product->id)
         ->select(
             'products.id as product_id',
-            'products.item_name',  
-            'purchase_custom_details.field_value',   
+            'products.item_name',
+            'purchase_custom_details.field_value',
             'purchase_custom_details.stock as purchase_stock'
         )
         ->get();
@@ -409,8 +409,8 @@ class ProductController extends Controller
                             'business_id' => $business_id->id,
                             'party_id' => '00',
                             'purchase_id' => '00',
-                            'product_id' => $id, 
-                            'field_name' => 'IMEI', 
+                            'product_id' => $id,
+                            'field_name' => 'IMEI',
                             'field_value' => $imei,
                             'stock' => 1,
                         ];
@@ -445,7 +445,7 @@ class ProductController extends Controller
     $user_id = $request->session()->get('user_id');
     $subcategory = productCategory::where('user_id', '=', $user_id)->where('name', $categoryId)->first();
     $brands = ProductSubCategory::where('user_id', '=', $user_id)->where('product_categories_id', $subcategory->id)->get(['id', 'name']);
-    
+
     return response()->json($brands);
 }
 }

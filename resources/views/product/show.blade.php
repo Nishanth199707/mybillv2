@@ -311,7 +311,7 @@
                     </div>
                 </div>
             </div>
-            @if($businessCategory->gstavailable != 'no')
+            {{-- @if($businessCategory->gstavailable != 'no') --}}
 
             <div class="card mb-4">
                 <div class="card-body">
@@ -343,7 +343,7 @@
                     </div>
                 </div>
             </div>
-            @endif
+            {{-- @endif --}}
 
         </div>
     </div>

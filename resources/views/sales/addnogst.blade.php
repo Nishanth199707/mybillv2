@@ -124,7 +124,7 @@
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal1">+</button>
                                     </div>
                                 </div>
-                               
+
                                 <div class="col-md-4 fv-plugins-icon-container">
                                     <label class="form-label" for="formValidationName">Invoice Date</label>
                                     <input type="text" class="form-control" id="datetimepicker9" required name="invoice_date" value="{{ date('d-m-Y') }}">
@@ -336,6 +336,7 @@
 
                                     <div class="col-md-3 border p-2">
                                         <b class="mt-1">Net Amount: ₹</b> <input readonly type="text" class="totalstyle" value="0" name="net_amount" id="netAmount">
+                                        <input type="hidden" id="totalAmountDisplay" name="totalAmountDisplay" value="" >
 
 
 
@@ -644,7 +645,7 @@
                                 @php
                                 $party_type = [
                                 'unregistered' => 'Unregistered',
-                               
+
                                 ];
                                 @endphp
                                 @foreach ($party_type as $key => $val)
@@ -1042,15 +1043,15 @@
         document.querySelectorAll('.qtybox').forEach(function(element) {
             element.addEventListener('keyup', function() {
                 var dRecid = this.getAttribute("dataid");
-                
-              
+
+
 
                 var qtyValue = this.value;
                 // var taxable_value = document.getElementById("amount" + dRecid).value;
 
                 var uPriceVal = document.getElementById("rpqty" + dRecid).value;
 console.log(uPriceVal);
-               
+
                 // var gstValue = document.getElementById("gst" + dRecid).value;
                 // if (gstValue === "") {
                 //     gstValue = 0;
@@ -1273,36 +1274,30 @@ console.log(uPriceVal);
     }
 
     function finalTotalValue() {
-        var totItems = document.getElementById("totQues").value;
-        var toPrice = 0;
-        // var gstPrice = 0;
+    var totItems = document.getElementById("totQues").value;
+    var toPrice = 0;
 
-        for (var i = 1; i <= totItems; i++) {
-            var indiItemPriceElement = document.getElementById("total_amount" + i);
-            // var gstItemPriceElement = document.getElementById("gstvaldata" + i);
+    for (var i = 1; i <= totItems; i++) {
+        var indiItemPriceElement = document.getElementById("total_amount" + i);
 
-            if (indiItemPriceElement !== null && indiItemPriceElement !== undefined) {
-                var indiItemPrice = indiItemPriceElement.value;
-                if (indiItemPrice !== "") {
-                    toPrice += parseFloat(indiItemPrice);
-                }
+        if (indiItemPriceElement !== null && indiItemPriceElement !== undefined) {
+            var indiItemPrice = indiItemPriceElement.value;
+            if (indiItemPrice != "") {
+                toPrice += parseFloat(indiItemPrice);
             }
-
-            // if (gstItemPriceElement !== null && gstItemPriceElement !== undefined) {
-            //     var gstItemPrice = gstItemPriceElement.value;
-            //     if (gstItemPrice !== "") {
-            //         gstPrice += parseFloat(gstItemPrice);
-            //     }
-            // }
         }
-
-        var withOutGst = toPrice; //- gstPrice
-
-        // document.getElementById("totalAmountDisplay").value = withOutGst.toFixed(2);
-        // document.getElementById("taxAmount").value = gstPrice.toFixed(2);
-        // document.getElementById("netAmountDisplay").value = toPrice.toFixed(2);
-        document.getElementById("netAmount").value = toPrice.toFixed(2);
     }
+
+    var totalAmountDisplay = document.getElementById("totalAmountDisplay");
+    if (totalAmountDisplay !== null) {
+        totalAmountDisplay.value = toPrice.toFixed(2);
+    }
+
+    var netAmount = document.getElementById("netAmount");
+    if (netAmount !== null) {
+        netAmount.value = toPrice.toFixed(2);
+    }
+}
 
     document.addEventListener('DOMContentLoaded', function() {
         initCalculation();
@@ -1318,7 +1313,7 @@ console.log(uPriceVal);
 </script>
 
 <script type="text/javascript">
-    var path = "{{ route('autocomplete') }}";
+      var path = "{{ route('autocomplete') }}";
 
     $(document).ready(function() {
         $("#tblData").delegate('.product_name', 'focus', function() {
@@ -1335,8 +1330,9 @@ console.log(uPriceVal);
                             // response(data); // Pass the received data to response function
                             if (data.length > 0) {
                                 response(data.map(function(product) {
+                                    var imeiValue = product.field_value ? product.field_value : '';
                                     return {
-                                        label: product.item_name,
+                                        label: product.item_name + (imeiValue !== '' ? ' (' + imeiValue + ')' : ''),
                                         sale_price: product.sale_price,
                                         gst_rate: product.gst_rate,
                                         id: product.id,
