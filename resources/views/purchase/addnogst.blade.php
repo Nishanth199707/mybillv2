@@ -146,7 +146,7 @@
                                         <b>QTY</b>
                                     </div>
 
-                               
+
 
                                     <div class="col-md-3 border p-1 text-center">
                                         <b>TOTAL AMOUNT</b>
@@ -161,6 +161,20 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description1" />
                                         <input type="hidden" class="form-control product_id" name="product_id1" />
                                         <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button> -->
+                                        <div class="input-group mb-2">
+                                            <div id="imei-fields" style="display: none;">
+                                                <br>
+                                                <div class="imei-fields-container" data-row="1">
+                                                    <div class="input-group mb-2">
+                                                        <input type="text" class="form-control imei-field"
+                                                            name="imei[1][]" placeholder="ENTER IMEI" />
+                                                        <button type="button"
+                                                            class="btn btn-outline-secondary add-imei"
+                                                            data-row="1">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-3 border p-2">
                                         <input class="form-control uprice" type="number" dataid="1" name="rpqty1" id="rpqty1">
@@ -169,7 +183,7 @@
                                         <input class="form-control qtybox" tabindex="1" type="number" dataid="1" name="qty1" id="qty1">
                                     </div>
 
-                                   
+
                                     <div class="col-md-3 border p-2">
                                         <input class="form-control" type="number" readonly="readonly" id="total_amount1" name="total_amount1">
                                     </div>
@@ -182,6 +196,20 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description2" />
                                         <input type="hidden" class="form-control product_id" name="product_id2" />
                                         <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button> -->
+                                        <div class="input-group mb-2">
+                                            <div id="imei-fields" style="display: none;">
+                                                <br>
+                                                <div class="imei-fields-container" data-row="2">
+                                                    <div class="input-group mb-2">
+                                                        <input type="text" class="form-control imei-field"
+                                                            name="imei[2][]" placeholder="ENTER IMEI" />
+                                                        <button type="button"
+                                                            class="btn btn-outline-secondary add-imei"
+                                                            data-row="2">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-3 border p-2">
                                         <input class="form-control uprice" type="text" dataid="2" name="rpqty2" id="rpqty2">
@@ -190,7 +218,7 @@
                                         <input class="form-control qtybox" tabindex="1" type="text" dataid="2" name="qty2" id="qty2">
                                     </div>
 
-                                 
+
                                     <div class="col-md-3 border p-2">
                                         <input class="form-control" type="number" readonly="readonly" id="total_amount2" name="total_amount2">
                                     </div>
@@ -203,6 +231,20 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description3" />
                                         <input type="hidden" class="form-control product_id" name="product_id3" />
                                         <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button> -->
+                                        <div class="input-group mb-2">
+                                            <div id="imei-fields" style="display: none;">
+                                                <br>
+                                                <div class="imei-fields-container" data-row="3">
+                                                    <div class="input-group mb-2">
+                                                        <input type="text" class="form-control imei-field"
+                                                            name="imei[3][]" placeholder="ENTER IMEI" />
+                                                        <button type="button"
+                                                            class="btn btn-outline-secondary add-imei"
+                                                            data-row="3">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-3 border p-2">
                                         <input class="form-control uprice" type="text" dataid="3" name="rpqty3" id="rpqty3">
@@ -211,7 +253,7 @@
                                         <input class="form-control qtybox" tabindex="1" type="text" dataid="3" name="qty3" id="qty3">
                                     </div>
 
-                                  
+
                                     <div class="col-md-3 border p-2">
                                         <input class="form-control" type="number" readonly="readonly" id="total_amount3" name="total_amount3">
                                     </div>
@@ -224,11 +266,25 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description4" />
                                         <input type="hidden" class="form-control product_id" name="product_id4" />
                                         <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button> -->
+                                        <div class="input-group mb-2">
+                                            <div id="imei-fields" style="display: none;">
+                                                <br>
+                                                <div class="imei-fields-container" data-row="4">
+                                                    <div class="input-group mb-2">
+                                                        <input type="text" class="form-control imei-field"
+                                                            name="imei[4][]" placeholder="ENTER IMEI" />
+                                                        <button type="button"
+                                                            class="btn btn-outline-secondary add-imei"
+                                                            data-row="4">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-3 border p-2">
                                         <input class="form-control uprice" type="text" dataid="4" name="rpqty4" id="rpqty4">
                                     </div>
-                                   
+
 
                                     <div class="col-md-2 border p-2">
                                         <input class="form-control gstperc" dataid="4" type="text" name="gst4" id="gst4">
@@ -245,6 +301,20 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description5" />
                                         <input type="hidden" class="form-control product_id" name="product_id5" />
                                         <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button> -->
+                                        <div class="input-group mb-2">
+                                            <div id="imei-fields" style="display: none;">
+                                                <br>
+                                                <div class="imei-fields-container" data-row="5">
+                                                    <div class="input-group mb-2">
+                                                        <input type="text" class="form-control imei-field"
+                                                            name="imei[5][]" placeholder="ENTER IMEI" />
+                                                        <button type="button"
+                                                            class="btn btn-outline-secondary add-imei"
+                                                            data-row="5">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-3 border p-2">
                                         <input class="form-control uprice" type="text" dataid="5" name="rpqty5" id="rpqty5">
@@ -253,7 +323,7 @@
                                         <input class="form-control qtybox" tabindex="1" type="text" dataid="5" name="qty5" id="qty5">
                                     </div>
 
-                                    
+
                                     <div class="col-md-3 border p-2">
                                         <input class="form-control" type="number" readonly="readonly" id="total_amount5" name="total_amount5">
                                     </div>
@@ -628,7 +698,7 @@
                                 @php
                                 $party_type = [
                                 'unregistered' => 'Unregistered',
-                               
+
                                 ];
                                 @endphp
                                 @foreach ($party_type as $key => $val)
@@ -998,12 +1068,20 @@
                 document.getElementById("totQues").value = parseInt(extCnt) + 1;
                 document.getElementById("addrow").insertAdjacentHTML('beforeend',
                     `<div class="row mb-3">` +
-                    `<div class="border p-2 input-group col-md-4" style="width: 50%;"><input class="form-control product_name" tabindex="1" name="item_description${cIncr}" /><input type="hidden" class="form-control product_id" name="product_id${cIncr}" /><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button></div>` +
+                    `<div class="border p-2 input-group col-md-4" style="width: 33.33333333%;"><input class="form-control product_name" tabindex="1" name="item_description${cIncr}" /><input type="hidden" class="form-control product_id" name="product_id${cIncr}" /> <div class="input-group mb-2"> <div id="imei-fields" style="display: none;">
+                        <br>
+                        <div class="imei-fields-container" data-row="${cIncr}">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control imei-field" name="imei[${cIncr}][]" placeholder="ENTER IMEI" />
+                                <button type="button" class="btn btn-outline-secondary add-imei" data-row="${cIncr}">+</button>
+                            </div>
+                        </div>
+                    </div></div></div>` +
                     `<div class="col-md-3 border p-2"><input class="form-control uprice" type="text" dataid="${cIncr}" name="rpqty${cIncr}" id="rpqty${cIncr}"></div>` +
                     `<div class="col-md-2 border p-2"><input class="form-control qtybox" tabindex="1" type="number" dataid="${cIncr}" name="qty${cIncr}" id="qty${cIncr}"></div>` +
                     // `<div class="col-md-2 border p-2"><input class="form-control amountbox" tabindex="1" type="number" dataid="${cIncr}" name="amount${cIncr}" id="taxableamount${cIncr}"></div>` +
                     //`<div class="col-md-1 border p-2"><input class="form-control gstperc" type="text" dataid="${cIncr}" name="gst${cIncr}" id="gst${cIncr}"><input class="gstvaldata" type="hidden" dataid="${cIncr}" name="gstvaldata${cIncr}" id="gstvaldata${cIncr}"></div>` +
-                    `<div class="col-md-3 border p-2"><input class="form-control" type="number" name="total_amount${cIncr}" id="total_amount${cIncr}"></div>` +
+                    `<div class="col-md-3 border p-2"><input class="form-control" type="number" name="total_amount${cIncr}" id="total_amount${cIncr}" readonly></div>` +
                     `</div>`
                 );
                 initCalculation();
@@ -1250,38 +1328,6 @@
         // });
     }
 
-    function finalTotalValue() {
-        var totItems = document.getElementById("totQues").value;
-        var toPrice = 0;
-        // var gstPrice = 0;
-
-        for (var i = 1; i <= totItems; i++) {
-            var indiItemPriceElement = document.getElementById("total_amount" + i);
-            // var gstItemPriceElement = document.getElementById("gstvaldata" + i);
-
-            if (indiItemPriceElement !== null && indiItemPriceElement !== undefined) {
-                var indiItemPrice = indiItemPriceElement.value;
-                if (indiItemPrice !== "") {
-                    toPrice += parseFloat(indiItemPrice);
-                }
-            }
-
-            // if (gstItemPriceElement !== null && gstItemPriceElement !== undefined) {
-            //     var gstItemPrice = gstItemPriceElement.value;
-            //     if (gstItemPrice !== "") {
-            //         gstPrice += parseFloat(gstItemPrice);
-            //     }
-            // }
-        }
-
-        var withOutGst = toPrice; //- gstPrice
-
-        // document.getElementById("totalAmountDisplay").value = withOutGst.toFixed(2);
-        // document.getElementById("taxAmount").value = gstPrice.toFixed(2);
-        // document.getElementById("netAmountDisplay").value = toPrice.toFixed(2);
-        document.getElementById("netAmount").value = toPrice.toFixed(2);
-    }
-
     document.addEventListener('DOMContentLoaded', function() {
         initCalculation();
         triggerInitialCalculations();
@@ -1319,6 +1365,7 @@
                                         gst_rate: product.gst_rate,
                                         id: product.id,
                                         stock: product.stock,
+                                        imei_required: product.imei
 
                                     };
                                 }));
@@ -1341,6 +1388,15 @@
                     $(this).closest("div").parent().find('.gstperc').val(ui.item.gst_rate);
                     $(this).closest("div").parent().find('.product_id').val(ui.item.id);
                     $(this).closest("div").parent().find('.qtybox').attr('data-avail-qty', ui.item.stock);
+                    console.log(ui);
+                    if (ui.item.imei_required === "yes") {
+                        console.log("IMEI required");
+                        $(this).closest("div").parent().find('#imei-fields').show();
+                    } else {
+                        console.log("IMEI not required");
+                        $(this).closest("div").parent().find('#imei-fields').remove();
+                        $(this).closest("div").parent().find('.add-imei').remove();
+                    }
 
                     return false;
                 }
@@ -1587,5 +1643,94 @@
         sameAddressRadio.addEventListener('change', copyAddress);
         differentAddressRadio.addEventListener('change', copyAddress);
     });
+</script>
+<script>
+       $(document).on('input', '.imei-field', function() {
+        var imeiField = $(this);
+
+        if (imeiField.val().trim() !== '') {
+            var row = imeiField.closest('.imei-fields-container').data('row');
+            var nextRow = imeiField.closest('.input-group').next('.input-group');
+            if (nextRow.length === 0) {
+                addImeiRow(row);
+            }
+
+            updateQuantity(row);
+            calculateRow(row);
+            finalTotalValue();
+        }
+        function addImeiRow(row) {
+        var container = $(`.imei-fields-container[data-row="${row}"]`);
+
+        var newInput = `
+        <div class="input-group mb-2">
+            <input type="text" class="form-control imei-field" name="imei[${row}][]" placeholder="ENTER IMEI" />
+            <button type="button" class="btn btn-outline-secondary remove-imei">Remove</button>
+        </div>
+    `;
+
+        container.append(newInput);
+
+        // Handle removing an IMEI field
+        container.find('.remove-imei').on('click', function() {
+            $(this).parent().remove();
+            updateQuantity(row);
+            calculateRow(row);
+            finalTotalValue();
+        });
+
+        updateQuantity(row);
+    }
+    });
+
+    function updateQuantity(row) {
+        var imeiFields = $(`.imei-fields-container[data-row="${row}"] .imei-field`);
+        var quantityField = $(`#qty${row}`);
+        var filledCount = imeiFields.filter(function() {
+            return $(this).val().trim() !== '';
+        }).length;
+        quantityField.val(filledCount);
+        finalTotalValue(row);
+    }
+
+    function calculateRow(aaa) {
+        var price = $(`#rpqty`+aaa).val();
+        var qty = $(`#qty`+aaa).val();
+        var line_total = price * qty;
+        $(`#total_amount`+aaa).val(line_total);
+    }
+
+
+    function finalTotalValue() {
+        var totItems = document.getElementById("totQues").value;
+        var toPrice = 0;
+        // var gstPrice = 0;
+
+        for (var i = 1; i <= totItems; i++) {
+            var indiItemPriceElement = document.getElementById("total_amount" + i);
+            // var gstItemPriceElement = document.getElementById("gstvaldata" + i);
+
+            if (indiItemPriceElement !== null && indiItemPriceElement !== undefined) {
+                var indiItemPrice = indiItemPriceElement.value;
+                if (indiItemPrice !== "") {
+                    toPrice += parseFloat(indiItemPrice);
+                }
+            }
+
+            // if (gstItemPriceElement !== null && gstItemPriceElement !== undefined) {
+            //     var gstItemPrice = gstItemPriceElement.value;
+            //     if (gstItemPrice !== "") {
+            //         gstPrice += parseFloat(gstItemPrice);
+            //     }
+            // }
+        }
+
+        var withOutGst = toPrice; //- gstPrice
+
+        document.getElementById("totalAmountDisplay").value = toPrice.toFixed(2);
+        // document.getElementById("taxAmount").value = gstPrice.toFixed(2);
+        // document.getElementById("netAmountDisplay").value = toPrice.toFixed(2);
+        document.getElementById("netAmount").value = toPrice.toFixed(2);
+    }
 </script>
 @endsection

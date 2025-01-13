@@ -856,8 +856,8 @@ class PartyController extends Controller
 
         $Date = Carbon::today()->format('d-m-Y');
 
-        $data = PartyPayment::join('parties', 'party_payments.party_id', '=', 'parties.id')
-            ->where('parties.user_id', $userId)
+        $data = PartyPayment::join('parties', 'party_payments.party_id', '=', 'parties.id','left')
+            ->where('party_payments.user_id', $userId)
             ->where('party_payments.invoice_no', 'like', '%PMT%')
             ->orderBy('party_payments.invoice_no', 'DESC')
             ->select('parties.name as party_name', 'party_payments.invoice_no as invoice', 'party_payments.debit as amount', 'party_payments.paid_date as date')

@@ -98,6 +98,7 @@ class PurchaseController extends Controller
             return view('purchase.add', compact('party', 'productcategory', 'productsubcategory', 'businessCategory')); //'purchase_no'
         } else {
             return view('purchase.addnogst  ', compact('party', 'productcategory', 'productsubcategory',  'businessCategory')); //'purchase_no'
+            // return view('purchase.add', compact('party', 'productcategory', 'productsubcategory', 'businessCategory')); //'purchase_no'
         }
     }
 
@@ -232,7 +233,7 @@ class PurchaseController extends Controller
         ->orderBy('id', 'DESC')
         ->latest('paid_date')
         ->value('closing_balance') ?? 0;
-        
+
 
 // dd( $opening_balance);
 
@@ -270,7 +271,7 @@ class PurchaseController extends Controller
             }
 
             // Generate the next invoice number with padding
-            $invoice_no = $this->invoice_num($nextInvoiceNumber, 7, $prefix);
+            $invoice_no = $this->invoice_num($nextInvoiceNumber, 4, $prefix);
 
 
             $latestPayment = PartyPayment::where('party_id', $request->partyid)
@@ -350,7 +351,7 @@ class PurchaseController extends Controller
 
                     $product->update([
                         'purchase_price' => $purchasePrice,
-                        'sale_price' => $SalePrice,
+                        // 'sale_price' => $SalePrice,
                     ]);
                 }
             }

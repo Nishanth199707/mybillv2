@@ -100,7 +100,9 @@
                             <td class="col-2 text-center"><strong>HSN Code</strong></td>
                             <td class="col-2 text-center"><strong>Rate Per Qty</strong></td>
                             <td class="col-1 text-center"><strong>QTY</strong></td>
+                            @if ($business->gstavailable == 'yes')
                             <td class="col-2 text-center"><strong>GST Rate</strong></td>
+                            @endif
                             <td class="col-2 text-end"><strong>TOTAL</strong></td>
                         </tr>
                     </thead>
@@ -111,7 +113,9 @@
                             <td class="col-2 text-center">{{ $val->hsn_code }}</td>
                             <td class="col-2 text-center">{{ $val->rpqty }}</td>
                             <td class="col-1 text-center">{{ $val->qty }}</td>
+                            @if ($business->gstavailable == 'yes')
                             <td class="col-2 text-center">{{ $val->gst }}</td>
+                            @endif
                             <td class="col-2 text-end">{{ $val->total_amount }}</td>
                         </tr>
                         @endforeach
@@ -126,6 +130,7 @@
                         <td class="text-end"><strong>Sub Total:</strong></td>
                         <td class="col-sm-2 text-end">Rs. {{ $purchase->totalAmountDisplay }}</td>
                     </tr>
+                    @if ($business->gstavailable == 'yes')
                     <tr class="bg-light">
                         <td class="text-end"><strong>Total Tax:</strong><br>
                         @if($purchase->tax_amount_18_cgst)
@@ -143,6 +148,7 @@
                         </td>
                         <td class="col-sm-2 text-end">Rs. {{ $purchase->tax_amount }}</td>
                     </tr>
+                    @endif
 
                     <tr class="bg-light">
                         <td class="text-end"><strong>Grand Total:</strong></td>
