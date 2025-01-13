@@ -15,27 +15,9 @@
                         </div>
                         <div class="card-body">
 
-                            <form method="POST" action="{{ route('sub-user.store') }}">
+                            <form method="POST" action="{{ route('subuser.store') }}">
                                 @csrf
-                                <!-- Parent User Dropdown -->
-                                <div class="mb-3">
-                                    <label class="form-label">Parent User</label>
-                                    <select name="user_id" id="user_id" class="form-select">
-                                        <option value="">Select Parent User</option>
-                                        @foreach ($users as $user)
-                                            <option @if (old('user_id') == $user->id) selected @endif
-                                                value="{{ $user->id }}">
-                                                {{ $user->name }} ({{ $user->email }})
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('user_id'))
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $errors->first('user_id') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-
+                         
                                 <!-- Sub-User Name -->
                                 <div class="mb-3">
                                     <label class="form-label">Full Name</label>

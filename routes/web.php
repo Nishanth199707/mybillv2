@@ -294,14 +294,13 @@ Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(
     // Route::get('/search', [ApiController::class, 'search']);
     Route::resource('settings', SettingController::class);
 
-    // Sub-User Management Routes
-    Route::group(['prefix' => 'subusers', 'as' => 'subusers.'], function () {
-        Route::get('/', [SubUserController::class, 'index'])->name('index');
-        Route::get('/create', [SubUserController::class, 'create'])->name('create');
-        Route::post('/', [SubUserController::class, 'store'])->name('store');
-        Route::get('/{subuser}/edit', [SubUserController::class, 'edit'])->name('edit');
-        Route::put('/{subuser}', [SubUserController::class, 'update'])->name('update');
-        Route::delete('/{subuser}', [SubUserController::class, 'destroy'])->name('destroy');
+    Route::prefix('subuser')->name('subuser.')->group(function () {
+        Route::get('/', [SubUserController::class, 'index'])->name('index'); 
+        Route::get('/create', [SubUserController::class, 'create'])->name('create'); 
+        Route::post('/store', [SubUserController::class, 'store'])->name('store'); 
+        Route::get('/{id}/edit', [SubUserController::class, 'edit'])->name('edit'); 
+        Route::put('/{id}', [SubUserController::class, 'update'])->name('update'); 
+        Route::delete('/{id}', [SubUserController::class, 'destroy'])->name('destroy'); 
     });
 });
 

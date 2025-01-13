@@ -10,7 +10,7 @@ class SubUserController extends Controller
 {
     public function create()
     {
-        return view('subUsers.create');
+        return view('subUsers.add');
     }
 
     public function store(Request $request)
@@ -30,33 +30,48 @@ class SubUserController extends Controller
             'permissions' => json_encode($validated['permissions']),
         ]);
 
-        return response()->json([
-            'message' => 'Sub-user created successfully',
-            'sub_user' => $subUser,
-        ]);
+        // return response()->json([
+        //     'message' => 'Sub-user created successfully',
+        //     'sub_user' => $subUser,
+        // ]);
+        return redirect()->route('subuser.index')->with('success', 'User Added successfully.');
+
     }
 
     public function edit($id)
     {
-        $subUser = SubUser::findOrFail($id);
-        return view('subUsers.edit', compact('subUser'));
+        $user = SubUser::findOrFail($id);
+        $permissions = json_decode($user->permissions, true);
+
+        return view('subUsers.edit', compact('user', 'permissions'));
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'permissions' => 'required|array',
+            'permissions' => 'nullable|array',
         ]);
-
+    
         $subUser = SubUser::findOrFail($id);
-        $subUser->permissions = json_encode($validated['permissions']);
+    
+        // Ensure all permissions exist and default to "false"
+        $permissionsList = ['service', 'cash_bank', 'payment', 'report'];
+        $permissions = array_fill_keys($permissionsList, 'false');
+    
+        // Update the "true" permissions from the request
+        foreach ($request->input('permissions', []) as $key => $value) {
+            if (in_array($key, $permissionsList)) {
+                $permissions[$key] = 'true';
+            }
+        }
+    
+        // Save the updated JSON to the database
+        $subUser->permissions = json_encode($permissions);
         $subUser->save();
-
-        return response()->json([
-            'message' => 'Permissions updated successfully',
-            'sub_user' => $subUser,
-        ]);
+    
+        return redirect()->route('subuser.index')->with('success', 'Sub-user updated successfully.');
     }
+    
 
     public function destroy($id)
     {
@@ -71,14 +86,12 @@ class SubUserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = SubUser::with('parentUser')->select('id', 'name', 'email', 'permissions', 'user_id')->where('user_id', $request->session()->get('user_id'))->get();
+            $data = SubUser::with('parentUser')->select('id', 'name', 'email', 'permissions')->where('user_id', $request->session()->get('user_id'))->get();
             return Datatables::of($data)
-                ->addColumn('parent_user', function ($row) {
-                    return $row->parentUser ? $row->parentUser->name : 'N/A';
-                })
+              
                 ->addColumn('action', function ($row) {
-                    $editUrl = route('subusers.edit', $row->id);
-                    $deleteUrl = route('subusers.destroy', $row->id);
+                    $editUrl = route('subuser.edit', $row->id);
+                    $deleteUrl = route('subuser.destroy', $row->id);
                     return '
                         <a href="' . $editUrl . '" class="btn btn-sm btn-info">Edit</a>
                         <form action="' . $deleteUrl . '" method="POST" style="display:inline-block;">

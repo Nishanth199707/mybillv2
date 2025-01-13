@@ -788,6 +788,50 @@
                         </ul>
                     </li>
 
+                    <li class="menu {{ Route::is('subuser.*') ? 'active' : '' }}">
+                        <a href="#subuser" data-bs-toggle="collapse"
+                            aria-expanded="{{ Route::is('subuser.*') ? 'true' : 'false' }}"
+                            class="dropdown-toggle">
+                            <div class="d-flex align-items-center">
+                                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 52 52"
+                                    enable-background="new 0 0 52 52" xml:space="preserve">
+                                    <g>
+                                        <path
+                                            d="M26,0C11.7,0,0,11.7,0,26s11.7,26,26,26s26-11.7,26-26S40.3,0,26,0z M26,48C13.4,48,4,38.6,4,26S13.4,4,26,4
+                                            s22,9.4,22,22S38.6,48,26,48z" />
+                                        <circle cx="26" cy="18" r="8" />
+                                        <path
+                                            d="M39.1,38.5c-1.5-5.5-6.6-9.5-13.1-9.5s-11.6,4-13.1,9.5c-0.2,0.7,0.2,1.5,0.9,1.7c0.7,0.2,1.5-0.2,1.7-0.9
+                                            c1.2-4.3,5.2-7.3,10.5-7.3s9.3,3,10.5,7.3c0.2,0.7,1,1.1,1.7,0.9C38.9,40,39.3,39.2,39.1,38.5z" />
+                                    </g>
+                                </svg>
+                                <span> User</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-chevron-right">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </div>
+                        </a>
+                        <ul class="collapse submenu list-unstyled {{ Route::is('subuser.*') ? 'show' : '' }}"
+                            id="subuser" data-bs-parent="#accordionExample">
+                    
+                            <li class="{{ Route::is('subuser.create') ? 'active' : '' }}">
+                                <a href="{{ route('subuser.create') }}">
+                                    Create User
+                                </a>
+                            </li>
+                    
+                            <li class="{{ Route::is('subuser.index') ? 'active' : '' }}">
+                                <a href="{{ route('subuser.index') }}">
+                                    User List
+                                </a>
+                            </li>
+                    
+                        </ul>
+                    </li>
                     <!-- Finance Menu -->
                     @if ($business != null)
                         @if ($business->business_category == 'Mobile & Accessories')
