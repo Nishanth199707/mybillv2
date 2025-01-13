@@ -56,6 +56,7 @@ class PurchaseController extends Controller
         $data = Product::select("id", "item_name", "purchase_price", "sale_price", "gst_rate", "stock",'imei')
             ->where('item_name', 'LIKE', '%' . $request->get('search') . '%')
             ->where('user_id', $request->session()->get('user_id'))
+            ->where('item_type','!=','service')
             ->take(10)
             ->get();
         return response()->json($data);
