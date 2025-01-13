@@ -25,6 +25,7 @@ use App\Http\Controllers\PlanController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\SubUserController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -292,6 +293,15 @@ Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(
 
     // Route::get('/search', [ApiController::class, 'search']);
     Route::resource('settings', SettingController::class);
+
+    Route::prefix('subuser')->name('subuser.')->group(function () {
+        Route::get('/', [SubUserController::class, 'index'])->name('index'); 
+        Route::get('/create', [SubUserController::class, 'create'])->name('create'); 
+        Route::post('/store', [SubUserController::class, 'store'])->name('store'); 
+        Route::get('/{id}/edit', [SubUserController::class, 'edit'])->name('edit'); 
+        Route::put('/{id}', [SubUserController::class, 'update'])->name('update'); 
+        Route::delete('/{id}', [SubUserController::class, 'destroy'])->name('destroy'); 
+    });
 });
 
 Route::middleware(['auth', 'user-access:partner'])->group(function () {

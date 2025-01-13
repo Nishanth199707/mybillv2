@@ -950,8 +950,8 @@ class PartyController extends Controller
                 DB::raw('MAX(party_payments.invoice_no) as latest_invoice'),
                 DB::raw('SUM(party_payments.debit) as total_amount'),
             )
-            ->groupBy('parties.name')
-            ->orderBy('party_name', 'ASC')
+            ->groupBy('parties.id')
+        ->orderBy('parties.id', 'ASC')
             ->get();
 
         return view('party.debtors', compact('data'));
@@ -971,8 +971,8 @@ class PartyController extends Controller
             DB::raw('MAX(party_payments.paid_date) as latest_date'),
             DB::raw('MAX(party_payments.invoice_no) as latest_invoice')
         )
-        ->groupBy('parties.name')
-        ->orderBy('party_name', 'ASC')
+        ->groupBy('parties.id')
+        ->orderBy('parties.id', 'ASC')
         ->get();
 
     return view('party.creditors', compact('data'));
