@@ -223,8 +223,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @else
-                                            @endif
+                                            {{-- @else
+                                            @endif --}}
                                         </div>
                                     </div>
                                     <div class="col-md-2 border p-2">
