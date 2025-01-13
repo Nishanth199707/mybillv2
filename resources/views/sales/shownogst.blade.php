@@ -27,7 +27,7 @@
         <header>
             <div class="row gy-3">
                 <div class="col-12 text-center">
-                    <h2 class="text-4">Tax Invoice</h4>
+                    <h2 class="text-4">Invoice</h4>
                 </div>
                 <div class="col-sm-3">
                     <img style="width: 100%;" id="logo" src="{{asset('uploads/' . $business->logo)}}" title="MyDailyBill" alt="MyDailyBill" />
