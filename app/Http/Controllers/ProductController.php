@@ -10,6 +10,7 @@ use App\Models\Business;
 use App\Models\ProductCategory;
 use App\Models\ProductsubCategory;
 use App\Models\PurchaseCustomDetails;
+use App\Models\SaleDetail;
 
 class ProductController extends Controller
 {
@@ -34,6 +35,8 @@ class ProductController extends Controller
                                 <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
                                 </form>';
                     return $btn;
+
+
                 })
 
                 ->rawColumns(['image', 'action'])
@@ -85,7 +88,8 @@ class ProductController extends Controller
         if ($request->ajax()) {
             $products = Product::select('products.*', 'productsub_categories.name as category_name')
                 ->join('productsub_categories', 'products.sub_category_id', '=', 'productsub_categories.id')
-                ->where('products.user_id', $request->session()->get('user_id'));
+                ->where('products.user_id', $request->session()->get('user_id'))
+                ->where('products.status', 1);
 
             if ($request->has('subcategoryFilter') && $request->subcategoryFilter !== 'all') {
                 $products->where('products.sub_category_id', $request->subcategoryFilter);
@@ -110,13 +114,26 @@ class ProductController extends Controller
                     }
                 })
                 ->addColumn('action', function ($row) {
-                    return '<form action="' . url('superadmin/product/' . $row->id) . '" method="POST" style="display:inline;" onsubmit="return confirm(\'Are you sure you want to delete this Product?\')">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="hidden" name="_token" value="' . csrf_token() . '">
-                                <a class="btn btn-info btn-sm" href="' . url('superadmin/product/' . $row->id) . '"><i class="fa-solid fa-list"></i> Show</a>
-                                <a class="btn btn-primary btn-sm" href="' . url('superadmin/product/' . $row->id . '/edit') . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
-                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
-                            </form>';
+
+                   $query = SaleDetail::query();
+                   $query->where('sale_details.product_id', $row->id);
+                   $query->where('sale_details.user_id', $row->user_id);
+                   $data1 = $query->first();
+                    if(empty($data1)){
+                        return '<form action="' . url('superadmin/product/' . $row->id) . '" method="POST" style="display:inline;" onsubmit="return confirm(\'Are you sure you want to delete this Product?\')">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <a class="btn btn-info btn-sm" href="' . url('superadmin/product/' . $row->id) . '"><i class="fa-solid fa-list"></i> Show</a>
+                        <a class="btn btn-primary btn-sm" href="' . url('superadmin/product/' . $row->id . '/edit') . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                        <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </form>';
+                    }else{
+                        return '                        <a class="btn btn-info btn-sm" href="' . url('superadmin/product/' . $row->id) . '"><i class="fa-solid fa-list"></i> Show</a>
+                        <a class="btn btn-primary btn-sm" href="' . url('superadmin/product/' . $row->id . '/edit') . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                        <a class="btn btn-primary btn-sm" href="' . url('superadmin/product/disable/' . $row->id ) . '"><i class="fa-solid fa-pen-to-square"></i> Disable</a>
+                        ';
+                    }
+
                 })
                 ->rawColumns(['image', 'action'])
                 ->make(true);
@@ -131,7 +148,7 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
-// dd($request->session()->get('gstavailable'));
+        // dd($request->session()->get('gstavailable'));
 
         $user_id = $request->session()->get('user_id');
         $businessCategory = Business::select('business_category','gstavailable')->where('user_id', '=', $user_id)->first();
@@ -227,6 +244,99 @@ class ProductController extends Controller
             ->with('success', 'Products created successfully.');
     }
 
+    public function disable(Request $request, $product_id)
+    {
+        // Find the product by ID
+        $productupdate = Product::find($product_id);
+
+        // Check if the product exists
+        if (!$productupdate) {
+            return redirect()->route('product.index')
+                ->with('error', 'Product not found.');
+        }
+
+        // Update the status
+        $productupdate->status = 0;
+        $updateResult = $productupdate->save();
+
+        // Check if the update was successful
+        if ($updateResult) {
+            return redirect()->route('product.index')
+                ->with('success', 'Product disabled successfully.');
+        } else {
+            return redirect()->route('product.index')
+                ->with('error', 'Failed to disable the product.');
+        }
+    }
+
+    public function disablelist(Request $request){
+        if ($request->ajax()) {
+            $products = Product::select('products.*', 'productsub_categories.name as category_name')
+                ->join('productsub_categories', 'products.sub_category_id', '=', 'productsub_categories.id')
+                ->where('products.user_id', $request->session()->get('user_id'))
+                ->where('products.status', 0);
+
+            if ($request->has('subcategoryFilter') && $request->subcategoryFilter !== 'all') {
+                $products->where('products.sub_category_id', $request->subcategoryFilter);
+            }
+
+            if ($request->has('categoryFilter') && $request->categoryFilter !== 'all') {
+                $products->where('products.category', $request->categoryFilter);
+            }
+
+            // Get the filtered data
+            $data = $products->get();
+
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->editColumn('image', function ($row) {
+                    if (!empty($row->image)) {
+                        $imagePath = asset('uploads/product/' . $row->image);
+                        return '<img src="' . $imagePath . '" width="50" height="50">';
+                    } else {
+                        return ''; // Or return a placeholder image if desired
+                    }
+                })
+                ->addColumn('action', function ($row) {
+
+                        return '                        <a class="btn btn-info btn-sm" href="' . url('superadmin/product/' . $row->id) . '"><i class="fa-solid fa-list"></i> Show</a>
+                        <a class="btn btn-primary btn-sm" href="' . url('superadmin/product/enable/' . $row->id ) . '"><i class="fa-solid fa-pen-to-square"></i> Enable</a>
+                        ';
+
+                })
+                ->rawColumns(['image', 'action'])
+                ->make(true);
+        }
+
+
+        return view('product.dis_productview');
+    }
+
+    public function enable(Request $request, $product_id)
+    {
+        // Find the product by ID
+        $productupdate = Product::find($product_id);
+
+        // Check if the product exists
+        if (!$productupdate) {
+            return redirect()->route('product.index')
+                ->with('error', 'Product not found.');
+        }
+
+        // Update the status
+        $productupdate->status = 1;
+        $updateResult = $productupdate->save();
+
+        // Check if the update was successful
+        if ($updateResult) {
+            return redirect()->route('product.index')
+                ->with('success', 'Product Enabled successfully.');
+        } else {
+            return redirect()->route('product.index')
+                ->with('error', 'Failed to Enabled the product.');
+        }
+    }
 
     public function storeAjax(Request $request)
     {

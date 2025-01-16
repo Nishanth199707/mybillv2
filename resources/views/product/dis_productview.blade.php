@@ -156,7 +156,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('product.index') }}",
+                url: "{{ route('product.disablelist') }}",
                 data: function(d) {
                     d.categoryFilter = $('#categoryFilter').val();
                     d.subcategoryFilter = $('#subcategoryFilter').val();

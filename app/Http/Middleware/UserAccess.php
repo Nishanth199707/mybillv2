@@ -22,7 +22,7 @@ class UserAccess
         $auth_user = Auth::user();
 
         // Check if the authenticated user is a main user and has the correct usertype
-        if ($auth_user instanceof User && $auth_user->usertype === $userType) {
+        if ($auth_user instanceof User && $auth_user->usertype == 'superadmin') {
             // User is authorized, proceed with setting session and continuing request
             return $this->setSessionAndProceed($request, $auth_user, $next);
         }

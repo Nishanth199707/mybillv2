@@ -842,7 +842,7 @@ class PartyController extends Controller
             )
             ->where('party_payments.invoice_no', 'like', '%REC%')
             // ->where('party_payments.receipt_type', 'sale')
-            ->orderBy('party_payments.invoice_no', 'DESC')
+            ->orderBy('party_payments.id', 'DESC')
             ->get();
 
         // dd( $data  ,$userId);
@@ -859,7 +859,7 @@ class PartyController extends Controller
         $data = PartyPayment::join('parties', 'party_payments.party_id', '=', 'parties.id','left')
             ->where('party_payments.user_id', $userId)
             ->where('party_payments.invoice_no', 'like', '%PMT%')
-            ->orderBy('party_payments.invoice_no', 'DESC')
+            ->orderBy('party_payments.id', 'DESC')
             ->select('parties.name as party_name', 'party_payments.invoice_no as invoice', 'party_payments.debit as amount', 'party_payments.paid_date as date')
             ->get();
 
@@ -933,6 +933,7 @@ class PartyController extends Controller
                     ELSE "Unknown"
                 END as status')
             )
+            ->orderBy('party_payments.id', 'DESC')
             ->get();
 
         return view('party.viewCheque', compact('data'));
