@@ -17,7 +17,7 @@
 
                             <form method="POST" action="{{ route('subuser.store') }}">
                                 @csrf
-                         
+
                                 <!-- Sub-User Name -->
                                 <div class="mb-3">
                                     <label class="form-label">Full Name</label>
@@ -57,10 +57,25 @@
                                     @endif
                                 </div>
 
+                                <!-- User Type -->
+                                <div class="mb-3">
+                                    <label class="form-label">User Type</label>
+                                    <select class="form-select" name="user_type">
+                                      
+                                        <option value="staff" {{ old('user_type') == 'staff' ? 'selected' : '' }}>Staff
+                                        </option>
+                                    </select>
+                                    @if ($errors->has('user_type'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('user_type') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+
                                 <!-- Permissions -->
                                 <div class="mb-3">
                                     <label class="form-label">Permissions</label>
-                                    
+
                                     <div class="form-check">
                                         <input type="checkbox" name="permissions[service]" id="service" value="true"
                                             class="form-check-input">

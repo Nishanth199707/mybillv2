@@ -60,7 +60,7 @@ class PartyController extends Controller
     public function create(Request $request)
     {
         $user_id = $request->session()->get('user_id');
-        $business = Business::where('user_id', '=', $user_id)->select('state', 'gstavailable')->first();
+        $business = Business::where('user_id', '=', $user_id)->select('state', 'gstavailable','business_category')->first();
 
         // dd($business);
 

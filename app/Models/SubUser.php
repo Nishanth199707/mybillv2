@@ -15,6 +15,7 @@ class SubUser extends Model
         'email',
         'password',
         'permissions',
+        'usertype'
     ];
 
     protected $casts = [
