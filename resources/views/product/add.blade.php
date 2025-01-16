@@ -284,32 +284,57 @@
                             @endif
 
                             <!-- Purchase Details -->
-                            <h5 class="mt-4 mb-4">Purchase Details</h5>
+                          
                             @if($businessCategory->gstavailable != 'no')
-                            <div class="row" id="purchase-details">
-                                <div class="col-md-3 mb-1">
-                                    <label class="form-label" for="purchase_type">Price Type</label>
-                                    <select class="form-select" id="purchase_type" name="purchase_type">
-                                        <option value="with_tax" selected>With Tax</option>
-                                        <option value="without_tax">Without Tax</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row" id="purchasedetails">
-                                <!-- Purchase Price (Including Tax) Field -->
-                                <div class="col-md-3 mb-1" id="purchase-including-tax-container">
-                                    <label class="form-label">Purchase Price (Including Tax)</label>
-                                    <input type="text" class="form-control" id="purchase_including_tax"
-                                        name="purchase_including_tax" value="{{ old('purchase_including_tax') }}" />
-                                    @if ($errors->has('purchase_including_tax'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('purchase_including_tax') }}</strong>
-                                    </span>
-                                    @enderror
+                                <div class="row" id="purchase-details">
+                                    <h5 class="mt-4 mb-4">Purchase Details</h5>
+                                        <div class="col-md-3 mb-1">
+                                            <label class="form-label" for="purchase_type">Price Type</label>
+                                            <select class="form-select" id="purchase_type" name="purchase_type">
+                                                <option value="with_tax" selected>With Tax</option>
+                                                <option value="without_tax">Without Tax</option>
+                                            </select>
+                                        </div>
                                 </div>
 
-                                <!-- Taxable Amount (Purchase Price) Field -->
+                                    <div class="row" id="purchasedetails">
+                                        <!-- Purchase Price (Including Tax) Field -->
+                                        <div class="col-md-3 mb-1" id="purchase-including-tax-container">
+                                            <label class="form-label">Purchase Price (Including Tax)</label>
+                                            <input type="text" class="form-control" id="purchase_including_tax"
+                                                name="purchase_including_tax" value="{{ old('purchase_including_tax') }}" />
+                                            @if ($errors->has('purchase_including_tax'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('purchase_including_tax') }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Taxable Amount (Purchase Price) Field -->
+                                        <div class="col-md-3 mb-1" id="purchase-price-container">
+                                            <label class="form-label">Taxable Amount (Purchase Price)</label>
+                                            <input type="text" class="form-control" id="purchase_price" name="purchase_price"
+                                                value="{{ old('purchase_price') }}" />
+                                            @if ($errors->has('purchase_price'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('purchase_price') }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
+
+                                        <!-- GST Amount Field -->
+                                        <div class="col-md-3 mb-1" id="purchase-gst-amount-container">
+                                            <label class="form-label">GST Amount</label>
+                                            <input type="text" class="form-control" id="purchase_gst_amount" name="purchase_gst_amount"
+                                                readonly />
+                                            @if ($errors->has('purchase_gst_amount'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('purchase_gst_amount') }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                            @else
                                 <div class="col-md-3 mb-1" id="purchase-price-container">
                                     <label class="form-label">Taxable Amount (Purchase Price)</label>
                                     <input type="text" class="form-control" id="purchase_price" name="purchase_price"
@@ -320,30 +345,6 @@
                                     </span>
                                     @enderror
                                 </div>
-
-                                <!-- GST Amount Field -->
-                                <div class="col-md-3 mb-1" id="purchase-gst-amount-container">
-                                    <label class="form-label">GST Amount</label>
-                                    <input type="text" class="form-control" id="purchase_gst_amount" name="purchase_gst_amount"
-                                        readonly />
-                                    @if ($errors->has('purchase_gst_amount'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('purchase_gst_amount') }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            @else
-                            <div class="col-md-3 mb-1" id="purchase-price-container">
-                                <label class="form-label">Taxable Amount (Purchase Price)</label>
-                                <input type="text" class="form-control" id="purchase_price" name="purchase_price"
-                                    value="{{ old('purchase_price') }}" />
-                                @if ($errors->has('purchase_price'))
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('purchase_price') }}</strong>
-                                </span>
-                                @enderror
-                            </div>
                             @endif
                             <div style="text-align: right;">
                                 <button type="submit" id="save-button" class="btn btn-primary">Save Product</button>
@@ -618,7 +619,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const imeiModal = document.getElementById('imeiModal');
     const purchaseDetail = document.getElementById('purchase-details');
     const purchaseDetailRow = document.getElementById('purchasedetails');
+    const imeiDisplayContainer = document.getElementById('imeiDisplayContainer');
+    const purchasepricecontainer = document.getElementById('purchase-price-container');
 
+   
     // Function to toggle fields visibility
     function toggleFields() {
         if (itemTypeField && itemTypeField.value === 'service') {
@@ -626,8 +630,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (stockField) stockField.style.display = 'none';
             if (imeiCheckboxField) imeiCheckboxField.style.display = 'none';
 
+            if (imeiDisplayContainer) imeiDisplayContainer.style.display = 'none';
+
             if (purchaseDetail) purchaseDetail.style.display = 'none';
             if (purchaseDetailRow) purchaseDetailRow.style.display = 'none';
+            if (purchasepricecontainer) purchasepricecontainer.style.display = 'none';
+
 
             // Ensure IMEI modal is closed if open
             if (imeiModal) {

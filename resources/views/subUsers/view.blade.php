@@ -25,8 +25,7 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Email</th>
-                                        <th>Permissions</th>
-
+                                        
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -52,7 +51,8 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('subuser.index') }}",
-                columns: [{
+                columns: [
+                    {
                         data: 'id',
                         name: 'id'
                     },
@@ -64,32 +64,7 @@
                         data: 'email',
                         name: 'email'
                     },
-                    {
-    data: 'permissions',
-    name: 'permissions',
-    render: function(data) {
-        if (data) {
-            try {
-                // Parse the JSON string into an object
-                const permissions = JSON.parse(data);
-
-                // Filter out the keys where the value is true
-                const truePermissions = Object.keys(permissions)
-                    .filter(key => permissions[key] === "true" || permissions[key] === true)
-                    .map(key => key.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase()));  // Format key names
-
-                // If there are true permissions, join them with a comma, otherwise display 'No Permissions'
-                return truePermissions.length ? truePermissions.join(', ') : 'No Permissions';
-            } catch (error) {
-                console.error('Error parsing permissions JSON:', error);
-                return 'Invalid Permissions';
-            }
-        }
-        return 'No Permissions';
-    }
-}
-,
-
+                   
                     {
                         data: 'action',
                         name: 'action',
@@ -98,8 +73,8 @@
                     },
                 ],
                 language: {
-                    "processing": "<span>Loading...</span>",
-                    "emptyTable": "No sub-users available"
+                    processing: "<span>Loading...</span>",
+                    emptyTable: "No sub-users available"
                 }
             });
         });

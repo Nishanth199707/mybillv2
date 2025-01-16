@@ -23,6 +23,8 @@
                         <form method="POST" action="{{ route('party.store') }}" enctype="multipart/form-data">
                             @csrf
 
+                           
+
                             <!-- Party Type and Sale/Purchase Selection in the Same Row -->
                             <div class="mb-3 row">
                                 <div class="col-md-3">
@@ -30,8 +32,10 @@
                                     <div>
                                         <input type="radio" id="sale" name="transaction_type" value="sale" checked />
                                         <label for="sale">Sale</label>
+                                        @if($business->business_category != 'Accounting & CA')
                                         <input type="radio" id="purchase" name="transaction_type" value="purchase" />
                                         <label for="purchase">Purchase</label>
+                                        @endif
                                     </div>
                                     @if ($errors->has('transaction_type'))
                                     <span class="invalid-feedback" role="alert">
@@ -39,6 +43,7 @@
                                     </span>
                                     @enderror
                                 </div>
+                              
                                 @if($business->gstavailable == 'yes')
                                 <div class="col-md-3">
                                     <label class="form-label">Party Type</label>
@@ -182,8 +187,6 @@
                                         <div id="gstin-field" class="mb-3" style="display: none;">
                                             <label class="form-label">GSTIN</label>
                                             <input type="text" id="gstin" class="form-control" name="gstin" value="{{ old('gstin') }}" />
-                                            <input type="hidden" class="form-control" name="gstin_status" id="gstin_status" value=""  />
-                                            <input type="hidden" class="form-control" name="gstin_reponse" id="gstin_reponse" value=""  />
                                             @if ($errors->has('gstin'))
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $errors->first('gstin') }}</strong>
@@ -364,21 +367,19 @@
                     type: 'GET',
                     success: function (data) {
                         var response = JSON.parse(data);
-                        // console.log(response.data);
+                        console.log(response.data);
                         if (response.data) {
                             $('#name').val(response.data.lgnm);
                             $('#billing_address_1').val(
                                 response.data.pradr.addr.bnm + ', ' +
-                                response.data.pradr.addr.st
+                                response.data.pradr.addr.st 
                             );
                             $('#billing_address_2').val(
                                 response.data.pradr.addr.loc + ', ' +
                                 response.data.pradr.addr.dst
                             );
                             $('#billing_pincode').val(response.data.pradr.addr.pncd);
-                            $('#gstin_status').val(response.status_cd);
-                            $('#gstin_reponse').val(data);
-
+                            
                         } else {
                             console.error("Unexpected response structure: ", response);
                         }
