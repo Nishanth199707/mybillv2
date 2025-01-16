@@ -57,6 +57,7 @@ class PurchaseController extends Controller
             ->where('item_name', 'LIKE', '%' . $request->get('search') . '%')
             ->where('user_id', $request->session()->get('user_id'))
             ->where('item_type','!=','service')
+            ->where('status',1)
             ->take(10)
             ->get();
         return response()->json($data);
