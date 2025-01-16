@@ -95,7 +95,6 @@
         use App\Models\Business;
         $user_id = session('user_id');
         $business = Business::select('*')->where('user_id', $user_id)->first();
-
     @endphp
     <!-- BEGIN LOADER -->
     <div id="load_screen">

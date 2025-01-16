@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\SubUser;
+use Illuminate\Support\Facades\Hash;
 
 
 class LoginController extends Controller
@@ -99,27 +101,57 @@ class LoginController extends Controller
                 ->withErrors($validator)
                 ->withInput($request->only('email', 'mobileno'));
         }
-
+        // Email and Password Login
         if (isset($input['email']) && isset($input['password'])) {
             if (Auth::attempt(['email' => $input['email'], 'password' => $input['password']])) {
                 $auth_user = Auth::user();
 
+                // Main user logic
                 switch ($auth_user->usertype) {
                     case 'superadmin':
                         return redirect()->route('superadmin.home');
                     case 'admin':
-                        return redirect()->route('superadmin.home');
+                        return redirect()->route('admin.home');
                     case 'manager':
                         return redirect()->route('manager.home');
                     default:
                         return redirect()->route('home');
                 }
-            } else {
-                return redirect()->route('login')
-                    ->with('error', 'Email-Address and Password are incorrect.');
             }
         }
 
+        // Check SubUser credentials
+        if (!empty($input['email']) && !empty($input['password'])) {
+            // Retrieve user by email
+            $subUser = \App\Models\SubUser::where('email', $input['email'])->first();
+
+            if ($subUser->where('password', $subUser->password)) {
+                // User authentication successful
+                $auth_user = $subUser;
+
+                session(['sub_user_id' => $auth_user->id]);
+                session(['sub_user_parent_id' => $auth_user->user_id]);
+
+                // dd(session('sub_user_id'),session('sub_user_parent_id'));
+                // dd($auth_user->usertype);
+                // Redirect based on user type
+                switch ($auth_user->usertype) {
+                    
+                    case 'staff':
+                        return redirect()->route('staff.home');
+                    
+                    default:
+                        return redirect()->route('home');
+                }
+
+                // dd($auth_user->usertype);
+
+            } else {
+                // Authentication failed
+                return back()->with('error', 'Invalid email or password.');
+            }
+        }
+        // OTP and Mobile Number Login
         if (isset($input['mobileno']) && isset($input['otp'])) {
             $otpRecord = DB::table('otps')
                 ->where('mobileno', $input['mobileno'])
@@ -128,22 +160,30 @@ class LoginController extends Controller
                 ->first();
 
             if ($otpRecord) {
-                // Fetch the user by mobile number
-                $auth_user = User::where('phone', $input['mobileno'])->where('id', $otpRecord->user_id)->first();
+                // Fetch the user or subuser by mobile number
+                $auth_user = User::where('phone', $input['mobileno'])
+                    ->orWhereHas('subUsers', function ($query) use ($input) {
+                        $query->where('phone', $input['mobileno']);
+                    })
+                    ->first();
 
                 if ($auth_user) {
-                    // Log the user in manually
-                    Auth::login($auth_user);
-
-                    switch ($auth_user->usertype) {
-                        case 'superadmin':
-                            return redirect()->route('superadmin.home');
-                        case 'admin':
-                            return redirect()->route('admin.home');
-                        case 'manager':
-                            return redirect()->route('manager.home');
-                        default:
-                            return redirect()->route('home');
+                    // Check if SubUser or Main User
+                    if ($auth_user instanceof SubUser) {
+                        Auth::login($auth_user);
+                        return redirect()->route('subuser.dashboard');
+                    } else {
+                        Auth::login($auth_user);
+                        switch ($auth_user->usertype) {
+                            case 'superadmin':
+                                return redirect()->route('superadmin.home');
+                            case 'admin':
+                                return redirect()->route('admin.home');
+                            case 'manager':
+                                return redirect()->route('manager.home');
+                            default:
+                                return redirect()->route('home');
+                        }
                     }
                 } else {
                     return redirect()->route('login')
@@ -154,10 +194,11 @@ class LoginController extends Controller
                     ->with('error', 'Invalid or expired OTP.');
             }
         }
-
+        // dd('Invalid login credentials.');
         return redirect()->route('login')
             ->with('error', 'Invalid login credentials.');
     }
+
 
 
     public function logout(Request $request)
