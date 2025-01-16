@@ -200,6 +200,7 @@
                                         <input class="form-control product_name" tabindex="1"
                                             name="item_description1" />
                                         <input type="hidden" class="form-control product_id" name="product_id1" />
+                                        <input type="hidden" class="form-control imei" name="imei1" />
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#basicModal">+</button>
                                     </div>
@@ -237,6 +238,7 @@
                                         <input class="form-control product_name" tabindex="1"
                                             name="item_description2" />
                                         <input type="hidden" class="form-control product_id" name="product_id2" />
+                                        <input type="hidden" class="form-control imei" name="imei2" />
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#basicModal">+</button>
                                     </div>
@@ -274,6 +276,7 @@
                                         <input class="form-control product_name" tabindex="1"
                                             name="item_description3" />
                                         <input type="hidden" class="form-control product_id" name="product_id3" />
+                                        <input type="hidden" class="form-control imei" name="imei2" />
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#basicModal">+</button>
                                     </div>
@@ -312,6 +315,7 @@
                                         <input class="form-control product_name" tabindex="1"
                                             name="item_description4" />
                                         <input type="hidden" class="form-control product_id" name="product_id4" />
+                                        <input type="hidden" class="form-control imei" name="imei4" />
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#basicModal">+</button>
                                     </div>
@@ -349,6 +353,7 @@
                                         <input class="form-control product_name" tabindex="1"
                                             name="item_description5" />
                                         <input type="hidden" class="form-control product_id" name="product_id5" />
+                                        <input type="hidden" class="form-control imei" name="imei5" />
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#basicModal">+</button>
                                     </div>
@@ -1314,6 +1319,7 @@ aria-hidden="true">
 
 <script type="text/javascript">
     var path = "{{ route('autocomplete') }}";
+
     var partypath = "{{ route('partyautocomplete') }}";
     $(document).ready(function() {
         // Initialize autocomplete only once
@@ -1395,7 +1401,8 @@ aria-hidden="true">
                                         gst_rate: product
                                             .gst_rate || '0',
                                         discount: '0',
-                                        id: product.id
+                                        id: product.id,
+                                        imeiValue: imeiValue,
                                     };
                                 }));
                             } else {
@@ -1415,7 +1422,7 @@ aria-hidden="true">
                     $(this).closest("div").parent().find('.gstperc').val(ui.item.gst_rate);
                     $(this).closest("div").parent().find('.discount').val(ui.item.discount);
                     $(this).closest("div").parent().find('.product_id').val(ui.item.id);
-
+                    $(this).closest("div").parent().find('.imei').val(ui.item.imeiValue);
                     // Move focus to qtybox
                     $(this).closest("div").parent().find('.qtybox').focus();
 
@@ -1470,8 +1477,8 @@ aria-hidden="true">
                             input.closest("div").parent().find('.uprice').val(purchase_price);
                             input.closest("div").parent().find('.gstperc').val(gstRate);
                             input.closest("div").parent().find('.discount').val(discount);
-                            input.closest("div").parent().find('.product_id').val(product
-                                .id);
+                            input.closest("div").parent().find('.product_id').val(product.id);
+                            input.closest("div").parent().find('.imei').val(product.imeiValue);
                         } else {
                             // Handle case when no matching products are found
                             input.closest("div").parent().find('.uprice').val('0');
@@ -1497,7 +1504,7 @@ aria-hidden="true">
                 document.getElementById("totQues").value = parseInt(extCnt) + 1;
                 document.getElementById("addrow").insertAdjacentHTML('beforeend',
                     `<div class="row mb-3">` +
-                    `<div class="border p-2 input-group col-md-4" style="width: 33.33333333%;"><input class="form-control product_name" tabindex="1" name="item_description${cIncr}" /><input type="hidden" class="form-control product_id" name="product_id${cIncr}" /><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button></div>` +
+                    `<div class="border p-2 input-group col-md-4" style="width: 33.33333333%;"><input class="form-control product_name" tabindex="1" name="item_description${cIncr}" /><input type="hidden" class="form-control product_id" name="product_id${cIncr}" /><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button><input type="hidden" class="form-control imei" name="imei${cIncr}" /></div>` +
                     `<div class="col-md-2 border p-2"><input class="form-control uprice" type="text" dataid="${cIncr}" name="rpqty${cIncr}" id="rpqty${cIncr}"></div>` +
                     `<div class="col-md-1 border p-2"><input class="form-control qtybox" tabindex="1" type="number" dataid="${cIncr}" name="qty${cIncr}" id="qty${cIncr}"></div>` +
                     `<div class="col-md-1 border p-2"><input class="form-control amountbox" tabindex="1" type="number" dataid="${cIncr}" name="amount${cIncr}" id="taxableamount${cIncr}"></div>` +

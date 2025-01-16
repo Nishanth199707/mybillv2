@@ -48,17 +48,6 @@
                         <h5 class="mb-0">View Product</h5>
                     </div>
                     <div class="card-body">
-
-                        <div class="d-flex justify-content-between mb-1">
-                            <a class="btn btn-primary btn-sm mb-3" href="{{ route('product.create') }}">
-                                <i class="fa fa-arrow-left"></i> Add New Product
-                            </a>
-
-                            <a class="btn btn-primary btn-sm mb-3" href="{{ route('purchase.create') }}">
-                                <i class="fa fa-arrow-left"></i> Add purchase
-                            </a>
-                        </div>
-
                         <div class="row">
                             <div class="col-md-4"></div>
                             <div class="col-md-2">

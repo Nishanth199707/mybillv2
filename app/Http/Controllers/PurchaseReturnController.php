@@ -124,17 +124,14 @@ class PurchaseReturnController extends Controller
                     Product::where('id', $request->input("product_id{$i}"))
                         ->decrement('stock', $request->input("qty{$i}"));
 
-
-                    // $string = $request->input("item_description{$i}");
-                    // preg_match('/\d{15}$/', $string, $matches);
-
-
-                    // $code = $matches[0];
-
-
-                    // PurchaseCustomDetails::where('user_id', $user_id)
-                    // ->where('field_value', '=', $code)
-                    // ->update(['stock' => 0]);
+                    $code = $request->input("imei{$i}");
+                    $product_retun =  PurchaseCustomDetails::where('user_id', $user_id)->where('field_value', '=', $code)->get();
+                    if(!empty($product_retun->stock)){
+                        $product_current_stock = $product_retun->stock - $request->input("qty{$i}");
+                    }
+                    PurchaseCustomDetails::where('user_id', $user_id)
+                    ->where('field_value', '=', $code)
+                    ->update(['stock' => $product_current_stock ]);
 
                     $purchaseReturnDetailData = [
                         'user_id' => $user_id,
