@@ -300,10 +300,10 @@ echo '
 
         if (gstAvailableYes.checked) {
             gstinContainer.style.display = 'block';
-            $('.checkgst').addClass('readonly');
+            // $('.checkgst').addClass('readonly');
         } else {
             gstinContainer.style.display = 'none';
-            $('.checkgst').removeClass('readonly');
+            // $('.checkgst').removeClass('readonly');
         }
     }
 

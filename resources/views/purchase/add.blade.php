@@ -208,9 +208,9 @@
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id1" />
 
-                                              
+
                                             </div>
-                                            @if ($businessCategory->business_category === 'Mobile & Accessories')
+                                            {{-- @if ($businessCategory->business_category === 'Mobile & Accessories') --}}
                                                 <div id="imei-fields" style="display: none;">
                                                     <br>
                                                     <div class="imei-fields-container" data-row="1">
@@ -223,8 +223,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @else
-                                            @endif
+                                            {{-- @else
+                                            @endif --}}
                                         </div>
                                     </div>
                                     <div class="col-md-2 border p-2">
@@ -263,9 +263,9 @@
                                                     name="item_description2" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id2" />
-                                              
+
                                             </div>
-                                            @if ($businessCategory->business_category === 'Mobile & Accessories')
+                                            {{-- @if ($businessCategory->business_category === 'Mobile & Accessories') --}}
                                                 <div id="imei-fields" style="display: none;">
                                                     <br>
                                                     <div class="imei-fields-container" data-row="2">
@@ -278,7 +278,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endif
+                                            {{-- @endif --}}
                                         </div>
                                     </div>
                                     <div class="col-md-2 border p-2">
@@ -319,9 +319,9 @@
                                                     name="item_description3" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id3" />
-                                              
+
                                             </div>
-                                            @if ($businessCategory->business_category === 'Mobile & Accessories')
+                                            {{-- @if ($businessCategory->business_category === 'Mobile & Accessories') --}}
                                                 <div id="imei-fields" style="display: none;">
                                                     <br>
                                                     <div class="imei-fields-container" data-row="3">
@@ -334,7 +334,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endif
+                                            {{-- @endif --}}
                                         </div>
                                     </div>
                                     <div class="col-md-2 border p-2">
@@ -375,9 +375,9 @@
                                                     name="item_description4" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id4" />
-                                              
+
                                             </div>
-                                            @if ($businessCategory->business_category === 'Mobile & Accessories')
+                                            {{-- @if ($businessCategory->business_category === 'Mobile & Accessories') --}}
                                                 <div id="imei-fields" style="display: none;">
                                                     <br>
                                                     <div class="imei-fields-container" data-row="4">
@@ -390,7 +390,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endif
+                                            {{-- @endif --}}
                                         </div>
                                     </div>
                                     <div class="col-md-2 border p-2">
@@ -431,9 +431,9 @@
                                                     name="item_description5" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id5" />
-                                              
+
                                             </div>
-                                            @if ($businessCategory->business_category === 'Mobile & Accessories')
+                                            {{-- @if ($businessCategory->business_category === 'Mobile & Accessories') --}}
                                                 <div id="imei-fields" style="display: none;">
                                                     <br>
                                                     <div class="imei-fields-container" data-row="5">
@@ -446,7 +446,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endif
+                                            {{-- @endif --}}
                                         </div>
                                     </div>
                                     <div class="col-md-2 border p-2">
@@ -1427,8 +1427,6 @@
                     `<input type="hidden" class="form-control product_id" name="product_id${cIncr}" />` +
                     `<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>` +
                     `</div>` +
-
-                    (businessCategory === 'Mobile & Accessories' ?
                         `<div id="imei-fields" style="display: none;">
                         <br>
                         <div class="imei-fields-container" data-row="${cIncr}">
@@ -1437,8 +1435,7 @@
                                 <button type="button" class="btn btn-outline-secondary add-imei" data-row="${cIncr}">+</button>
                             </div>
                         </div>
-                    </div>` :
-                        '') +
+                    </div>`  +
                     `</div>` +
                     `</div>` +
                     `<div class="col-md-2 border p-2"><input class="form-control uprice" type="text" dataid="${cIncr}" name="rpqty${cIncr}" id="rpqty${cIncr}"></div>` +
@@ -1742,7 +1739,7 @@
         });
     });
 
-   
+
     $(document).on('input', '.imei-field', function() {
         var imeiField = $(this);
 

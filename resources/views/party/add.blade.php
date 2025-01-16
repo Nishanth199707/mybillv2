@@ -294,9 +294,9 @@
         function toggleGstinField() {
             if (partyTypeSelect.value === 'registered') {
                 gstinField.style.display = 'block';
-                $('.checkgst').addClass('readonly');
+                // $('.checkgst').addClass('readonly');
             } else {
-                $('.checkgst').removeClass('readonly');
+                // $('.checkgst').removeClass('readonly');
                 gstinField.style.display = 'none';
                 $('#name').val('');
                             $('#billing_address_1').val('');

@@ -56,6 +56,7 @@ class PurchaseController extends Controller
         $data = Product::select("id", "item_name", "purchase_price", "sale_price", "gst_rate", "stock",'imei')
             ->where('item_name', 'LIKE', '%' . $request->get('search') . '%')
             ->where('user_id', $request->session()->get('user_id'))
+            ->where('item_type','!=','service')
             ->take(10)
             ->get();
         return response()->json($data);
@@ -98,6 +99,7 @@ class PurchaseController extends Controller
             return view('purchase.add', compact('party', 'productcategory', 'productsubcategory', 'businessCategory')); //'purchase_no'
         } else {
             return view('purchase.addnogst  ', compact('party', 'productcategory', 'productsubcategory',  'businessCategory')); //'purchase_no'
+            // return view('purchase.add', compact('party', 'productcategory', 'productsubcategory', 'businessCategory')); //'purchase_no'
         }
     }
 
@@ -232,7 +234,7 @@ class PurchaseController extends Controller
         ->orderBy('id', 'DESC')
         ->latest('paid_date')
         ->value('closing_balance') ?? 0;
-        
+
 
 // dd( $opening_balance);
 
@@ -270,7 +272,7 @@ class PurchaseController extends Controller
             }
 
             // Generate the next invoice number with padding
-            $invoice_no = $this->invoice_num($nextInvoiceNumber, 7, $prefix);
+            $invoice_no = $this->invoice_num($nextInvoiceNumber, 4, $prefix);
 
 
             $latestPayment = PartyPayment::where('party_id', $request->partyid)
@@ -350,7 +352,7 @@ class PurchaseController extends Controller
 
                     $product->update([
                         'purchase_price' => $purchasePrice,
-                        'sale_price' => $SalePrice,
+                        // 'sale_price' => $SalePrice,
                     ]);
                 }
             }

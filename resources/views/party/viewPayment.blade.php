@@ -27,7 +27,7 @@
                                     @forelse($data as $index => $receipt)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <td>{{ $receipt->party_name }}</td>
+                                            <td>@if ($receipt->party_name) {{ $receipt->party_name }} @else {{ 'Expense' }} @endif</td>
                                             <td>{{ $receipt->invoice }}</td>
                                             <td>{{ $receipt->amount }}</td>
                                             <td>{{ $receipt->date }}</td>
