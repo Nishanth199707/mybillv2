@@ -150,7 +150,7 @@ class GstReportController extends Controller
         if ($request->ajax()) {
             // dd($request->all());
             // Start with the user's sales data
-            $data = Sale::join('businesses', 'businesses.id', '=', 'sales.business_id')
+            $data = Sale::select('sales.id','sales.party','sales.invoice_date','products.item_name as name','item_description','sales.invoice_no','net_amount' )->join('businesses', 'businesses.id', '=', 'sales.business_id')
                 ->join('sale_details', 'sale_details.sale_id', '=', 'sales.id')
                 ->join('products', 'products.id', '=', 'sale_details.product_id')
                 ->join('productsub_categories', 'productsub_categories.id', '=', 'products.sub_category_id')
@@ -183,6 +183,7 @@ class GstReportController extends Controller
                 $productId = $request->input('category');
                 $data->where('products.category', $productId);
             }
+            $data->orderBy('sales.id', 'DESC');
             $data->get();
 
             $totalAmount = $data->sum('net_amount');
@@ -209,55 +210,56 @@ class GstReportController extends Controller
     {
         // Check if the request is an AJAX request
         if ($request->ajax()) {
-            // Start by querying the purchase data
-            $data = Purchase::join('businesses', 'businesses.id', '=', 'purchases.business_id')
-                ->join('purchase_details', 'purchase_details.purchase_id', '=', 'purchases.id')
-                ->join('products', 'products.id', '=', 'purchase_details.product_id')
-                ->join('productsub_categories', 'productsub_categories.id', '=', 'products.sub_category_id')
-                ->where('purchases.user_id', $request->session()->get('user_id'));
+            $data = Purchase::select(
+                'purchases.id as purchase_id',
+                'businesses.company_name', // Correct the column name if necessary
+                'products.item_name', // Correct the column name if necessary
+                'purchases.created_at',
+                'purchases.party',
+                'purchases.net_amount',
+                'purchases.purchase_date',
+                'purchases.purchase_no',
+            )
+            ->join('businesses', 'businesses.id', '=', 'purchases.business_id')
+            ->join('purchase_details', 'purchase_details.purchase_id', '=', 'purchases.id')
+            ->join('products', 'products.id', '=', 'purchase_details.product_id')
+            ->join('productsub_categories', 'productsub_categories.id', '=', 'products.sub_category_id')
+            ->where('purchases.user_id', $request->session()->get('user_id'));
 
-            if ($request->filled('from_date') && $request->filled('to_date')) {
-                $fromDate = $request->input('from_date') . ' 00:00:00';
-                $toDate = $request->input('to_date') . ' 23:59:59';
+        if ($request->filled('from_date') && $request->filled('to_date')) {
+            $fromDate = $request->input('from_date') . ' 00:00:00';
+            $toDate = $request->input('to_date') . ' 23:59:59';
+            $data->whereBetween('purchases.created_at', [$fromDate, $toDate]);
+        }
 
-                $data->whereBetween('purchases.created_at', [$fromDate, $toDate]);
-            }
-            // Filter by date range if both from_date and to_date are provided
-            if ($request->filled('from_date') && $request->filled('to_date') && $request->subcategory !== 'all' && $request->category !== 'all') {
-                $fromDate = $request->input('from_date') . ' 00:00:00';
-                $toDate = $request->input('to_date') . ' 23:59:59';
+        if ($request->filled('subcategory') && $request->subcategory !== 'all') {
+            $subcategoryId = $request->input('subcategory');
+            $data->where('products.sub_category_id', $subcategoryId);
+        }
 
-                $data->whereBetween('purchases.created_at', [$fromDate, $toDate]);
-            }
+        if ($request->filled('category') && $request->category !== 'all') {
+            $categoryId = $request->input('category');
+            $data->where('products.category', $categoryId);
+        }
 
-            // Filter by Subcategory if provided
-            if ($request->filled('subcategory') && $request->subcategory !== 'all') {
-                $subcategoryId = $request->input('subcategory');
-                $data->where('products.sub_category_id', $subcategoryId);
-            }
+        $data->orderBy('purchases.id', 'DESC');
+        $totalAmount = $data->sum('net_amount');
 
-            // Filter by Category if provided
-            if ($request->filled('category') && $request->category !== 'all') {
-                $categoryId = $request->input('category');
-                $data->where('products.category', $categoryId);
-            }
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->with('totalAmount', $totalAmount)
+            ->addColumn('action', function ($row) {
+                return '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
 
-            $totalAmount = $data->sum('net_amount');
-
-            // Return the results as a DataTable
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->with('totalAmount', $totalAmount)
-                ->addColumn('action', function ($row) {
-                    return '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
-                })
-                ->rawColumns(['action'])
-                ->make(true);
         }
 
         // If the request is not AJAX, return the regular view
         return view('gstreport.purchasereport');
     }
+
 
 
     public function stockreport(Request $request)
@@ -283,25 +285,25 @@ class GstReportController extends Controller
                     'productsub_categories.name'
                 )
                 ->where('products.user_id', $request->session()->get('user_id'));
-            
-    
+
+
                 // Apply filters if selected
                 if ($request->filled('subcategory') && $request->filled('category') && $request->subcategory !== 'all' && $request->category !== 'all') {
                     $data->where('products.sub_category_id', $request->input('subcategory'))
                         ->where('products.category', $request->input('category'));
                 }
-    
+
                 if ($request->filled('subcategory') && $request->subcategory !== 'all') {
                     $data->where('products.sub_category_id', $request->input('subcategory'));
                 }
-    
+
                 if ($request->filled('category') && $request->category !== 'all') {
                     $data->where('products.category', $request->input('category'));
                 }
-    
+
                 // Get the results
                 $products = $data->get();
-    
+
                 // dd($products);
                 // After fetching the results, group IMEIs by product
                 $products->map(function ($product) {
@@ -309,7 +311,7 @@ class GstReportController extends Controller
                     $product->imei_list = DB::table('purchase_custom_details')->where('product_id', $product->id)
                         ->pluck('field_value')->toArray();
                 });
-    
+
                 // Return the data to DataTables
                 return DataTables::of($products)
                     ->addIndexColumn() // Add an index column for row numbers
@@ -331,7 +333,7 @@ class GstReportController extends Controller
         //         'code' => $e->getCode(),
         //         'trace' => $e->getTraceAsString()
         //     ]);
-    
+
         //     // Return an error response
         //     return response()->json([
         //         'error' => 'An error occurred while processing the data.',
@@ -339,12 +341,12 @@ class GstReportController extends Controller
         //         'code' => $e->getCode()
         //     ], 500);
         // }
-    
+
         // If not an AJAX request, return the view
         return view('gstreport.stockreport');
     }
-    
-    
+
+
 
     public function generatePdf(Request $request)
     {

@@ -17,10 +17,10 @@ class RepairController extends Controller
 
         if ($request->ajax()) {
             try {
-               
+
                 $fromDate = $request->input('date_from') . ' 00:00:00';
                 $toDate = $request->input('date_to') . ' 23:59:59';
-                
+
                 $repairs = Repair::select('id', 'service_no', 'customer_name', 'date', 'phone', 'complaint_remark', 'user_id', 'status')
                     ->where('user_id', $request->session()->get('user_id'))
                     ->when($request->status, function ($query) use ($request) {
@@ -31,8 +31,8 @@ class RepairController extends Controller
                     })
                     ->orderBy('id', 'DESC')
                     ->get();
-                
-                
+
+
 
 
                 return DataTables::of($repairs)
@@ -242,7 +242,7 @@ class RepairController extends Controller
         $cashReceivedQuery = Repair::where('repairs.user_id', $userId)
             ->select('repairs.service_no', 'repairs.customer_name', 'repairs.cash_received', 'repairs.date')
             ->whereNotNull('repairs.cash_received')
-            ->orderBy('repairs.date', 'DESC');
+            ->orderBy('repairs.id', 'DESC');
 
 
         // Apply date range filters if provided

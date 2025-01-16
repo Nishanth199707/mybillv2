@@ -304,8 +304,11 @@ Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(
     Route::get('productcategory', [ProductController::class, 'getCategories'])->name('productcategory.index');
     Route::get('/productsubcategory', [ProductSubCategoryController::class, 'subcategoryindex'])->name('productsubcategory.subcategoryindex');
     Route::get('/productcategory', [ProductCategoryController::class, 'categoryindex'])->name('productcategory.categoryindex');
+    Route::get('/superadmin/disablelist', [ProductController::class, 'disablelist'])->name('product.disablelist');
 
     Route::resource('/superadmin/product', ProductController::class);
+    Route::get('/superadmin/product/disable/{id}', [ProductController::class, 'disable'])->name('product.disable');
+    Route::get('/superadmin/product/enable/{id}', [ProductController::class, 'enable'])->name('product.enable');
     Route::get('/get-brands/{categoryId}', [ProductController::class, 'getBrandsByCategory']);
 
     Route::resource('/superadmin/party', PartyController::class);
@@ -390,12 +393,12 @@ Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(
     Route::resource('settings', SettingController::class);
 
     Route::prefix('subuser')->name('subuser.')->group(function () {
-        Route::get('/', [SubUserController::class, 'index'])->name('index'); 
-        Route::get('/create', [SubUserController::class, 'create'])->name('create'); 
-        Route::post('/store', [SubUserController::class, 'store'])->name('store'); 
-        Route::get('/{id}/edit', [SubUserController::class, 'edit'])->name('edit'); 
-        Route::put('/{id}', [SubUserController::class, 'update'])->name('update'); 
-        Route::delete('/{id}', [SubUserController::class, 'destroy'])->name('destroy'); 
+        Route::get('/', [SubUserController::class, 'index'])->name('index');
+        Route::get('/create', [SubUserController::class, 'create'])->name('create');
+        Route::post('/store', [SubUserController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [SubUserController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [SubUserController::class, 'update'])->name('update');
+        Route::delete('/{id}', [SubUserController::class, 'destroy'])->name('destroy');
     });
 });
 
