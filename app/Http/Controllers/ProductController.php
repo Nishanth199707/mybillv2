@@ -11,6 +11,7 @@ use App\Models\ProductCategory;
 use App\Models\ProductsubCategory;
 use App\Models\PurchaseCustomDetails;
 use App\Models\SaleDetail;
+use App\Models\HsnCode;
 
 class ProductController extends Controller
 {
@@ -157,10 +158,30 @@ class ProductController extends Controller
 
         $productsubcategory = ProductsubCategory::select('*')->where('user_id', $request->session()->get('user_id'))->get();
 
+        // $hsncode = HsnCode::select('*')->get();
+
 
         return view('product.add', compact('productcategory', 'businessCategory', 'productsubcategory'));
     }
 
+    public function getHsnCodes(Request $request)
+    {
+        $search = $request->input('q'); // 'q' is the default search term used by Select2
+
+        $hsnCodes = HsnCode::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('code', 'like', "%{$search}%")
+                             ->orWhere('description', 'like', "%{$search}%");
+            })
+            ->orderBy('code', 'ASC')
+            ->select('code', 'description')
+            ->paginate(10); // Adjust the pagination size as needed
+
+        return response()->json([
+            'results' => $hsnCodes->items(), // Select2 expects 'results' as the key
+            'pagination' => ['more' => $hsnCodes->hasMorePages()],
+        ]);
+    }
 
     public function store(Request $request)
     {

@@ -122,15 +122,14 @@
                                     <div class="border input-group col-md-4">
                                         <input type="text" required class="form-control party" id="party"
                                             required name="party" value="">
+                                            <input type="hidden" class="party_gst" id="party_gst" value="">
+                                            <input type="hidden" class="gst_auth" id="gst_auth" value="{{ $businessCategory->gst_auth }}">
                                         <input type="hidden" required class="party" id="partyid" required
                                             name="partyid" value="">
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#basicModal1" style="background:linear-gradient(to right,#ff746e, #ff9e6f);border:none;">+</button>
                                     </div>
                                 </div>
-
-
-
                                 <div class="col-md-2 fv-plugins-icon-container">
                                     <label class="form-label" for="formValidationName">Invoice No</label>
                                     <input type="text" id="formValidationName" class="form-control" readonly
@@ -565,8 +564,114 @@
                                 <div class="row mt-3">
                                     <input type="hidden" name="totQues" id="totQues" value="5" />
                                     <input type="hidden" name="invoice_url" id="invoice_url">
-
-
+                                    <div class="col-md-4 e-bill">
+                                        @if($businessCategory->gst_auth == 1)
+                                        <input type="checkbox" name="e_bill" id="e_bill" value="1">
+                                        <input type="hidden" name="gstin" id="gstin" value="{{$businessCategory->gstin}}">
+                                        <label for="e_bill">E-Bill</label>
+                                        @else
+                                        <input type="checkbox" name="e_bill" id="e_bill" value="1" disabled>
+                                        <span class="text-danger">Setup the E-Bill</span>
+                                        @endif
+                                    </div>
+                                    <script>
+                                        $(document).ready(function() {
+                                            $('.e_bill_content').hide();
+                                            $('#e_bill').change(function() {
+                                                if ($(this).is(':checked')) {
+                                                    $('.e_bill_content').show();
+                                                } else {
+                                                    $('.e_bill_content').hide();
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                     <div class="col-md-4 fv-plugins-icon-container e_bill_content">
+                                        <div >
+                                            <label class="form-label">Transaction Type</label>
+                                                <select class="form-select select2" name="transactionType" id="transactionType">
+                                                    <option value="1">Regular</option>
+                                                    <option value="2">Bill To - Ship To</option>
+                                                    <option value="3">Bill From - Dispatch From</option>
+                                                    <option value="4">Combination of 2 and 3</option>
+                                                </select>
+                                        </div>
+                                    </div>
+                                     <div class="col-md-4 fv-plugins-icon-container e_bill_content">
+                                        <div >
+                                            <label class="form-label">Transaction Mode</label>
+                                                <select class="form-select select2" name="transMode" id="transMode">
+                                                    <option value="1">Road</option>
+                                                    <option value="2">Rail</option>
+                                                    <option value="3">Air</option>
+                                                    <option value="4">Ship</option>
+                                                    <option value="5">inTransit</option>
+                                                </select>
+                                        </div>
+                                        <script>
+                                            $(document).ready(function() {
+                                                $('#vehicleType').val('R');
+                                                $('#transMode').change(function() {
+                                                    if ($(this).val() == 1) {
+                                                       $('#vehicleType').val('R');
+                                                    } else {
+                                                        $('#vehicleType').val('O');
+                                                    }
+                                                });
+                                            });
+                                        </script>
+                                    </div>
+                                    <div class="col-md-4 fv-plugins-icon-container e_bill_content">
+                                        <div >
+                                            <label class="form-label">Transaction Distance</label>
+                                            <input type="text" class="form-control" name="transDistance"
+                                                id="transDistance" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 fv-plugins-icon-container e_bill_content">
+                                        <div >
+                                            <label class="form-label">Transporter Doc. No</label>
+                                            <input type="text" class="form-control" name="transDocNo"
+                                                id="transDocNo" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 fv-plugins-icon-container e_bill_content">
+                                        <div >
+                                            <label class="form-label">Vehicle No</label>
+                                            <input type="text" class="form-control" name="vehicleNo"
+                                                id="vehicleNo" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 fv-plugins-icon-container e_bill_content">
+                                        <div >
+                                            <label class="form-label">Vehicle Type</label>
+                                            <select class="form-select select2" name="vehicleType" id="vehicleType" readonly>
+                                                <option value="R">Regular</option>
+                                                <option value="O">ODC(Over Dimentional Cargo)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 fv-plugins-icon-container e_bill_content">
+                                        <div >
+                                            <label class="form-label">Transporter Name</label>
+                                            <input type="text" class="form-control" name="transporterName"
+                                                id="transporterName" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 fv-plugins-icon-container e_bill_content">
+                                        <div >
+                                            <label class="form-label">Transporter ID</label>
+                                            <input type="text" class="form-control" name="transporterId"
+                                                id="transporterId" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 fv-plugins-icon-container">
+                                        <div id="cash_received_field" style="display: none;">
+                                            <label class="form-label">Cash Received</label>
+                                            <input type="text" class="form-control" name="cash_received"
+                                                id="CashReceived" />
+                                        </div>
+                                    </div>
                                     <div class="col-md-4 fv-plugins-icon-container">
                                         <label class="form-label">Cash Type</label>
                                         <select name="cash_type" required id="cash_type" class="form-select">
@@ -583,13 +688,6 @@
                                             <strong>{{ $errors->first('cash_type') }}</strong>
                                         </span>
                                         @enderror
-                                    </div>
-                                    <div class="col-md-4 fv-plugins-icon-container">
-                                        <div id="cash_received_field" style="display: none;">
-                                            <label class="form-label">Cash Received</label>
-                                            <input type="text" class="form-control" name="cash_received"
-                                                id="CashReceived" />
-                                        </div>
                                     </div>
 
                                 </div>
@@ -1435,6 +1533,7 @@
                     success: function(data) {
                         if (data.length > 0) {
                             response(data.map(function(party) {
+                                $("#party_gst").val(party.gst_profile);
                                 return {
                                     label: party.name,
                                     id: party.id,
@@ -1445,7 +1544,6 @@
                                     ].filter(Boolean).join(', '),
                                     partyphone: party.phone_no,
                                     state: party.state
-
                                 };
                             }));
                         } else {

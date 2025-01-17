@@ -9,11 +9,13 @@ use App\Models\Financier;
 use App\Models\Party;
 use App\Models\PartyPayment;
 use App\Models\Product;
+use App\Models\States;
 use App\Models\Setting;
 use App\Models\ProductCategory;
 use App\Models\ProductsubCategory;
 use App\Models\PurchaseCustomDetails;
 use App\Models\Sale;
+use App\Models\User;
 use App\Models\SaleDetail;
 use App\Models\SaleReturn;
 use App\Models\SaleReturnDetail;
@@ -21,6 +23,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Http;
 
 class SaleController extends Controller
 {
@@ -80,7 +83,7 @@ class SaleController extends Controller
 
         $query = Product::query();
 
-        $query->where('products.user_id', $userId);
+        $query->where('products.user_id', $userId)->where('products.status',1);
 
         // if ($businessCategory && $businessCategory->business_category === 'Mobile & Accessories') {
         //     $query->select('products.id', 'products.item_name', 'products.sale_price', 'products.gst_rate', 'products.stock', 'purchase_custom_details.field_name', 'purchase_custom_details.field_value')
@@ -102,13 +105,13 @@ class SaleController extends Controller
             ->where('field_value', $searchTerm)
             ->first();
 
-        if ($businessCategory && $businessCategory->business_category === 'Mobile & Accessories') {
+        // if ($businessCategory && $businessCategory->business_category === 'Mobile & Accessories') {
 
             if (!empty($customDetail)) {
-                $query->leftJoin('purchase_custom_details', 'products.id','products.purchase_price', '=', 'purchase_custom_details.product_id')
+                $query->leftJoin('purchase_custom_details','products.id', '=', 'purchase_custom_details.product_id')
                     ->select('products.id', 'products.item_name', 'products.sale_price', 'products.gst_rate', 'products.stock', 'purchase_custom_details.field_value')
                     ->where('purchase_custom_details.stock', '!=', 0)
-
+                    ->where('products.status', 1)
                     ->where(function ($subQuery) use ($searchTerm) {
                         $subQuery->where('products.item_name', 'LIKE', '%' . $searchTerm . '%')
                             ->orWhere('purchase_custom_details.field_value', 'LIKE', '%' . $searchTerm . '%');
@@ -120,6 +123,7 @@ class SaleController extends Controller
                     ->select('products.id', 'products.item_name','products.purchase_price', 'products.sale_price', 'products.gst_rate', 'products.stock', 'purchase_custom_details.field_value')
                     ->where('purchase_custom_details.stock', '!=', 0)
                     ->where('products.user_id', $userId)
+                    ->where('products.status', 1)
                     ->where(function ($subQuery) use ($searchTerm) {
                         $subQuery->where('products.item_name', 'LIKE', '%' . $searchTerm . '%')
                             ->orWhere('purchase_custom_details.field_value', 'LIKE', '%' . $searchTerm . '%');
@@ -129,6 +133,7 @@ class SaleController extends Controller
                 $query2 = DB::table('products')
                     ->select('products.id', 'products.item_name','products.purchase_price', 'products.sale_price', 'products.gst_rate', 'products.stock', DB::raw('NULL as field_value'))
                     ->where('products.user_id', $userId)
+                    ->where('products.status', 1)
                     ->where('products.item_name', 'LIKE', '%' . $searchTerm . '%')
                     ->orWhere('item_code_barcode', 'LIKE', '%' . $searchTerm . '%');
 
@@ -138,13 +143,13 @@ class SaleController extends Controller
                 $query->where('products.item_name', 'LIKE', '%' . $searchTerm . '%')
                     ->orWhere('item_code_barcode', 'LIKE', '%' . $searchTerm . '%');
             }
-        } else {
-            $query->select('id', 'item_name', 'item_code_barcode', 'sale_price', 'gst_rate', 'stock')
-                ->where(function ($subQuery) use ($searchTerm) {
-                    $subQuery->where('item_name', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('item_code_barcode', 'LIKE', '%' . $searchTerm . '%');
-                });
-        }
+        // } else {
+        //     $query->select('id', 'item_name', 'item_code_barcode', 'sale_price', 'gst_rate', 'stock')
+        //         ->where(function ($subQuery) use ($searchTerm) {
+        //             $subQuery->where('item_name', 'LIKE', '%' . $searchTerm . '%')
+        //                 ->orWhere('item_code_barcode', 'LIKE', '%' . $searchTerm . '%');
+        //         });
+        // }
         // dd($query->toSql(), $query->getBindings());
         $data = $query->get();
 
@@ -188,9 +193,9 @@ class SaleController extends Controller
 
         $productsubcategory = ProductsubCategory::select('*')->where('user_id', $request->session()->get('user_id'))->get();
 
-        $businessCategory = Business::select('business_category', 'gstavailable')->where('user_id', '=', $user_id)->first();
+        $businessCategory = Business::select('business_category', 'gstavailable','gst_auth','auth_response','gstin')->where('user_id', '=', $user_id)->first();
 
-        // dd($invoice_no);
+        // dd($businessCategory);
         if ($request->session()->get('gstavailable') == 'yes') {
 
             return view('sales.add', compact('party', 'invoice_no', 'productsubcategory', 'productcategory', 'businessCategory', 'setting'));
@@ -247,7 +252,7 @@ class SaleController extends Controller
         if (empty($request->session()->get('user_id'))) {
             return redirect()->route('login');
         }
-
+        $e_bill = $request->e_bill;
         $request->validate([
             'party' => 'required',
             'cash_type' => 'required',
@@ -257,6 +262,13 @@ class SaleController extends Controller
 
         $user_id = $request->session()->get('user_id');
         $business_id = Business::where('user_id', '=', $user_id)->select('id')->first();
+        if($e_bill == '1'){
+            $user_details = User::where('id', '=', $user_id)->first();
+            $bus_details = Business::where('user_id', '=', $user_id)->first();
+            $user_state = States::where('name', '=', $bus_details->state)->first();
+            $party_deatils = Party::where('id', '=', $request->partyid)->first();
+            $party_state = States::where('name', '=', $party_deatils->state)->first();
+        }
 
         $salesArr = [
             'user_id' => $user_id,
@@ -294,10 +306,14 @@ class SaleController extends Controller
             'purchase_order_number' => $request->purchase_order_number,
             'vehicle_no' => $request->vehicle_no,
         ];
+        $cgstValue = $request->tax_amount_28_cgst + $request->tax_amount_18_cgst + $request->tax_amount_12_cgst + $request->tax_amount_5_cgst;
+        $sgstValue = $request->tax_amount_28_sgst + $request->tax_amount_18_sgst + $request->tax_amount_12_sgst + $request->tax_amount_5_sgst;
+        $igstValue = $request->tax_amount_28_igst + $request->tax_amount_18_igst + $request->tax_amount_12_igst + $request->tax_amount_5_igst;
 
         $saleInsert = Sale::create($salesArr);
         // $j=0;
         // dd($request->totQues);
+        $itemdetais = [];
         for ($j = 0; $j < $request->totQues; $j++) {
             $i = $j + 1;
             if ($request->input("product_id{$i}") != '' && $request->input("qty{$i}") != '') {
@@ -352,6 +368,30 @@ class SaleController extends Controller
                     "gstvaldata" => $request->input("gstvaldata{$i}"),
                     "total_amount" => $request->input("total_amount{$i}"),
                 ];
+                if($e_bill == '1'){
+
+                if($party_state->code == $user_state->code){
+                    $cgst = $product->gst_rate/2;
+                    $sgst = $product->gst_rate/2;
+                    $igst = 0;
+                }else{
+                    $cgst = 0;
+                    $sgst = 0;
+                    $igst = $product->gst_rate;
+                }
+
+                $itemdetais[] = [
+                        "productName" => "$product->item_name",
+                        "productDesc" => "$product->description",
+                        "hsnCode" => (int)$product->hsn_code,
+                        "quantity" => (int)$request->input("qty{$i}"),
+                        "qtyUnit" => "$product->units",
+                        "taxableAmount" => (int)$request->input("amount{$i}"),
+                        "sgstRate" => (int)$sgst,
+                        "cgstRate" => (int)$cgst,
+                        "igstRate" => (int)$igst,
+                        "cessRate" => 0 ];
+                }
                 SaleDetail::create($salesProductArr);
             }
         }
@@ -555,6 +595,100 @@ class SaleController extends Controller
                 EmiReceived::create($emireceivedarr);
             }
         }
+        if($e_bill == '1'){
+            $jsonData = [
+                "supplyType" => "O",
+                "subSupplyType" => "1",
+                "subSupplyDesc" => " ",
+                "docType" => "INV",
+                "docNo" => "INV".$saleInsert->id."",
+                "docDate" => date('d/m/Y'),
+                "fromGstin" => "$request->gstin",
+                "fromTrdName" => "$user_details->name",
+                "fromAddr1" => "$user_details->address",
+                "fromAddr2" => "".$user_details->address."",
+                "fromPlace" => "$user_details->city",
+                "actFromStateCode" => $user_state->code ? (int)$user_state->code : 0,
+                "fromPincode" => $bus_details->pincode ? (int)$bus_details->pincode : 000000,
+                "fromStateCode" => $user_state->code ? (int)$user_state->code : 0,
+                "toGstin" => "$party_deatils->gstin",
+                "toTrdName" => "$party_deatils->name",
+                "toAddr1" => "$party_deatils->billing_address_1",
+                "toAddr2" => "$party_deatils->billing_address_2",
+                "toPlace" => " ",
+                "toPincode" => $party_deatils->billing_pincode ? (int)$party_deatils->billing_pincode : 000000,
+                "actToStateCode" => $party_state->code ? (int)$party_state->code : 0,
+                "toStateCode" => $party_state->code ? (int)$party_state->code : 0,
+                "transactionType" => 1,
+                "dispatchFromGSTIN" => "$request->gstin",
+                "dispatchFromTradeName" => "$bus_details->company_name",
+                "shipToGSTIN" => "$party_deatils->gstin",
+                "shipToTradeName" => "$party_deatils->name",
+                "totalValue" => (int)$request->TotalAmount,
+                "cgstValue" => (int)$cgstValue,
+                "sgstValue" => (int)$sgstValue,
+                "igstValue" => (int)$igstValue,
+                "cessValue" => 0,
+                "cessNonAdvolValue" => 0,
+                "totInvValue" => (int)$request->net_amount,
+                "transMode" => "$request->transMode",
+                "transDistance" => "$request->transDistance",
+                "transporterName" => "$request->transporterName",
+                "transDocNo" => "$request->transDocNo",
+                "transDocDate" => date('d/m/Y'),
+                "vehicleNo" => $request->vehicleNo,
+                "vehicleType" => $request->vehicleType,
+                "itemList" =>
+                    $itemdetais,
+            ];
+            if (!empty($request->transporterId)) {
+                $jsonData["transporterId"] = $request->transporterId;
+            }
+            $client_id = env('MASTERGST_CLIENT_ID');
+            $client_secret = env('MASTERGST_CLIENT_SECRET');
+            $email = env('MASTERGST_MAILID');
+            $gsturl = env('GST_BASE_URL');
+            $ipAddress = $_SERVER['SERVER_ADDR'] ?? getHostByName(getHostName());
+            try {
+                // Make the API call with SSL verification disabled
+                $response = Http::withHeaders([
+                    'Accept' => 'application/json',
+                    'ip_address' => $ipAddress,
+                    'client_id' => $client_id,
+                    'client_secret' => $client_secret,
+                    'gstin' => $request->gstin,
+                ])->withoutVerifying()->post($gsturl.'/ewaybillapi/v1.03/ewayapi/genewaybill?email='.$email.'', $jsonData);
+                // Check for a successful response
+                if ($response->successful()) {
+                 $response_data = $response->json();
+                 $res_ebill = $response_data['data']['ewayBillNo'];
+                 $sales_update = Sale::where('id',$saleInsert->id);
+                 $sales_update->update([
+                    'ewayBillNo' => $res_ebill,
+                    'ebillresponse' => json_encode($response->json())
+                ]);
+                } else {
+                    // Log the response status and body for debugging
+                    Log::error('API response error', [
+                        'status' => $response->status(),
+                        'body' => $response->body()
+                    ]);
+                }
+            } catch (RequestException $e) {
+                // Catch any errors
+                if ($e->hasResponse()) {
+                    $response = $e->getResponse();
+                    echo json_encode($response->json());
+                    die;
+                } else {
+                    // Log the exception for debugging
+                    Log::error('API request exception', [
+                        'exception' => $e->getMessage()
+                    ]);
+                }
+            }
+
+        }
         // return response()->json([])->with('success','Sale Completed successfully.');
         // return response()->json(['invoice_id' => $saleInsert->id, 'success' => 'Product saved successfully.']);
         // $saleArrData = Sale::find($saleInsert->id);
@@ -629,7 +763,7 @@ class SaleController extends Controller
         } else {
 
             // dd($setting->invoice);
-            return view('sales.' . $setting->invoice, compact('business', 'party', 'sale', 'saledetail', 'emi', 'setting'));
+            return view('sales.shownogst', compact('business', 'party', 'sale', 'saledetail', 'emi', 'setting'));
         }
     }
 
@@ -923,7 +1057,7 @@ class SaleController extends Controller
                 'party_payments.debit as amount',
                 'party_payments.paid_date as date'
             )
-            ->orderBy('party_payments.invoice_no', 'DESC');
+            ->orderBy('party_payments.id', 'DESC');
         if ($request->filled('from_date') && $request->filled('to_date')) {
 
             $cashReceivedLedger->whereBetween('party_payments.paid_date', [$fromDate, $toDate]);
@@ -956,7 +1090,7 @@ class SaleController extends Controller
                 'party_payments.debit as amount',
                 'party_payments.paid_date as date'
             )
-            ->orderBy('party_payments.invoice_no', 'DESC');
+            ->orderBy('party_payments.id', 'DESC');
         if ($request->filled('from_date') && $request->filled('to_date')) {
 
             $onlinecashReceivedLedger->whereBetween('party_payments.paid_date', [$fromDate, $toDate]);
