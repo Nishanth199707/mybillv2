@@ -45,5 +45,7 @@ class Sale extends Model
                             'vehicle_no',
                             'created_at',
                             'updated_at',
+                            'ewayBillNo',
+                            'ebillresponse',
                            ];
 }
