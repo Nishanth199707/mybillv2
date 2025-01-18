@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('gst_profile',225);
-            $table->json('gst_response');
+            $table->string('gst_profile',225)->nullable();
+            $table->json('gst_response')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

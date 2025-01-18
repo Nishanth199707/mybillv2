@@ -251,10 +251,10 @@
                                                                     No:</p>
                                                                 <strong>{{ $sale->invoice_no }}</strong>
                                                                 @if($sale->ewayBillNo)
-                                                                <p class=""><strong>E-Way Bill No:</strong><br>{{ $sale->ewayBillNo }}
+                                                                <p class=""  style="padding:0;margin:0">E-Way Bill No:<br><strong>{{ $sale->ewayBillNo }}</strong>
                                                                 </p>
                                                                 @endif
-                                                                <hr>
+                                                                <hr style="margin:0px;">
                                                                 <p class=""><strong>Inv Date:</strong><br>
                                                                     {{ $sale->invoice_date }}
                                                                 </p>
@@ -375,7 +375,7 @@
                                                         </tr>
 
                                                     </thead>
-                                                    <tbody class="table_body" style="height:280px !important">
+                                                    <tbody class="table_body" style="height:250px !important">
                                                         @foreach ($saledetail as $key => $val)
                                                             <tr class="t3" style="height:10px !important">
                                                                 <td class="t3"

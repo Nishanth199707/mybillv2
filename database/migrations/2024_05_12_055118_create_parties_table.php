@@ -29,6 +29,8 @@ return new class extends Migration
             $table->text('shipping_address_2')->nullable();
             $table->string('shipping_pincode')->nullable();
             $table->float('opening_balance')->default(0);
+            $table->string('gst_profile',225)->nullable();
+            $table->json('gst_response')->nullable();
             $table->timestamps();
         });
     }

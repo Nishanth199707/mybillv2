@@ -74,11 +74,12 @@ class ApiController extends Controller
             // Check for a successful response
             if ($response->successful()) {
                 $data = $response->json();
+                $data['date'] = date('d-m-Y');
                 $Business = Business::find($business_id);
                 if ($Business) {
                     $Business->update([
                         'gst_auth' => $data['status_cd'],
-                        'auth_response' => $response,
+                        'auth_response' =>json_encode($data),
                     ]);
 
                     echo json_encode($response->json());

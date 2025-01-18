@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('hsn_code')->nullable();
             $table->text('description')->nullable();
             $table->string('imei')->default('no');
+            $table->float('status')->default(1);
             $table->timestamps();
         });
     }
