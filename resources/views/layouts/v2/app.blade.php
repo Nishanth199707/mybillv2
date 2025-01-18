@@ -98,7 +98,7 @@
 
         $user_id = session('user_id');
         $subuser = session('sub_user');
-        
+
         if($subuser != null){
 
             $authUser = User::select('*')->where('id', $subuser)->first();
@@ -208,7 +208,7 @@
                         </div>
                     </a>
 
-                    <div class="dropdown-menu position-absolute" aria-labelledby="userProfileDropdown">
+                    <div class="dropdown-menu position-absolute" aria-labelledby="userProfileDropdown" style="width:235px !important;">
                         <div class="user-profile-section">
                             <div class="media mx-auto">
                                 <div class="emoji me-2">
@@ -223,6 +223,7 @@
                                 <div class="media-body">
                                     @if (Auth::user())
                                         <h5 class="me-1">{{ Auth::user()->name }}</h5>
+                                        <h5 class="me-1">User Id : MDB{{ Auth::user()->id }}</h5>
                                     @endif
                                 </div>
                             </div>
