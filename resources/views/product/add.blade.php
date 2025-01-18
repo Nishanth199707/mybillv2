@@ -79,7 +79,11 @@
                                 </div>
 
                                 <div class="col-md-3 mb-1">
+                                    @if($businessCategory->business_category == 'Accounting & CA')
+                                    <label class="form-label">SAC Code</label>
+                                    @else
                                     <label class="form-label">HSN Code</label>
+                                    @endif
                                     {{-- <input type="text" class="form-control" name="hsn_code"
                                         value="{{ old('hsn_code') }}" /> --}}
                                         <select name="hsn_code" id="hsn_code" class="form-select">
@@ -292,11 +296,11 @@
                             </div>
                             @endif
 
+                            @if($businessCategory->business_category != 'Accounting & CA')
                             <!-- Purchase Details -->
-
+                            <h5 class="mt-4 mb-4">Purchase Details</h5>
                             @if($businessCategory->gstavailable != 'no')
                                 <div class="row" id="purchase-details">
-                                    <h5 class="mt-4 mb-4">Purchase Details</h5>
                                         <div class="col-md-3 mb-1">
                                             <label class="form-label" for="purchase_type">Price Type</label>
                                             <select class="form-select" id="purchase_type" name="purchase_type">
@@ -355,6 +359,9 @@
                                     @enderror
                                 </div>
                             @endif
+                            @endif
+
+
                             <div style="text-align: right;">
                                 <button type="submit" id="save-button" class="btn btn-primary">Save Product</button>
                             </div>
