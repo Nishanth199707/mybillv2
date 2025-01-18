@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SubUser;
+use App\Models\User;
+use App\Models\Business;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 
@@ -25,14 +27,51 @@ class SubUserController extends Controller
             'user_type' => 'required|in:manager,staff', // Validate user_type
         ]);
 
+
+        $user_id = $request->session()->get('user_id');
+
+        $business = Business::where('user_id', '=', $user_id)->select('state', 'company_name', 'gstavailable','business_category')->first();
+
+        $permissions = [
+            'party' => false,
+        'product' => false,
+        'purchase' => false,
+        'sale' => false,
+        'quotation' => false,
+        'payment' => false,
+        'expense' => false,
+        'cash_bank' => false,
+        'report' => false,
+        'setting' => false,
+        'finance' => false,
+        ];
+    
+        if ($request->has('permissions')) {
+            foreach ($request->input('permissions') as $key => $value) {
+                $permissions[$key] = $value === 'true'; 
+            }
+        }
+
         $subUser = SubUser::create([
             'user_id' => $request->session()->get('user_id'),
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'permissions' => json_encode($validated['permissions']),
-            'usertype' => $validated['user_type'], // Store user_type
+            'permissions' => json_encode($permissions),
+            'usertype' => $validated['user_type'], 
         ]);
+
+        $userArr = [
+            'name' =>$business->company_name,
+            'email' =>$validated['email'],
+            'password' => Hash::make($validated['password']),
+            'usertype' => $validated['user_type'],
+            'parent_id' => $user_id,
+        ];
+
+        // dd($userArr);
+
+        User::create($userArr);
 
         return redirect()->route('subuser.index')->with('success', 'User added successfully.');
     }
@@ -86,10 +125,13 @@ class SubUserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = SubUser::with('parentUser')->select('id', 'name', 'email') // Include user_type
-                ->where('user_id', $request->session()->get('user_id'))
+            $userId = $request->session()->get('user_id');
+    
+            // Fetch data
+            $data = SubUser::select('id', 'name', 'email', 'permissions')
+                ->where('user_id', $userId)
                 ->get();
-
+    
             return Datatables::of($data)
                 ->addColumn('action', function ($row) {
                     $editUrl = route('subuser.edit', $row->id);
@@ -103,13 +145,33 @@ class SubUserController extends Controller
                     ';
                 })
                 ->editColumn('permissions', function ($row) {
-                    $permissions = json_decode($row->permissions, true);
-                    return implode(', ', array_keys(array_filter($permissions, fn($val) => $val === 'true')));
+                    try {
+                        // Decode JSON safely
+                        $permissions = json_decode($row->permissions, true);
+                
+                        // Handle null or invalid JSON
+                        if (!$permissions || !is_array($permissions)) {
+                            return json_encode([]); // Return an empty JSON array for invalid or null permissions
+                        }
+                
+                        // Filter permissions
+                        $filteredPermissions = array_filter($permissions, fn($val) => $val === true || $val === "true");
+                
+                        // Return JSON-encoded filtered keys
+                        return json_encode(array_keys($filteredPermissions));
+                    } catch (\Exception $e) {
+                        \Log::error('Error decoding permissions: ' . $e->getMessage());
+                        return json_encode([]); // Return an empty JSON array on error
+                    }
                 })
-                ->rawColumns(['action'])
+                
+                ->rawColumns(['action', 'permissions']) // Allow HTML in these columns
                 ->make(true);
         }
-
+    
         return view('subUsers.view');
     }
+    
+    
+    
 }

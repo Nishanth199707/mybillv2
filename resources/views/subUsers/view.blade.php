@@ -19,20 +19,19 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered data-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- DataTable dynamically renders rows -->
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table id="subuser-table" class="table dt-table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Permissions</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -44,38 +43,63 @@
     </div>
     <!-- Content wrapper -->
 
-    <!-- DataTable Script -->
     <script type="text/javascript">
-        $(function() {
-            var table = $('.data-table').DataTable({
+        $(document).ready(function() {
+            $('#subuser-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('subuser.index') }}",
-                columns: [
-                    {
-                        data: 'id',
-                        name: 'id'
+                ajax: {
+                    url: "{{ route('subuser.index') }}",
+                    error: function(xhr, error, code) {
+                        console.error('Error fetching data:', error);
+                        alert('Failed to load data.');
+                    }
+                },
+                columns: [{
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            return meta.row + 1; // Row index
+                        },
+                        title: '#'
                     },
                     {
                         data: 'name',
-                        name: 'name'
+                        title: 'name'
                     },
                     {
                         data: 'email',
-                        name: 'email'
+                        title: 'email'
                     },
-                   
                     {
-                        data: 'action',
-                        name: 'action',
+                        data: 'permissions',
+                        render: function(data) {
+                            try {
+                                // Parse JSON data received from the server
+                                let permissions = JSON.parse(data);
+
+                                // Format permissions as badges
+                                let formattedPermissions = permissions.map(permission => {
+                                    return `<span class="badge bg-success">${permission}</span>`;
+                                });
+
+                                return formattedPermissions.join(' ') ||
+                                    '<span class="badge bg-secondary">No Permissions</span>';
+                            } catch (e) {
+                                console.error('Error parsing permissions:', e);
+                                return '<span class="badge bg-danger">Invalid Permissions</span>';
+                            }
+                        },
+                        title: 'Permissions',
                         orderable: false,
                         searchable: false
                     },
-                ],
-                language: {
-                    processing: "<span>Loading...</span>",
-                    emptyTable: "No sub-users available"
-                }
+                    {
+                        data: 'action',
+                        orderable: false,
+                        searchable: false,
+                        title: 'Action'
+                    }
+                ]
             });
         });
     </script>
