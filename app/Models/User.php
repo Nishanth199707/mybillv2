@@ -26,7 +26,8 @@ class User extends Authenticatable
         'is_email_verified',
         'is_active',
         'gst_profile',
-        'gst_response'
+        'gst_response',
+        'parent_id'
     ];
 
     /**

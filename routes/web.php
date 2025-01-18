@@ -30,6 +30,7 @@ use App\Http\Controllers\SubUserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Plan;
+use App\Http\Middleware\UserAccess;
 
 Route::post('/front-logout', function () {
     Auth::logout();
@@ -171,57 +172,56 @@ Route::middleware(['auth', 'user-access:admin', 'is_verify_email'])->group(funct
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout')->middleware('clear.all');
 });
 
-/*------------------------------------------
---------------------------------------------
-All Admin Routes List
---------------------------------------------
---------------------------------------------*/
-Route::middleware(['auth', 'user-access:staff'])->group(function () {
+Route::middleware(['auth', UserAccess::class . ':staff'])->group(function () {
+        Route::get('/staff/home', [HomeController::class, 'staffHome'])->name('staff.home');
 
-    Route::get('/staff/home', [HomeController::class, 'staffHome'])->name('staff.home');
-    Route::resource('/staff/business', BusinessController::class);
-    Route::get('/staff/myprofile', [BusinessController::class, 'indexshow'])->name('business.indexshow');
-    Route::resource('/staff/users', UserController::class);
-    Route::get('/staff/settings', [BusinessController::class, 'ebillsettings'])->name('ebill.settings');
-    Route::get('/staff/users/', [UserController::class, 'index'])->name('users.index');
-    Route::resource('/staff/productcategory', ProductCategoryController::class);
-    Route::resource('/staff/productsubcategory', ProductSubCategoryController::class);
+
+    Route::resource('/business', BusinessController::class);
+    Route::get('/myprofile', [BusinessController::class, 'indexshow'])->name('business.indexshow');
+    Route::resource('/users', UserController::class);
+    Route::get('/settings', [BusinessController::class, 'ebillsettings'])->name('ebill.settings');
+    Route::get('/users/', [UserController::class, 'index'])->name('users.index');
+    Route::resource('/productcategory', ProductCategoryController::class);
+    Route::resource('/productsubcategory', ProductSubCategoryController::class);
     Route::get('productsubcategory', [ProductController::class, 'getSubcategories'])->name('productsubcategory.index');
     Route::get('productcategory', [ProductController::class, 'getCategories'])->name('productcategory.index');
     Route::get('/hsn-codes', [ProductController::class, 'getHsnCodes'])->name('hsn.codes');
     Route::get('/productsubcategory', [ProductSubCategoryController::class, 'subcategoryindex'])->name('productsubcategory.subcategoryindex');
     Route::get('/productcategory', [ProductCategoryController::class, 'categoryindex'])->name('productcategory.categoryindex');
+    Route::get('/disablelist', [ProductController::class, 'disablelist'])->name('product.disablelist');
 
-    Route::resource('/staff/product', ProductController::class);
+    Route::resource('/product', ProductController::class);
+    Route::get('/product/disable/{id}', [ProductController::class, 'disable'])->name('product.disable');
+    Route::get('/product/enable/{id}', [ProductController::class, 'enable'])->name('product.enable');
     Route::get('/get-brands/{categoryId}', [ProductController::class, 'getBrandsByCategory']);
 
-    Route::resource('/staff/party', PartyController::class);
-    Route::post('/staff/party/ajax', [PartyController::class, 'partypayment'])->name('partypayment.ajaxsave');
-    Route::get('/staff/receivepayment', [PartyController::class, 'receivePayment'])->name('partypayment.receivePayment');
-    Route::get('/staff/addpayment', [PartyController::class, 'addPayment'])->name('partypayment.addPayment');
-    Route::get('/staff/viewreceipt', [PartyController::class, 'viewReceipt'])->name('payment.receipt');
-    Route::get('/staff/viewpayment', [PartyController::class, 'viewPayment'])->name('payment.payment');
-    Route::get('/staff/viewCheque', [PartyController::class, 'viewCheque'])->name('payment.cheque');
+    Route::resource('/party', PartyController::class);
+    Route::post('/party/ajax', [PartyController::class, 'partypayment'])->name('partypayment.ajaxsave');
+    Route::get('/receivepayment', [PartyController::class, 'receivePayment'])->name('partypayment.receivePayment');
+    Route::get('/addpayment', [PartyController::class, 'addPayment'])->name('partypayment.addPayment');
+    Route::get('/viewreceipt', [PartyController::class, 'viewReceipt'])->name('payment.receipt');
+    Route::get('/viewpayment', [PartyController::class, 'viewPayment'])->name('payment.payment');
+    Route::get('/viewCheque', [PartyController::class, 'viewCheque'])->name('payment.cheque');
 
     Route::post('/party/filter/transactions/{party}', [PartyController::class, 'filterTransactions'])->name('party.filter.transactions');
     Route::post('/party/filter/ledger/{party}', [PartyController::class, 'filterLedger'])->name('party.filter.ledger');
-    Route::post('/staff/payments/{id}', [PartyController::class, 'paymentdestroy'])->name('payments.paydestroy');
+    Route::post('/payments/{id}', [PartyController::class, 'paymentdestroy'])->name('payments.paydestroy');
 
-    Route::resource('/staff/sale', SaleController::class);
+    Route::resource('/sale', SaleController::class);
     Route::get('/sales/cash-received-ledger', [SaleController::class, 'cashReceivedLedger'])->name('sales.cash_received_ledger');
     Route::get('/BankLedger', [SaleController::class, 'bankLedger'])->name('sales.bankLedger');
 
 
-    Route::resource('/staff/salereturns', SaleReturnController::class);
-    Route::resource('/staff/purchase', PurchaseController::class);
-    Route::resource('/staff/purchasereturns', PurchaseReturnController::class);
+    Route::resource('/salereturns', SaleReturnController::class);
+    Route::resource('/purchase', PurchaseController::class);
+    Route::resource('/purchasereturns', PurchaseReturnController::class);
 
-    Route::resource('/staff/quotations', QuotationController::class);
+    Route::resource('/quotations', QuotationController::class);
     Route::get('/expense/index', [ExpenseController::class, 'index'])->name('expense.index');
-    Route::get('/staff/expense', [ExpenseController::class, 'create'])->name('expense.create');
-    Route::post('/staff/store', [ExpenseController::class, 'store'])->name('expense.store');
+    Route::get('/expense', [ExpenseController::class, 'create'])->name('expense.create');
+    Route::post('/store', [ExpenseController::class, 'store'])->name('expense.store');
 
-    Route::get('/staff/category', [ExpenseController::class, 'category'])->name('expense.category');
+    Route::get('/category', [ExpenseController::class, 'category'])->name('expense.category');
     Route::post('/expense/store', [ExpenseController::class, 'categorystore'])->name('expensecategory.store');
     Route::post('/expense/distroy', [ExpenseController::class, 'categorydestroy'])->name('expensecategory.distroy');
     Route::get('/expense/categoryedit/{id}', [ExpenseController::class, 'categoryedit'])->name('expense.categoryedit');
@@ -235,24 +235,24 @@ Route::middleware(['auth', 'user-access:staff'])->group(function () {
     Route::get('repairs/{repair}/bill', [RepairController::class, 'showBill'])->name('repairs.bill');
     Route::post('/repairs/{id}/update_status', [RepairController::class, 'updateStatus']);
 
-    Route::resource('/staff/financiers', FinancierController::class);
+    Route::resource('/financiers', FinancierController::class);
     Route::put('/emi-received/{id}', [FinancierController::class, 'updateStatus'])->name('emi-received.update');
 
-    Route::get('/staff/financiers/', [FinancierController::class, 'index'])->name('financiers.index');
-    Route::post('/staff/financiers/ajaxsave', [FinancierController::class, 'ajaxstore'])->name('financiers.ajaxsave');
+    Route::get('/financiers/', [FinancierController::class, 'index'])->name('financiers.index');
+    Route::post('/financiers/ajaxsave', [FinancierController::class, 'ajaxstore'])->name('financiers.ajaxsave');
 
     Route::get('fetch-financiers', [FinancierController::class, 'fetchfinanciers']);
 
-    Route::get('/staff/salereturn', [SaleController::class, 'salesreturnindex'])->name('salesreturn.index');
-    Route::get('/staff/salereturn/store', [SaleController::class, 'salereturnstore'])->name('salesreturn.store');
+    Route::get('/salereturn', [SaleController::class, 'salesreturnindex'])->name('salesreturn.index');
+    Route::get('/salereturn/store', [SaleController::class, 'salereturnstore'])->name('salesreturn.store');
 
-    Route::get('/staff/purchasereturn', [PurchaseController::class, 'purchasereturnindex'])->name('purchasereturn.index');
-    // Route::get('/staff/purchasereturn', [PurchaseController::class,'purchasereturnstore'])->name('purchasereturn.store');
+    Route::get('/purchasereturn', [PurchaseController::class, 'purchasereturnindex'])->name('purchasereturn.index');
+    // Route::get('/purchasereturn', [PurchaseController::class,'purchasereturnstore'])->name('purchasereturn.store');
 
-    // Route::resource('/staff/gstreport', GstReportController::class);
-    Route::get('/staff/salereport', [GstReportController::class, 'salereport'])->name('sale.gstreport');
-    Route::get('/staff/purchasereport', [GstReportController::class, 'purchasereport'])->name('purchase.gstreport');
-    Route::get('/staff/stockreport', [GstReportController::class, 'stockreport'])->name('stock.gstreport');
+    // Route::resource('/gstreport', GstReportController::class);
+    Route::get('/salereport', [GstReportController::class, 'salereport'])->name('sale.gstreport');
+    Route::get('/purchasereport', [GstReportController::class, 'purchasereport'])->name('purchase.gstreport');
+    Route::get('/stockreport', [GstReportController::class, 'stockreport'])->name('stock.gstreport');
 
     Route::get('gst-sale-export', [GstReportController::class, 'saleexport'])->name('gst.salereport');
     Route::get('gst-purchase-export', [GstReportController::class, 'purchaseexport'])->name('gst.purchasereport');
@@ -261,29 +261,20 @@ Route::middleware(['auth', 'user-access:staff'])->group(function () {
     Route::get('service-export', [GstReportController::class, 'serviceexport'])->name('gst.Servicereport');
     Route::get('/export/stock-pdf', [GstReportController::class, 'generatePdf'])->name('stock.pdf.export');
 
-    // Route::get('/staff/sale/invoice', [SaleController::class, 'showdata'])->name('sale.invoice');
+    // Route::get('/sale/invoice', [SaleController::class, 'showdata'])->name('sale.invoice');
     Route::get('autocomplete', [SaleController::class, 'autocomplete'])->name('autocomplete');
     Route::get('partyautocomplete', [PartyController::class, 'partyautocomplete'])->name('partyautocomplete');
     Route::get('purchaseautocomplete', [PurchaseController::class, 'purchaseautocomplete'])->name('purchaseautocomplete');
 
-    Route::post('/staff/product/ajaxsave', [ProductController::class, 'storeAjax'])->name('product.ajaxsave');
-    Route::post('/staff/party/ajaxsave', [PartyController::class, 'ajaxstore'])->name('party.ajaxsave');
-    // Route::get('/staff/invoice/{invoice_id}', [SaleController::class, 'invoice'])->name('invoice');
+    Route::post('/product/ajaxsave', [ProductController::class, 'storeAjax'])->name('product.ajaxsave');
+    Route::post('/party/ajaxsave', [PartyController::class, 'ajaxstore'])->name('party.ajaxsave');
+    // Route::get('/invoice/{invoice_id}', [SaleController::class, 'invoice'])->name('invoice');
     Route::get('gst-export', [GstReportController::class, 'export'])->name('gst.export');
 
-    // API CALL
-
-    // Route::get('/search', [ApiController::class, 'search']);
-    Route::resource('settings', SettingController::class);
 });
 
-/*------------------------------------------
---------------------------------------------
-All Admin Routes List
---------------------------------------------
---------------------------------------------*/
-Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(function () {
-    Route::post('superadmin/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('superadmin.logout')->middleware('clear.all');
+Route::middleware(['auth',  UserAccess::class . ':superadmin', 'is_verify_email'])->group(function () {
+    Route::post('superadmin/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('superadmin.logout');
 
     Route::get('/subscription/expired', [App\Http\Controllers\Auth\LoginController::class, 'expired'])->name('subscription.expired');
     Route::get('/pricing', function () {
@@ -402,6 +393,120 @@ Route::middleware(['auth', 'user-access:superadmin', 'is_verify_email'])->group(
         Route::delete('/{id}', [SubUserController::class, 'destroy'])->name('destroy');
     });
 });
+/*------------------------------------------
+--------------------------------------------
+All Admin Routes List
+--------------------------------------------
+--------------------------------------------*/
+// Route::middleware(['auth', 'user-access:staff', 'is_verify_email'])->group(function () {
+
+
+//     Route::get('/superadmin/home', [HomeController::class, 'superadminHome'])->name('superadmin.home');
+
+//     Route::get('/superadmin/home', [HomeController::class, 'staffHome'])->name('staff.home');
+//     Route::resource('/superadmin/business', BusinessController::class);
+//     Route::get('/superadmin/myprofile', [BusinessController::class, 'indexshow'])->name('business.indexshow');
+//     Route::resource('/superadmin/users', UserController::class);
+//     Route::get('/superadmin/settings', [BusinessController::class, 'ebillsettings'])->name('ebill.settings');
+//     Route::get('/superadmin/users/', [UserController::class, 'index'])->name('users.index');
+//     Route::resource('/superadmin/productcategory', ProductCategoryController::class);
+//     Route::resource('/superadmin/productsubcategory', ProductSubCategoryController::class);
+//     Route::get('productsubcategory', [ProductController::class, 'getSubcategories'])->name('productsubcategory.index');
+//     Route::get('productcategory', [ProductController::class, 'getCategories'])->name('productcategory.index');
+//     Route::get('/productsubcategory', [ProductSubCategoryController::class, 'subcategoryindex'])->name('productsubcategory.subcategoryindex');
+//     Route::get('/productcategory', [ProductCategoryController::class, 'categoryindex'])->name('productcategory.categoryindex');
+
+//     Route::resource('/superadmin/product', ProductController::class);
+//     Route::get('/get-brands/{categoryId}', [ProductController::class, 'getBrandsByCategory']);
+
+//     Route::resource('/superadmin/party', PartyController::class);
+//     Route::post('/superadmin/party/ajax', [PartyController::class, 'partypayment'])->name('partypayment.ajaxsave');
+//     Route::get('/superadmin/receivepayment', [PartyController::class, 'receivePayment'])->name('partypayment.receivePayment');
+//     Route::get('/superadmin/addpayment', [PartyController::class, 'addPayment'])->name('partypayment.addPayment');
+//     Route::get('/superadmin/viewreceipt', [PartyController::class, 'viewReceipt'])->name('payment.receipt');
+//     Route::get('/superadmin/viewpayment', [PartyController::class, 'viewPayment'])->name('payment.payment');
+//     Route::get('/superadmin/viewCheque', [PartyController::class, 'viewCheque'])->name('payment.cheque');
+
+//     Route::post('/party/filter/transactions/{party}', [PartyController::class, 'filterTransactions'])->name('party.filter.transactions');
+//     Route::post('/party/filter/ledger/{party}', [PartyController::class, 'filterLedger'])->name('party.filter.ledger');
+//     Route::post('/superadmin/payments/{id}', [PartyController::class, 'paymentdestroy'])->name('payments.paydestroy');
+
+//     Route::resource('/superadmin/sale', SaleController::class);
+//     Route::get('/sales/cash-received-ledger', [SaleController::class, 'cashReceivedLedger'])->name('sales.cash_received_ledger');
+//     Route::get('/BankLedger', [SaleController::class, 'bankLedger'])->name('sales.bankLedger');
+
+
+//     Route::resource('/superadmin/salereturns', SaleReturnController::class);
+//     Route::resource('/superadmin/purchase', PurchaseController::class);
+//     Route::resource('/superadmin/purchasereturns', PurchaseReturnController::class);
+
+//     Route::resource('/superadmin/quotations', QuotationController::class);
+//     Route::get('/expense/index', [ExpenseController::class, 'index'])->name('expense.index');
+//     Route::get('/superadmin/expense', [ExpenseController::class, 'create'])->name('expense.create');
+//     Route::post('/superadmin/store', [ExpenseController::class, 'store'])->name('expense.store');
+
+//     Route::get('/superadmin/category', [ExpenseController::class, 'category'])->name('expense.category');
+//     Route::post('/expense/store', [ExpenseController::class, 'categorystore'])->name('expensecategory.store');
+//     Route::post('/expense/distroy', [ExpenseController::class, 'categorydestroy'])->name('expensecategory.distroy');
+//     Route::get('/expense/categoryedit/{id}', [ExpenseController::class, 'categoryedit'])->name('expense.categoryedit');
+//     Route::get('/expense/view/{id}', [ExpenseController::class, 'view'])->name('expense.view');
+//     Route::get('/expense/edit/{id}', [ExpenseController::class, 'edit'])->name('expense.edit');
+//     Route::get('/expense/delete/{id}', [ExpenseController::class, 'delete'])->name('expense.delete');
+//     Route::post('/expense/update', [ExpenseController::class, 'update'])->name('expense.update');
+//     // Route::get('/report/profit', [ExpenseController::class, 'profit_report'])->name('expense.profit');
+//     Route::resource('repairs', RepairController::class);
+//     Route::get('/cash-received', [RepairController::class, 'cashReceived'])->name('repairs.cashReceived');
+//     Route::get('repairs/{repair}/bill', [RepairController::class, 'showBill'])->name('repairs.bill');
+//     Route::post('/repairs/{id}/update_status', [RepairController::class, 'updateStatus']);
+
+//     Route::resource('/superadmin/financiers', FinancierController::class);
+//     Route::put('/emi-received/{id}', [FinancierController::class, 'updateStatus'])->name('emi-received.update');
+
+//     Route::get('/superadmin/financiers/', [FinancierController::class, 'index'])->name('financiers.index');
+//     Route::post('/superadmin/financiers/ajaxsave', [FinancierController::class, 'ajaxstore'])->name('financiers.ajaxsave');
+
+//     Route::get('fetch-financiers', [FinancierController::class, 'fetchfinanciers']);
+
+//     Route::get('/superadmin/salereturn', [SaleController::class, 'salesreturnindex'])->name('salesreturn.index');
+//     Route::get('/superadmin/salereturn/store', [SaleController::class, 'salereturnstore'])->name('salesreturn.store');
+
+//     Route::get('/superadmin/purchasereturn', [PurchaseController::class, 'purchasereturnindex'])->name('purchasereturn.index');
+//     // Route::get('/superadmin/purchasereturn', [PurchaseController::class,'purchasereturnstore'])->name('purchasereturn.store');
+
+//     // Route::resource('/superadmin/gstreport', GstReportController::class);
+//     Route::get('/superadmin/salereport', [GstReportController::class, 'salereport'])->name('sale.gstreport');
+//     Route::get('/superadmin/purchasereport', [GstReportController::class, 'purchasereport'])->name('purchase.gstreport');
+//     Route::get('/superadmin/stockreport', [GstReportController::class, 'stockreport'])->name('stock.gstreport');
+
+//     Route::get('gst-sale-export', [GstReportController::class, 'saleexport'])->name('gst.salereport');
+//     Route::get('gst-purchase-export', [GstReportController::class, 'purchaseexport'])->name('gst.purchasereport');
+//     Route::get('gst-stock-export', [GstReportController::class, 'stockexport'])->name('gst.stockreport');
+//     Route::get('party-export', [GstReportController::class, 'partyexport'])->name('gst.Partyreport');
+//     Route::get('service-export', [GstReportController::class, 'serviceexport'])->name('gst.Servicereport');
+//     Route::get('/export/stock-pdf', [GstReportController::class, 'generatePdf'])->name('stock.pdf.export');
+
+//     // Route::get('/superadmin/sale/invoice', [SaleController::class, 'showdata'])->name('sale.invoice');
+//     Route::get('autocomplete', [SaleController::class, 'autocomplete'])->name('autocomplete');
+//     Route::get('partyautocomplete', [PartyController::class, 'partyautocomplete'])->name('partyautocomplete');
+//     Route::get('purchaseautocomplete', [PurchaseController::class, 'purchaseautocomplete'])->name('purchaseautocomplete');
+
+//     Route::post('/superadmin/product/ajaxsave', [ProductController::class, 'storeAjax'])->name('product.ajaxsave');
+//     Route::post('/superadmin/party/ajaxsave', [PartyController::class, 'ajaxstore'])->name('party.ajaxsave');
+//     // Route::get('/superadmin/invoice/{invoice_id}', [SaleController::class, 'invoice'])->name('invoice');
+//     Route::get('gst-export', [GstReportController::class, 'export'])->name('gst.export');
+
+//     // API CALL
+
+//     // Route::get('/search', [ApiController::class, 'search']);
+//     Route::resource('settings', SettingController::class);
+// });
+
+/*------------------------------------------
+--------------------------------------------
+All Admin Routes List
+--------------------------------------------
+--------------------------------------------*/
+
 
 Route::middleware(['auth', 'user-access:partner'])->group(function () {
     Route::post('/logout', [PartnerController::class, 'logout'])->name('logout')->middleware('clear.all');

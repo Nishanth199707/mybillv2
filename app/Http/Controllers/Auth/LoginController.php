@@ -88,103 +88,46 @@ class LoginController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $input = $request->all();
-
+    
+        // Validate input fields
         $validator = Validator::make($input, [
             'email' => 'required_without:otp|email',
             'password' => 'required_without:otp',
             'mobileno' => 'required_without:email|digits:10',
             'otp' => 'required_without:password|digits:6',
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->route('login')
                 ->withErrors($validator)
                 ->withInput($request->only('email', 'mobileno'));
         }
+    
         // Email and Password Login
-        if (isset($input['email']) && isset($input['password'])) {
+        if (!empty($input['email']) && !empty($input['password'])) {
             if (Auth::attempt(['email' => $input['email'], 'password' => $input['password']])) {
                 $auth_user = Auth::user();
-
-                // Main user logic
-                switch ($auth_user->usertype) {
-                    case 'superadmin':
-                        return redirect()->route('superadmin.home');
-                    case 'admin':
-                        return redirect()->route('admin.home');
-                    case 'manager':
-                        return redirect()->route('manager.home');
-                    default:
-                        return redirect()->route('home');
-                }
-            }
-        }
-
-        // Check SubUser credentials
-        if (!empty($input['email']) && !empty($input['password'])) {
-            // Retrieve user by email
-            $subUser = \App\Models\SubUser::where('email', $input['email'])->first();
-
-            if ($subUser->where('password', $subUser->password)) {
-                // User authentication successful
-                $auth_user = $subUser;
-
-                session(['sub_user_id' => $auth_user->id]);
-                session(['sub_user_parent_id' => $auth_user->user_id]);
-
-                // dd(session('sub_user_id'),session('sub_user_parent_id'));
-                // dd($auth_user->usertype);
-                // Redirect based on user type
-                switch ($auth_user->usertype) {
-                    
-                    case 'staff':
-                        return redirect()->route('staff.home');
-                    
-                    default:
-                        return redirect()->route('home');
-                }
-
-                // dd($auth_user->usertype);
-
+                
+                return $this->redirectUser($auth_user);
             } else {
-                // Authentication failed
-                return back()->with('error', 'Invalid email or password.');
+                return redirect()->route('login')
+                    ->with('error', 'Invalid email or password.');
             }
         }
+    
         // OTP and Mobile Number Login
-        if (isset($input['mobileno']) && isset($input['otp'])) {
+        if (!empty($input['mobileno']) && !empty($input['otp'])) {
             $otpRecord = DB::table('otps')
                 ->where('mobileno', $input['mobileno'])
                 ->where('otp', $input['otp'])
                 ->where('expires_at', '>=', now())
                 ->first();
-
+    
             if ($otpRecord) {
-                // Fetch the user or subuser by mobile number
-                $auth_user = User::where('phone', $input['mobileno'])
-                    ->orWhereHas('subUsers', function ($query) use ($input) {
-                        $query->where('phone', $input['mobileno']);
-                    })
-                    ->first();
-
+                $auth_user = User::where('phone', $input['mobileno'])->first();
+    
                 if ($auth_user) {
-                    // Check if SubUser or Main User
-                    if ($auth_user instanceof SubUser) {
-                        Auth::login($auth_user);
-                        return redirect()->route('subuser.dashboard');
-                    } else {
-                        Auth::login($auth_user);
-                        switch ($auth_user->usertype) {
-                            case 'superadmin':
-                                return redirect()->route('superadmin.home');
-                            case 'admin':
-                                return redirect()->route('admin.home');
-                            case 'manager':
-                                return redirect()->route('manager.home');
-                            default:
-                                return redirect()->route('home');
-                        }
-                    }
+                    return $this->redirectUser($auth_user);
                 } else {
                     return redirect()->route('login')
                         ->with('error', 'User not found for the provided mobile number.');
@@ -194,12 +137,34 @@ class LoginController extends Controller
                     ->with('error', 'Invalid or expired OTP.');
             }
         }
-        // dd('Invalid login credentials.');
+    
         return redirect()->route('login')
             ->with('error', 'Invalid login credentials.');
     }
-
-
+    
+    /**
+     * Redirect the user based on their user type.
+     *
+     * @param  \App\Models\User  $auth_user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function redirectUser($auth_user): RedirectResponse
+    {
+        // dd($auth_user);
+        switch ($auth_user->usertype) {
+            case 'superadmin':
+                return redirect()->route('superadmin.home');
+            case 'staff':
+                return redirect()->route('staff.home');
+            case 'manager':
+                return redirect()->route('manager.home');
+            case 'admin':
+                return redirect()->route('admin.home');
+            default:
+                return redirect()->route('home');
+        }
+    }
+    
 
     public function logout(Request $request)
     {

@@ -93,8 +93,22 @@
 <body class="" data-bs-spy="scroll" data-bs-target="#navSection" data-bs-offset="100">
     @php
         use App\Models\Business;
+        use App\Models\SubUser;
+        use App\Models\User;
+
         $user_id = session('user_id');
+        $subuser = session('sub_user');
+        
+        if($subuser != null){
+
+            $authUser = User::select('*')->where('id', $subuser)->first();
+        }else{
+            $authUser = User::select('*')->where('id', $user_id)->first();
+
+        }
         $business = Business::select('*')->where('user_id', $user_id)->first();
+        $permission = SubUser::select('permissions')->where('user_id', $user_id)->first();
+        // dd($permission);
     @endphp
     <!-- BEGIN LOADER -->
     <div id="load_screen">
@@ -146,99 +160,7 @@
 
                 <ul class="navbar-nav flex-row ms-auto breadcrumb-action-dropdown">
 
-                    <!-- <li class="nav-item more-dropdown">
-                                <div class="dropdown  custom-dropdown-icon">
-                                    <a class="dropdown-toggle btn" href="#" role="button" id="customDropdown"
-                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span>Settings</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="feather feather-chevron-down custom-dropdown-arrow">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </a>
 
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="customDropdown">
-
-                                        <a class="dropdown-item" data-value="Settings"
-                                            data-icon="<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; class=&quot;feather feather-settings&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;></circle><path d=&quot;M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z&quot;></path></svg>"
-                                            href="javascript:void(0);">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-settings">
-                                                <circle cx="12" cy="12" r="3"></circle>
-                                                <path
-                                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-                                                </path>
-                                            </svg> Settings
-                                        </a>
-
-                                        <a class="dropdown-item" data-value="Mail"
-                                            data-icon="<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; class=&quot;feather feather-mail&quot;><path d=&quot;M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z&quot;></path><polyline points=&quot;22,6 12,13 2,6&quot;></polyline></svg>"
-                                            href="javascript:void(0);">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-mail">
-                                                <path
-                                                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                                </path>
-                                                <polyline points="22,6 12,13 2,6"></polyline>
-                                            </svg> Mail
-                                        </a>
-
-                                        <a class="dropdown-item" data-value="Print"
-                                            data-icon="<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; class=&quot;feather feather-printer&quot;><polyline points=&quot;6 9 6 2 18 2 18 9&quot;></polyline><path d=&quot;M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2&quot;></path><rect x=&quot;6&quot; y=&quot;14&quot; width=&quot;12&quot; height=&quot;8&quot;></rect></svg>"
-                                            href="javascript:void(0);">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-printer">
-                                                <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                                                <path
-                                                    d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2">
-                                                </path>
-                                                <rect x="6" y="14" width="12" height="8"></rect>
-                                            </svg> Print
-                                        </a>
-
-                                        <a class="dropdown-item" data-value="Download"
-                                            data-icon="<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; class=&quot;feather feather-download&quot;><path d=&quot;M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4&quot;></path><polyline points=&quot;7 10 12 15 17 10&quot;></polyline><line x1=&quot;12&quot; y1=&quot;15&quot; x2=&quot;12&quot; y2=&quot;3&quot;></line></svg>"
-                                            href="javascript:void(0);">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-download">
-                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                                <polyline points="7 10 12 15 17 10"></polyline>
-                                                <line x1="12" y1="15" x2="12" y2="3">
-                                                </line>
-                                            </svg> Download
-                                        </a>
-
-                                        <a class="dropdown-item" data-value="Share"
-                                            data-icon="<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; class=&quot;feather feather-share-2&quot;><circle cx=&quot;18&quot; cy=&quot;5&quot; r=&quot;3&quot;></circle><circle cx=&quot;6&quot; cy=&quot;12&quot; r=&quot;3&quot;></circle><circle cx=&quot;18&quot; cy=&quot;19&quot; r=&quot;3&quot;></circle><line x1=&quot;8.59&quot; y1=&quot;13.51&quot; x2=&quot;15.42&quot; y2=&quot;17.49&quot;></line><line x1=&quot;15.41&quot; y1=&quot;6.51&quot; x2=&quot;8.59&quot; y2=&quot;10.49&quot;></line></svg>"
-                                            href="javascript:void(0);">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-share-2">
-                                                <circle cx="18" cy="5" r="3"></circle>
-                                                <circle cx="6" cy="12" r="3"></circle>
-                                                <circle cx="18" cy="19" r="3"></circle>
-                                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49">
-                                                </line>
-                                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49">
-                                                </line>
-                                            </svg> Share
-                                        </a>
-
-                                    </div>
-
-                                </div>
-                            </li> -->
                 </ul>
             </header>
             <ul class="navbar-item flex-row ms-lg-auto ms-0 action-area">
@@ -389,51 +311,54 @@
                     </li>
 
                     <!-- User Menu -->
-                    <li class="menu {{ Route::is('subuser.*') ? 'active' : '' }}">
-                        <a href="#subuser" data-bs-toggle="collapse"
-                            aria-expanded="{{ Route::is('subuser.*') ? 'true' : 'false' }}"
-                            class="dropdown-toggle">
-                            <div class="d-flex align-items-center">
-                                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 52 52"
-                                    enable-background="new 0 0 52 52" xml:space="preserve">
-                                    <g>
-                                        <path
-                                            d="M26,0C11.7,0,0,11.7,0,26s11.7,26,26,26s26-11.7,26-26S40.3,0,26,0z M26,48C13.4,48,4,38.6,4,26S13.4,4,26,4
-                                            s22,9.4,22,22S38.6,48,26,48z" />
-                                        <circle cx="26" cy="18" r="8" />
-                                        <path
-                                            d="M39.1,38.5c-1.5-5.5-6.6-9.5-13.1-9.5s-11.6,4-13.1,9.5c-0.2,0.7,0.2,1.5,0.9,1.7c0.7,0.2,1.5-0.2,1.7-0.9
-                                            c1.2-4.3,5.2-7.3,10.5-7.3s9.3,3,10.5,7.3c0.2,0.7,1,1.1,1.7,0.9C38.9,40,39.3,39.2,39.1,38.5z" />
-                                    </g>
-                                </svg>
-                                <span> User</span>
-                            </div>
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-chevron-right">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="collapse submenu list-unstyled {{ Route::is('subuser.*') ? 'show' : '' }}"
-                            id="subuser" data-bs-parent="#accordionExample">
+                    @if ($subuser != null)
+                    @else
+                        <li class="menu {{ Route::is('subuser.*') ? 'active' : '' }}">
+                            <a href="#subuser" data-bs-toggle="collapse"
+                                aria-expanded="{{ Route::is('subuser.*') ? 'true' : 'false' }}"
+                                class="dropdown-toggle">
+                                <div class="d-flex align-items-center">
+                                    <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="800px"
+                                        height="800px" viewBox="0 0 52 52" enable-background="new 0 0 52 52"
+                                        xml:space="preserve">
+                                        <g>
+                                            <path d="M26,0C11.7,0,0,11.7,0,26s11.7,26,26,26s26-11.7,26-26S40.3,0,26,0z M26,48C13.4,48,4,38.6,4,26S13.4,4,26,4
+                                        s22,9.4,22,22S38.6,48,26,48z" />
+                                            <circle cx="26" cy="18" r="8" />
+                                            <path
+                                                d="M39.1,38.5c-1.5-5.5-6.6-9.5-13.1-9.5s-11.6,4-13.1,9.5c-0.2,0.7,0.2,1.5,0.9,1.7c0.7,0.2,1.5-0.2,1.7-0.9
+                                        c1.2-4.3,5.2-7.3,10.5-7.3s9.3,3,10.5,7.3c0.2,0.7,1,1.1,1.7,0.9C38.9,40,39.3,39.2,39.1,38.5z" />
+                                        </g>
+                                    </svg>
+                                    <span> User</span>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-chevron-right">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </div>
+                            </a>
+                            <ul class="collapse submenu list-unstyled {{ Route::is('subuser.*') ? 'show' : '' }}"
+                                id="subuser" data-bs-parent="#accordionExample">
 
-                            <li class="{{ Route::is('subuser.create') ? 'active' : '' }}">
-                                <a href="{{ route('subuser.create') }}">
-                                    Create User
-                                </a>
-                            </li>
+                                <li class="{{ Route::is('subuser.create') ? 'active' : '' }}">
+                                    <a href="{{ route('subuser.create') }}">
+                                        Create User
+                                    </a>
+                                </li>
 
-                            <li class="{{ Route::is('subuser.index') ? 'active' : '' }}">
-                                <a href="{{ route('subuser.index') }}">
-                                    User List
-                                </a>
-                            </li>
+                                <li class="{{ Route::is('subuser.index') ? 'active' : '' }}">
+                                    <a href="{{ route('subuser.index') }}">
+                                        User List
+                                    </a>
+                                </li>
 
-                        </ul>
-                    </li>
-
+                            </ul>
+                        </li>
+                    @endif
                     <!-- Products Menu -->
                     <li class="menu menu-heading">
                         <div class="heading">
@@ -498,7 +423,7 @@
                             <li class="{{ Request::routeIs('product.index') ? 'active' : '' }}"><a
                                     href="{{ route('product.index') }}">View Product</a></li>
                             <li class="{{ Request::routeIs('product.disablelist') ? 'active' : '' }}"><a
-                                href="{{ route('product.disablelist') }}">Disable Product</a></li>
+                                    href="{{ route('product.disablelist') }}">Disable Product</a></li>
                         </ul>
                     </li>
 
@@ -652,112 +577,118 @@
 
                     @if ($business != null)
                         @if ($business->business_category == 'Mobile & Accessories')
-                            <!-- Service Menu -->
-                            <li
-                                class="menu {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'active' : '' }}">
-                                <a href="#service" data-bs-toggle="collapse"
-                                    aria-expanded="{{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'true' : 'false' }}"
-                                    class="dropdown-toggle">
-                                    <div class="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="feather feather-box">
-                                            <path
-                                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                                            </path>
-                                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                            <line x1="12" y1="22.08" x2="12" y2="12">
-                                            </line>
-                                        </svg>
-                                        <span>Service</span>
-                                    </div>
-                                    <div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="feather feather-chevron-right">
-                                            <polyline points="9 18 15 12 9 6"></polyline>
-                                        </svg>
-                                    </div>
-                                </a>
-                                <ul class="collapse submenu list-unstyled {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'show' : '' }}"
-                                    id="service" data-bs-parent="#accordionExample">
-                                    <li class="{{ Route::is('repairs.create') ? 'active' : '' }}">
-                                        <a href="{{ route('repairs.create') }}">
 
-                                            Add Service
-                                        </a>
-                                    </li>
-                                    <li class="{{ Route::is('repairs.index') ? 'active' : '' }}">
-                                        <a href="{{ route('repairs.index') }}">
+                            @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permission && isset($permission->permissions['service']) && $permission->permissions['service'] === 'true'))
+                                <li
+                                    class="menu {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'active' : '' }}">
+                                    <a href="#service" data-bs-toggle="collapse"
+                                        aria-expanded="{{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'true' : 'false' }}"
+                                        class="dropdown-toggle">
+                                        <div class="">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                class="feather feather-box">
+                                                <path
+                                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                                                </path>
+                                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                                <line x1="12" y1="22.08" x2="12" y2="12">
+                                                </line>
+                                            </svg>
+                                            <span>Service</span>
+                                        </div>
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                class="feather feather-chevron-right">
+                                                <polyline points="9 18 15 12 9 6"></polyline>
+                                            </svg>
+                                        </div>
+                                    </a>
+                                    <ul class="collapse submenu list-unstyled {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'show' : '' }}"
+                                        id="service" data-bs-parent="#accordionExample">
+                                        <li class="{{ Route::is('repairs.create') ? 'active' : '' }}">
+                                            <a href="{{ route('repairs.create') }}">
+                                                Add Service
+                                            </a>
+                                        </li>
+                                        <li class="{{ Route::is('repairs.index') ? 'active' : '' }}">
+                                            <a href="{{ route('repairs.index') }}">
+                                                View Service
+                                            </a>
+                                        </li>
+                                        <li class="{{ Route::is('repairs.cashReceived') ? 'active' : '' }}">
+                                            <a href="{{ route('repairs.cashReceived') }}">
+                                                Service Cash
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @else
+                            @endif
 
-                                            View Service
-                                        </a>
-                                    </li>
-                                    <li class="{{ Route::is('repairs.cashReceived') ? 'active' : '' }}">
-                                        <a href="{{ route('repairs.cashReceived') }}">
-
-                                            Service Cash
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
                         @endif
                     @endif
+
                     <!-- Payments Menu -->
+
+                    {{-- {{$authUser->usertype}}     --}}
+                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permission && isset($permission->permissions['payment']) && $permission->permissions['payment'] === 'true'))
                     <li
-                        class="menu {{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'active' : '' }}">
-                        <a href="#payments" data-bs-toggle="collapse"
-                            aria-expanded="{{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'true' : 'false' }}"
-                            class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap">
-                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                                </svg>
-                                <span>Payments</span>
-                            </div>
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-chevron-right">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="collapse submenu list-unstyled {{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'show' : '' }}"
-                            id="payments" data-bs-parent="#accordionExample">
-                            <li><b class="pl-3">INWARD</b></li>
-                            <li class="{{ Route::is('partypayment.receivePayment') ? 'active' : '' }}"><a
-                                    href="{{ route('partypayment.receivePayment') }}"> Add Receipt </a></li>
-                            <li class="{{ Route::is('payment.receipt') ? 'active' : '' }}"><a
-                                    href="{{ route('payment.receipt') }}"> View Receipt </a></li>
-                            <li class="{{ Route::is('payment.receipt') ? 'active' : '' }}"><a
-                                    href="{{ route('payment.receipt') }}"> Creditors </a></li>
-                            <li><b class="pl-3">OUTWARD</b></li>
-                            <li class="{{ Route::is('partypayment.addPayment') ? 'active' : '' }}"><a
-                                    href="{{ route('partypayment.addPayment') }}"> Add Payment </a></li>
-                            <li class="{{ Route::is('payment.payment') ? 'active' : '' }}"><a
-                                    href="{{ route('payment.payment') }}"> View Payment </a></li>
-                            <li class="{{ Route::is('payment.payment') ? 'active' : '' }}"><a
-                                    href="{{ route('payment.payment') }}"> Debtors </a></li>
-                            <li><b class="pl-3">CHEQUE</b></li>
-                            <li class="{{ Route::is('payment.cheque') ? 'active' : '' }}"><a
-                                    href="{{ route('payment.cheque') }}"> View Cheque </a></li>
-                        </ul>
-                    </li>
-                    
+                            class="menu {{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'active' : '' }}">
+                            <a href="#payments" data-bs-toggle="collapse"
+                                aria-expanded="{{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'true' : 'false' }}"
+                                class="dropdown-toggle">
+                                <div class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap">
+                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                    </svg>
+                                    <span>Payments</span>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-chevron-right">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </div>
+                            </a>
+                            <ul class="collapse submenu list-unstyled {{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'show' : '' }}"
+                                id="payments" data-bs-parent="#accordionExample">
+                                <li><b class="pl-3">INWARD</b></li>
+                                <li class="{{ Route::is('partypayment.receivePayment') ? 'active' : '' }}"><a
+                                        href="{{ route('partypayment.receivePayment') }}"> Add Receipt </a></li>
+                                <li class="{{ Route::is('payment.receipt') ? 'active' : '' }}"><a
+                                        href="{{ route('payment.receipt') }}"> View Receipt </a></li>
+                                <li class="{{ Route::is('payment.receipt') ? 'active' : '' }}"><a
+                                        href="{{ route('payment.receipt') }}"> Creditors </a></li>
+                                <li><b class="pl-3">OUTWARD</b></li>
+                                <li class="{{ Route::is('partypayment.addPayment') ? 'active' : '' }}"><a
+                                        href="{{ route('partypayment.addPayment') }}"> Add Payment </a></li>
+                                <li class="{{ Route::is('payment.payment') ? 'active' : '' }}"><a
+                                        href="{{ route('payment.payment') }}"> View Payment </a></li>
+                                <li class="{{ Route::is('payment.payment') ? 'active' : '' }}"><a
+                                        href="{{ route('payment.payment') }}"> Debtors </a></li>
+                                <li><b class="pl-3">CHEQUE</b></li>
+                                <li class="{{ Route::is('payment.cheque') ? 'active' : '' }}"><a
+                                        href="{{ route('payment.cheque') }}"> View Cheque </a></li>
+                            </ul>
+                        </li>
+                    @else
+                    @endif
                     <!-- Expense Menu -->
                     <li class="menu {{ Route::is('expense') || Route::is('expense') ? 'active' : '' }}">
                         <a href="#expense" data-bs-toggle="collapse"
                             aria-expanded="{{ Route::is('expense') || Route::is('expense') ? 'true' : 'false' }}"
                             class="dropdown-toggle">
                             <div class="d-flex align-items-center">
-                                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"
-                                    width="800px" height="800px" viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve">
+                                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px"
+                                    viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve">
                                     <g>
                                         <path d="M45.1,10.9H6.9c-2.4,0-4.4,2-4.4,4.4v21.3c0,2.4,2,4.4,4.4,4.4h38.2c2.4,0,4.4-2,4.4-4.4V15.4
                                                 C49.5,12.9,47.5,10.9,45.1,10.9z M12,36.6c0-2.9-2.3-5.1-5.1-5.1v-11c2.9,0,5.1-2.3,5.1-5.1H40c0,2.9,2.3,5.1,5.1,5.1v11
@@ -768,8 +699,9 @@
                                 <span>Expense</span>
                             </div>
                             <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
                                     class="feather feather-chevron-right">
                                     <polyline points="9 18 15 12 9 6"></polyline>
                                 </svg>
@@ -799,45 +731,49 @@
                     </li>
 
                     <!-- Cash & Bank Menu -->
-                    <li
-                        class="menu {{ Route::is('sales.cash_received_ledger') || Route::is('sales.bankLedger') ? 'active' : '' }}">
-                        <a href="#cashBank" data-bs-toggle="collapse"
-                            aria-expanded="{{ Route::is('sales.cash_received_ledger') || Route::is('sales.bankLedger') ? 'true' : 'false' }}"
-                            class="dropdown-toggle">
-                            <div class="d-flex align-items-center">
-                                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px"
-                                    viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve">
-                                    <g>
-                                        <path d="M45.1,10.9H6.9c-2.4,0-4.4,2-4.4,4.4v21.3c0,2.4,2,4.4,4.4,4.4h38.2c2.4,0,4.4-2,4.4-4.4V15.4
+
+                    @if ($authUser->usertype === 'superadmin' || ($subuser !== null &&  $permission && isset($permission->permissions['cash_bank']) && $permission->permissions['cash_bank'] === 'true'))
+                        <li
+                            class="menu {{ Route::is('sales.cash_received_ledger') || Route::is('sales.bankLedger') ? 'active' : '' }}">
+                            <a href="#cashBank" data-bs-toggle="collapse"
+                                aria-expanded="{{ Route::is('sales.cash_received_ledger') || Route::is('sales.bankLedger') ? 'true' : 'false' }}"
+                                class="dropdown-toggle">
+                                <div class="d-flex align-items-center">
+                                    <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="800px"
+                                        height="800px" viewBox="0 0 52 52" enable-background="new 0 0 52 52"
+                                        xml:space="preserve">
+                                        <g>
+                                            <path d="M45.1,10.9H6.9c-2.4,0-4.4,2-4.4,4.4v21.3c0,2.4,2,4.4,4.4,4.4h38.2c2.4,0,4.4-2,4.4-4.4V15.4
                                                 C49.5,12.9,47.5,10.9,45.1,10.9z M12,36.6c0-2.9-2.3-5.1-5.1-5.1v-11c2.9,0,5.1-2.3,5.1-5.1H40c0,2.9,2.3,5.1,5.1,5.1v11
                                                 c-2.9,0-5.1,2.3-5.1,5.1H12z" />
-                                        <circle cx="26" cy="25.6" r="7.3" />
-                                    </g>
-                                </svg>
-                                <span>Cash & Bank</span>
-                            </div>
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-chevron-right">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="collapse submenu list-unstyled {{ Route::is('sales.cash_received_ledger') || Route::is('sales.bankLedger') ? 'show' : '' }}"
-                            id="cashBank" data-bs-parent="#accordionExample">
+                                            <circle cx="26" cy="25.6" r="7.3" />
+                                        </g>
+                                    </svg>
+                                    <span>Cash & Bank</span>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-chevron-right">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </div>
+                            </a>
+                            <ul class="collapse submenu list-unstyled {{ Route::is('sales.cash_received_ledger') || Route::is('sales.bankLedger') ? 'show' : '' }}"
+                                id="cashBank" data-bs-parent="#accordionExample">
 
-                            <li class="{{ Route::is('sales.cash_received_ledger') ? 'active' : '' }}">
-                                <a href="{{ route('sales.cash_received_ledger') }}"> Cash </a>
-                            </li>
+                                <li class="{{ Route::is('sales.cash_received_ledger') ? 'active' : '' }}">
+                                    <a href="{{ route('sales.cash_received_ledger') }}"> Cash </a>
+                                </li>
 
-                            <li class="{{ Route::is('sales.bankLedger') ? 'active' : '' }}">
-                                <a href="{{ route('sales.bankLedger') }}"> Bank </a>
-                            </li>
-                        </ul>
-                    </li>
-
+                                <li class="{{ Route::is('sales.bankLedger') ? 'active' : '' }}">
+                                    <a href="{{ route('sales.bankLedger') }}"> Bank </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @else
+                    @endif
 
 
                     <!-- Finance Menu -->
@@ -877,73 +813,76 @@
                         @endif
                     @endif
                     <!-- Reports Menu -->
-                    <li
-                        class="menu {{ Route::is('sale.gstreport') || Route::is('purchase.gstreport') ? 'active' : '' }}">
-                        <a href="#reports" data-bs-toggle="collapse"
-                            aria-expanded="{{ Route::is('sale.gstreport') || Route::is('purchase.gstreport') ? 'true' : 'false' }}"
-                            class="dropdown-toggle">
-                            <div class="">
-                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                    viewBox="0 0 295.238 295.238" style="enable-background:new 0 0 295.238 295.238;"
-                                    xml:space="preserve">
-                                    <g>
-                                        <g>
-                                            <rect x="85.714" y="100" style="fill:#F9BA48;" width="100"
-                                                height="66.667" />
-                                            <path style="fill:#333333;"
-                                                d="M276.19,0H28.571c-7.876,0-14.286,6.41-14.286,14.286v138.095c0,7.876,6.41,14.286,14.286,14.286
-                                                h38.095v85.714H4.762v9.524c0,18.381,14.952,33.333,33.333,33.333h133.333c18.381,0,33.333-14.952,33.333-33.333v-95.238h71.429
-                                                c7.876,0,14.286-6.41,14.286-14.286V14.286C290.476,6.41,284.067,0,276.19,0z M23.81,152.381V14.286
-                                                c0-2.624,2.138-4.762,4.762-4.762h23.81v147.619h-23.81C25.948,157.143,23.81,155.005,23.81,152.381z M38.095,285.714
-                                                c-13.129,0-23.81-10.681-23.81-23.81h119.048c0,9.319,3.843,17.757,10.024,23.81H38.095z M195.238,261.905
-                                                c0,13.129-10.681,23.81-23.81,23.81h-4.762c-13.129,0-23.81-10.681-23.81-23.81v-9.524H76.19V100
-                                                c0-13.129,10.681-23.81,23.81-23.81h105.262c-6.181,6.052-10.024,14.49-10.024,23.81L195.238,261.905L195.238,261.905z
-                                                M219.048,66.667H100c-5.119,0-9.948,1.19-14.286,3.262V57.143h133.333v9.524H219.048z M219.048,78.21v7.505h-9.4
-                                                C212.09,82.481,215.29,79.857,219.048,78.21z M204.762,100c0-1.629,0.167-3.224,0.481-4.762h23.329V76.19v-9.524V47.619H76.19
-                                                v29.095c-5.88,6.015-9.523,14.229-9.523,23.286v57.143h-4.762V9.524h171.428v147.619h-28.571V100z M280.952,85.714v66.667
-                                                c0,2.624-2.138,4.762-4.762,4.762h-33.333V85.714V9.524h33.333c2.624,0,4.762,2.138,4.762,4.762V85.714z" />
-                                            <rect x="33.333" y="52.381" style="fill:#333333;" width="9.524"
-                                                height="38.095" />
-                                            <rect x="33.333" y="100" style="fill:#333333;" width="9.524"
-                                                height="14.286" />
-                                            <path style="fill:#333333;"
-                                                d="M261.905,66.667c-10.505,0-19.048,8.543-19.048,19.048s8.543,19.048,19.048,19.048
-                                                    c10.505,0,19.048-8.543,19.048-19.048S272.409,66.667,261.905,66.667z M261.905,95.238c-5.252,0-9.524-4.271-9.524-9.524
-                                                    c0-5.252,4.271-9.524,9.524-9.524s9.524,4.271,9.524,9.524C271.429,90.967,267.157,95.238,261.905,95.238z" />
-                                            <rect x="85.714" y="180.952" style="fill:#333333;" width="100"
-                                                height="9.524" />
-                                            <rect x="85.714" y="204.762" style="fill:#333333;" width="100"
-                                                height="9.524" />
-                                            <rect x="85.714" y="228.571" style="fill:#333333;" width="100"
-                                                height="9.524" />
-                                        </g>
-                                    </g>
-                                </svg>
-                                <span>Reports</span>
-                            </div>
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-chevron-right">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="collapse submenu list-unstyled {{ Route::is('sale.gstreport') || Route::is('purchase.gstreport') || Route::is('stock.gstreport') ? 'show' : '' }}"
-                            id="reports" data-bs-parent="#accordionExample">
-                            <li class="{{ Route::is('sale.gstreport') ? 'active' : '' }}"><a
-                                    href="{{ route('sale.gstreport') }}"> Sales Report </a></li>
-                            <li class="{{ Route::is('purchase.gstreport') ? 'active' : '' }}"><a
-                                    href="{{ route('purchase.gstreport') }}"> Purchase Report </a></li>
-                            <li class="{{ Route::is('stock.gstreport') ? 'active' : '' }}"><a
-                                    href="{{ route('stock.gstreport') }}"> Stock Report </a></li>
-                                    {{-- <li class="{{ Route::is('expense.profit') ? 'active' : '' }}"><a
-                                        href="{{ route('expense.profit') }}"> Profit Report </a></li> --}}
-                        </ul>
-                    </li>
+                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permission && isset($permission->permissions['payment']) && $permission->permissions['payment'] === 'true'))
 
+                        <li
+                            class="menu {{ Route::is('sale.gstreport') || Route::is('purchase.gstreport') ? 'active' : '' }}">
+                            <a href="#reports" data-bs-toggle="collapse"
+                                aria-expanded="{{ Route::is('sale.gstreport') || Route::is('purchase.gstreport') ? 'true' : 'false' }}"
+                                class="dropdown-toggle">
+                                <div class="">
+                                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                        viewBox="0 0 295.238 295.238" style="enable-background:new 0 0 295.238 295.238;"
+                                        xml:space="preserve">
+                                        <g>
+                                            <g>
+                                                <rect x="85.714" y="100" style="fill:#F9BA48;" width="100"
+                                                    height="66.667" />
+                                                <path style="fill:#333333;"
+                                                    d="M276.19,0H28.571c-7.876,0-14.286,6.41-14.286,14.286v138.095c0,7.876,6.41,14.286,14.286,14.286
+                                                    h38.095v85.714H4.762v9.524c0,18.381,14.952,33.333,33.333,33.333h133.333c18.381,0,33.333-14.952,33.333-33.333v-95.238h71.429
+                                                    c7.876,0,14.286-6.41,14.286-14.286V14.286C290.476,6.41,284.067,0,276.19,0z M23.81,152.381V14.286
+                                                    c0-2.624,2.138-4.762,4.762-4.762h23.81v147.619h-23.81C25.948,157.143,23.81,155.005,23.81,152.381z M38.095,285.714
+                                                    c-13.129,0-23.81-10.681-23.81-23.81h119.048c0,9.319,3.843,17.757,10.024,23.81H38.095z M195.238,261.905
+                                                    c0,13.129-10.681,23.81-23.81,23.81h-4.762c-13.129,0-23.81-10.681-23.81-23.81v-9.524H76.19V100
+                                                    c0-13.129,10.681-23.81,23.81-23.81h105.262c-6.181,6.052-10.024,14.49-10.024,23.81L195.238,261.905L195.238,261.905z
+                                                    M219.048,66.667H100c-5.119,0-9.948,1.19-14.286,3.262V57.143h133.333v9.524H219.048z M219.048,78.21v7.505h-9.4
+                                                    C212.09,82.481,215.29,79.857,219.048,78.21z M204.762,100c0-1.629,0.167-3.224,0.481-4.762h23.329V76.19v-9.524V47.619H76.19
+                                                    v29.095c-5.88,6.015-9.523,14.229-9.523,23.286v57.143h-4.762V9.524h171.428v147.619h-28.571V100z M280.952,85.714v66.667
+                                                    c0,2.624-2.138,4.762-4.762,4.762h-33.333V85.714V9.524h33.333c2.624,0,4.762,2.138,4.762,4.762V85.714z" />
+                                                <rect x="33.333" y="52.381" style="fill:#333333;" width="9.524"
+                                                    height="38.095" />
+                                                <rect x="33.333" y="100" style="fill:#333333;" width="9.524"
+                                                    height="14.286" />
+                                                <path style="fill:#333333;"
+                                                    d="M261.905,66.667c-10.505,0-19.048,8.543-19.048,19.048s8.543,19.048,19.048,19.048
+                                                        c10.505,0,19.048-8.543,19.048-19.048S272.409,66.667,261.905,66.667z M261.905,95.238c-5.252,0-9.524-4.271-9.524-9.524
+                                                        c0-5.252,4.271-9.524,9.524-9.524s9.524,4.271,9.524,9.524C271.429,90.967,267.157,95.238,261.905,95.238z" />
+                                                <rect x="85.714" y="180.952" style="fill:#333333;" width="100"
+                                                    height="9.524" />
+                                                <rect x="85.714" y="204.762" style="fill:#333333;" width="100"
+                                                    height="9.524" />
+                                                <rect x="85.714" y="228.571" style="fill:#333333;" width="100"
+                                                    height="9.524" />
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <span>Reports</span>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-chevron-right">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </div>
+                            </a>
+                            <ul class="collapse submenu list-unstyled {{ Route::is('sale.gstreport') || Route::is('purchase.gstreport') || Route::is('stock.gstreport') ? 'show' : '' }}"
+                                id="reports" data-bs-parent="#accordionExample">
+                                <li class="{{ Route::is('sale.gstreport') ? 'active' : '' }}"><a
+                                        href="{{ route('sale.gstreport') }}"> Sales Report </a></li>
+                                <li class="{{ Route::is('purchase.gstreport') ? 'active' : '' }}"><a
+                                        href="{{ route('purchase.gstreport') }}"> Purchase Report </a></li>
+                                <li class="{{ Route::is('stock.gstreport') ? 'active' : '' }}"><a
+                                        href="{{ route('stock.gstreport') }}"> Stock Report </a></li>
+                                {{-- <li class="{{ Route::is('expense.profit') ? 'active' : '' }}"><a
+                                            href="{{ route('expense.profit') }}"> Profit Report </a></li> --}}
+                            </ul>
+                        </li>
+                    @else
+                    @endif
                     <!-- Settings Menu -->
                     <li
                         class="menu {{ Route::is('settings.index') || Route::is('business.indexshow') ? 'active' : '' }}">

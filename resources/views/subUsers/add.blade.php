@@ -74,33 +74,79 @@
 
                                 <!-- Permissions -->
                                 <div class="mb-3">
-                                    <label class="form-label">Permissions</label>
-
+                                    <h4>Permissions</h4>
+                            
+                                    <!-- Party Permission -->
+                                    {{-- <div class="form-check">
+                                        <input type="checkbox" name="permissions[party]" id="party" value="true" class="form-check-input">
+                                        <label for="party" class="form-check-label">Party</label>
+                                    </div> --}}
+                            
+                                    <!-- Product Permission -->
+                                    {{-- <div class="form-check">
+                                        <input type="checkbox" name="permissions[product]" id="product" value="true" class="form-check-input">
+                                        <label for="product" class="form-check-label">Product</label>
+                                    </div> --}}
+                            
+                                    <!-- Purchase Permission -->
+                                    {{-- <div class="form-check">
+                                        <input type="checkbox" name="permissions[purchase]" id="purchase" value="true" class="form-check-input">
+                                        <label for="purchase" class="form-check-label">Purchase</label>
+                                    </div> --}}
+                            
+                                    <!-- Sale Permission -->
+                                    {{-- <div class="form-check">
+                                        <input type="checkbox" name="permissions[sale]" id="sale" value="true" class="form-check-input">
+                                        <label for="sale" class="form-check-label">Sale</label>
+                                    </div> --}}
+                            
+                                    <!-- Quotation Permission -->
+                                    {{-- <div class="form-check">
+                                        <input type="checkbox" name="permissions[quotation]" id="quotation" value="true" class="form-check-input">
+                                        <label for="quotation" class="form-check-label">Quotation</label>
+                                    </div> --}}
+                            
+                                    <!-- Payment Permission -->
                                     <div class="form-check">
-                                        <input type="checkbox" name="permissions[service]" id="service" value="true"
-                                            class="form-check-input">
+                                        <input type="checkbox" name="permissions[payment]" id="payment" value="true" class="form-check-input">
+                                        <label for="payment" class="form-check-label">Payment</label>
+                                    </div>
+                            
+                                    <!-- Expense Permission -->
+                                    {{-- <div class="form-check">
+                                        <input type="checkbox" name="permissions[expense]" id="expense" value="true" class="form-check-input">
+                                        <label for="expense" class="form-check-label">Expense</label>
+                                    </div> --}}
+                            
+
+                                      <!-- Service Permission -->
+                                      <div class="form-check">
+                                        <input type="checkbox" name="permissions[service]" id="service" value="true" class="form-check-input">
                                         <label for="service" class="form-check-label">Service</label>
                                     </div>
+                                    <!-- Cash & Bank Permission -->
                                     <div class="form-check">
-                                        <input type="checkbox" name="permissions[cash_bank]" id="cash_bank" value="true"
-                                            class="form-check-input">
+                                        <input type="checkbox" name="permissions[cash_bank]" id="cash_bank" value="true" class="form-check-input">
                                         <label for="cash_bank" class="form-check-label">Cash & Bank</label>
                                     </div>
+                            
+                                    <!-- Report Permission -->
                                     <div class="form-check">
-                                        <input type="checkbox" name="permissions[payment]" id="payment" value="true"
-                                            class="form-check-input">
-                                        <label for="payment" class="form-check-label">Payments</label>
+                                        <input type="checkbox" name="permissions[report]" id="report" value="true" class="form-check-input">
+                                        <label for="report" class="form-check-label">Report</label>
                                     </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" name="permissions[report]" id="report" value="true"
-                                            class="form-check-input">
-                                        <label for="report" class="form-check-label">Reports</label>
-                                    </div>
-                                    @if ($errors->has('permissions'))
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $errors->first('permissions') }}</strong>
-                                        </span>
-                                    @endif
+                            
+                                    <!-- Setting Permission -->
+                                    {{-- <div class="form-check">
+                                        <input type="checkbox" name="permissions[setting]" id="setting" value="true" class="form-check-input">
+                                        <label for="setting" class="form-check-label">Setting</label>
+                                    </div> --}}
+                            
+                                    <!-- Finance Permission -->
+                                    {{-- <div class="form-check">
+                                        <input type="checkbox" name="permissions[finance]" id="finance" value="true" class="form-check-input">
+                                        <label for="finance" class="form-check-label">Finance</label>
+                                    </div> --}}
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Save Sub-User</button>
