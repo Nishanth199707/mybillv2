@@ -13,7 +13,10 @@
                     <div class="card-header d-flex justify-content-between align-items-center mb-3">
                         <h5 class="mb-0">E-Way Bill Setup</h5>
                     </div>
-                    @if ($business->gst_auth != 1)
+                    <?php
+                    $gst_response = json_decode($business->auth_response);
+                                                    ?>
+                    @if ($business->gst_auth != 1 &&  $gst_response->date != date('d-m-Y') )
                     <div class="card-body">
                             <div class="mb-3 row">
                                 <div class="col-md-3">
@@ -32,14 +35,12 @@
                     @else
                     <div class="card-body">
                         <div class="mb-3 row">
-                            <div class="col-md-3">
+                            <div class="col-md-5">
                                 <span class="text-success">GST Authentication is done</span><br>
-                                <?php
-                                $gst_response = json_decode($business->auth_response);
-                                                                ?>
                                 <span>GSTIN: {{ $business->gstin }}</span><br>
                                 <span >User Name: {{ $gst_response->header->username }}</span><br>
                                 <span>IP Address: {{ $gst_response->header->ip_address }}</span><br>
+                                <span>GST Authentication Date: {{ $gst_response->date }}</span><br>
                                 <span>Responce Status: {{ $gst_response->status_desc }}</span><br>
                             </div>
                         </div>
