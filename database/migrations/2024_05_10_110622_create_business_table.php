@@ -29,6 +29,8 @@ return new class extends Migration
             $table->string('country');
             $table->text('description')->nullable();
             $table->string('signature')->nullable();
+            $table->string('gst_auth',225)->nullable();
+            $table->json('auth_response')->nullable();
 
             $table->timestamps();
         });

@@ -42,10 +42,12 @@ return new class extends Migration
             $table->string('totQues');
             $table->string('cash_type');
             $table->string('bill_type');
-            
-            $table->string('purchase_order_date')->nullable(); 
-            $table->string('purchase_order_number')->nullable(); 
-            $table->string('vehicle_no')->nullable(); 
+
+            $table->string('purchase_order_date')->nullable();
+            $table->string('purchase_order_number')->nullable();
+            $table->string('vehicle_no')->nullable();
+            $table->string('ewayBillNo',225)->nullable();
+            $table->json('ebillresponse')->nullable();
             $table->timestamps();
         });
     }

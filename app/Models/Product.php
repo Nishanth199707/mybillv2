@@ -28,5 +28,6 @@ class Product extends Model
         'hsn_code',
         'description',
         'imei',
+        'status',
     ];
 }
