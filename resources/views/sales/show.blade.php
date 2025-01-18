@@ -250,11 +250,14 @@
                                                                     style="font-size:small;padding:0;margin:0">Invoice
                                                                     No:</p>
                                                                 <strong>{{ $sale->invoice_no }}</strong>
+                                                                @if($sale->ewayBillNo)
+                                                                <p class=""><strong>E-Way Bill No:</strong><br>{{ $sale->ewayBillNo }}
+                                                                </p>
+                                                                @endif
                                                                 <hr>
                                                                 <p class=""><strong>Inv Date:</strong><br>
                                                                     {{ $sale->invoice_date }}
                                                                 </p>
-
                                                             </div>
                                                         </div>
                                                     </header>
@@ -380,7 +383,7 @@
                                                                     class="col-2">
                                                                     <?php
                                                                     $itemDescription = $val->item_description;
-                                                                    
+
                                                                     // Use preg_replace to add "IMEI" before numbers in parentheses
                                                                     $updatedDescription = preg_replace_callback(
                                                                         '/\((\d+)\)/', // Match numbers inside parentheses
@@ -389,7 +392,7 @@
                                                                         },
                                                                         $itemDescription,
                                                                     );
-                                                                    
+
                                                                     echo $updatedDescription;
                                                                     ?>
                                                                 </td>
@@ -469,7 +472,7 @@
                                                 </table>
 
                                             </div>
-                                         
+
                                                 <div class="row1">
                                                     @if (session('gstavailable') == 'yes')
                                                     <div class="col-md-6">
@@ -646,13 +649,13 @@
                                                     @else
                                                     <div class="col-md-6">
 
-                                                        
+
                                                         <table class="table taxable">
                                                             <thead style="border: 0.5pt solid#303030">
-                                                                
+
                                                             </thead>
                                                             <tbody>
-                                                             
+
                                                                 <tr>
                                                                     <td colspan="5" style="padding: 8px;">
                                                                         <span class="inline"
@@ -697,7 +700,7 @@
                                                     </div>
                                                     @endif
                                                 </div>
-                                          
+
                                             @if ($setting->description == 'yes')
                                                 <div class="row2" style="margin-top:-17px;">
                                                     @if ($sale->cash_type == 'cash' || $sale->cash_type == 'credit')

@@ -1,5 +1,8 @@
 @extends('layouts.v2.app')
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <!-- Content wrapper -->
 <div class="content-wrapper">
     <!-- Content -->
@@ -38,7 +41,7 @@
                                 <div class="col-md-2 mb-1">
                                     <label class="form-label">Product Category</label>
                                     <select name="category" id="category" class="form-select">
-                                        <option value="">Select Category</option> 
+                                        <option value="">Select Category</option>
                                         @foreach ($productcategory as $val)
                                         <option @if (old('category')==$val->name) selected @endif value="{{ $val->name }}">{{ $val->name }}</option>
                                         @endforeach
@@ -77,8 +80,14 @@
 
                                 <div class="col-md-3 mb-1">
                                     <label class="form-label">HSN Code</label>
-                                    <input type="text" class="form-control" name="hsn_code"
-                                        value="{{ old('hsn_code') }}" />
+                                    {{-- <input type="text" class="form-control" name="hsn_code"
+                                        value="{{ old('hsn_code') }}" /> --}}
+                                        <select name="hsn_code" id="hsn_code" class="form-select">
+                                            {{-- @foreach ($hsncode as $code)
+                                            <option @if (old('hsn_code')==$val) selected @endif
+                                                value="{{ $code->code }}">{{ $code->code.'-'.$code->description }}</option>
+                                            @endforeach --}}
+                                        </select>
                                     @if ($errors->has('hsn_code'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('hsn_code') }}</strong>
@@ -144,7 +153,7 @@
                                     </span>
                                     @enderror
                                 </div>
-                               
+
                                 @if($businessCategory->gstavailable != 'no')
                                 <div class="col-md-3 mb-1">
                                     <label class="form-label">GST Rate (%)</label>
@@ -176,12 +185,12 @@
                                 </div>
                             <!-- Checkbox to Show Modal -->
                             <div class="col-md-3 mb-1">
-                                    <input 
-                                        class="form-check-input" 
-                                        style="border-color: black;" 
-                                        type="checkbox" 
-                                        name="imeiCheckbox" 
-                                        id="imeiCheckbox" 
+                                    <input
+                                        class="form-check-input"
+                                        style="border-color: black;"
+                                        type="checkbox"
+                                        name="imeiCheckbox"
+                                        id="imeiCheckbox"
                                         value="yes"
                                     >
                                     <label class="form-check-label" for="imeiCheckbox">
@@ -284,7 +293,7 @@
                             @endif
 
                             <!-- Purchase Details -->
-                          
+
                             @if($businessCategory->gstavailable != 'no')
                                 <div class="row" id="purchase-details">
                                     <h5 class="mt-4 mb-4">Purchase Details</h5>
@@ -561,7 +570,7 @@ $(document).ready(function () {
     });
 
     function addImeiRow() {
-        var rowId = $('.imei-fields-container').data('row') || 0; 
+        var rowId = $('.imei-fields-container').data('row') || 0;
         var imeiGroup = `
             <div class="input-group mb-2">
                 <input type="text" class="form-control imei-field" name="imei[${rowId}][]" placeholder="ENTER IMEI" />
@@ -622,7 +631,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const imeiDisplayContainer = document.getElementById('imeiDisplayContainer');
     const purchasepricecontainer = document.getElementById('purchase-price-container');
 
-   
+
     // Function to toggle fields visibility
     function toggleFields() {
         if (itemTypeField && itemTypeField.value === 'service') {
@@ -659,7 +668,34 @@ document.addEventListener('DOMContentLoaded', () => {
         itemTypeField.addEventListener('change', toggleFields);
     }
 });
-
 </script>
+
+<script>
+$(document).ready(function() {
+    $('#hsn_code').select2({
+        ajax: {
+            url: '{{ route('hsn.codes') }}',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data.results, function (item) {
+                        return {
+                            text: item.code + ' - ' + item.description,
+                            id: item.code
+                        };
+                    }),
+                    pagination: {
+                        more: data.pagination.more
+                    }
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 1
+    });
+});
+</script>
+
 
 @endsection

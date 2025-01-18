@@ -121,11 +121,11 @@ class PurchaseReturnController extends Controller
 
             for ($i = 1; $i <= $request->totQues; $i++) {
                 if ($request->input("product_id{$i}") && $request->input("qty{$i}")) {
-                    Product::where('id', $request->input("product_id{$i}"))
-                        ->decrement('stock', $request->input("qty{$i}"));
+                  Product::where('id', $request->input("product_id{$i}"))
+                    ->decrement('stock', $request->input("qty{$i}"));
 
                     $code = $request->input("imei{$i}");
-                    $product_retun =  PurchaseCustomDetails::where('user_id', $user_id)->where('field_value', '=', $code)->get();
+                    $product_retun =  PurchaseCustomDetails::where('user_id', $user_id)->where('field_value', '=', $code)->first();
                     if(!empty($product_retun->stock)){
                         $product_current_stock = $product_retun->stock - $request->input("qty{$i}");
                     }

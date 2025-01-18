@@ -185,6 +185,7 @@ Route::middleware(['auth', UserAccess::class . ':staff'])->group(function () {
     Route::resource('/productsubcategory', ProductSubCategoryController::class);
     Route::get('productsubcategory', [ProductController::class, 'getSubcategories'])->name('productsubcategory.index');
     Route::get('productcategory', [ProductController::class, 'getCategories'])->name('productcategory.index');
+    Route::get('/hsn-codes', [ProductController::class, 'getHsnCodes'])->name('hsn.codes');
     Route::get('/productsubcategory', [ProductSubCategoryController::class, 'subcategoryindex'])->name('productsubcategory.subcategoryindex');
     Route::get('/productcategory', [ProductCategoryController::class, 'categoryindex'])->name('productcategory.categoryindex');
     Route::get('/disablelist', [ProductController::class, 'disablelist'])->name('product.disablelist');
