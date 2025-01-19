@@ -173,24 +173,29 @@ Route::middleware(['auth', 'user-access:admin', 'is_verify_email'])->group(funct
 });
 
 Route::middleware(['auth', UserAccess::class . ':staff'])->group(function () {
-        Route::get('/staff/home', [HomeController::class, 'staffHome'])->name('staff.home');
+    Route::get('/staff/home', [HomeController::class, 'staffHome'])->name('staff.home');
 
-
-    Route::resource('/business', BusinessController::class);
-    Route::get('/myprofile', [BusinessController::class, 'indexshow'])->name('business.indexshow');
+    Route::resource('/staff/business', BusinessController::class);
+    Route::get('/myprofile', [BusinessController::class, 'indexshow'])->name('staff.indexshow');
     Route::resource('/users', UserController::class);
     Route::get('/settings', [BusinessController::class, 'ebillsettings'])->name('ebill.settings');
     Route::get('/users/', [UserController::class, 'index'])->name('users.index');
-    Route::resource('/productcategory', ProductCategoryController::class);
-    Route::resource('/productsubcategory', ProductSubCategoryController::class);
     Route::get('productsubcategory', [ProductController::class, 'getSubcategories'])->name('productsubcategory.index');
     Route::get('productcategory', [ProductController::class, 'getCategories'])->name('productcategory.index');
     Route::get('/hsn-codes', [ProductController::class, 'getHsnCodes'])->name('hsn.codes');
     Route::get('/productsubcategory', [ProductSubCategoryController::class, 'subcategoryindex'])->name('productsubcategory.subcategoryindex');
-    Route::get('/productcategory', [ProductCategoryController::class, 'categoryindex'])->name('productcategory.categoryindex');
-    Route::get('/disablelist', [ProductController::class, 'disablelist'])->name('product.disablelist');
+    Route::get('/sproductsubcategory', [ProductSubCategoryController::class, 'index'])->name('sproductsubcategory.index');
+    Route::get('/sproductsubcategory/create', [ProductSubCategoryController::class, 'create'])->name('sproductsubcategory.create');
+    Route::get('/staff/sproductcategory/create', [ProductCategoryController::class, 'create'])->name('sproductcategory.create');
+    Route::get('/sproductcategory', [ProductCategoryController::class, 'categoryindex'])->name('sproductcategory.categoryindex');
+    Route::get('/sdisablelist', [ProductController::class, 'disablelist'])->name('sproduct.disablelist');
+    Route::get('/sproduct/create', [ProductController::class, 'create'])->name('sproduct.create');
+    Route::get('/sproduct/index', [ProductController::class, 'index'])->name('sproduct.index');
+    Route::get('/staff/sproductcategory', [ProductCategoryController::class, 'index'])->name('sproductcategory.index');
+    Route::resource('/staff/productcategory', ProductCategoryController::class);
+    Route::resource('/staff/productsubcategory', ProductSubCategoryController::class);
 
-    Route::resource('/product', ProductController::class);
+    Route::resource('/staff/product', ProductController::class);
     Route::get('/product/disable/{id}', [ProductController::class, 'disable'])->name('product.disable');
     Route::get('/product/enable/{id}', [ProductController::class, 'enable'])->name('product.enable');
     Route::get('/get-brands/{categoryId}', [ProductController::class, 'getBrandsByCategory']);
@@ -214,7 +219,7 @@ Route::middleware(['auth', UserAccess::class . ':staff'])->group(function () {
 
     Route::resource('/salereturns', SaleReturnController::class);
     Route::resource('/purchase', PurchaseController::class);
-    Route::resource('/purchasereturns', PurchaseReturnController::class);
+    Route::resource('/spurchasereturns', PurchaseReturnController::class);
 
     Route::resource('/quotations', QuotationController::class);
     Route::get('/expense/index', [ExpenseController::class, 'index'])->name('expense.index');

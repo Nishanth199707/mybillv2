@@ -16,9 +16,9 @@
                         <a class="btn btn-primary btn-sm" href="{{ route('productsubcategory.create') }}">
                                 <i class="fa fa-arrow-left"></i> Add Product Sub Category
                             </a>
-                          
+
                             <a class="btn btn-primary btn-sm" href="{{ route('product.create') }}">
-                                <i class="fa fa-arrow-left"></i> Add Product 
+                                <i class="fa fa-arrow-left"></i> Add Product
                             </a>
                         </div>
                             <div class="table-responsive">
@@ -43,6 +43,11 @@
 
         <div class="content-backdrop fade"></div>
     </div>
+    @if(session()->get('user_type') == 'admin')
+<input type="hidden" id="category_url" value="{{ route('productsubcategory.index') }}">
+@else
+<input type="hidden" id="category_url" value="{{ route('sproductsubcategory.index') }}">
+@endif
     <!-- Content wrapper -->
 
     <script type="text/javascript">
@@ -51,13 +56,13 @@
             if ($.fn.DataTable.isDataTable('#zero-config')) {
                 $('#zero-config').DataTable().destroy();
             }
-
+            var url1 = $("#category_url").val();
             // Initialize DataTable
             var table = $('#zero-config').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('productsubcategory.index') }}"
+                    url: url1,
                 },
                 columns: [
                     {

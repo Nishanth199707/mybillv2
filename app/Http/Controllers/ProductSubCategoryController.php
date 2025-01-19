@@ -21,16 +21,30 @@ class ProductSubCategoryController extends Controller
             ->join('product_categories', 'productsub_categories.product_categories_id', '=', 'product_categories.id')
             ->where('productsub_categories.user_id', $request->session()->get('user_id'))
             ->get();
+            $data->user_type = $request->session()->get('user_type');
                     return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<form action="' . url('superadmin/productsubcategory/' . $row->id . '') . '" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this Sub Category?\')">
+                    $btn = '<form';
+                    if( $row->user_type == 'admin'){
+                    $btn .=  'action="' . url('superadmin/productsubcategory/' . $row->id . '') . '"';
+                    }else{
+                    $btn .=  'action="' . url('staff/productsubcategory/' . $row->id . '') . '"';
+                    }
+
+                   $btn .= 'method="POST" onsubmit="return confirm(\'Are you sure you want to delete this Sub Category?\')">
                                 <input type="hidden" name="_method" value="DELETE">
-                                <input type="hidden" name="_token" value="' . csrf_token() . '">
-                                <a class="btn btn-info btn-sm" href="' . url('superadmin/productsubcategory/' . $row->id . '') . '"><i class="fa-solid fa-list"></i> Show</a>
-                                <a class="btn btn-primary btn-sm" href="' . url('superadmin/productsubcategory/' . $row->id . '/edit') . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
-                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
-                                </form>';
+                                <input type="hidden" name="_token" value="' . csrf_token() . '">';
+                    if( $row->user_type == 'admin'){
+                    $btn .=  '<a class="btn btn-info btn-sm" href="' . url('superadmin/productsubcategory/' . $row->id . '') . '"><i class="fa-solid fa-list"></i> Show</a>';
+                    }else{
+                    $btn .=  '<a class="btn btn-info btn-sm" href="' . url('staff/productsubcategory/' . $row->id . '') . '"><i class="fa-solid fa-list"></i> Show</a>';
+                    }
+                    if( $row->user_type == 'admin'){
+                    $btn .=  ' <a class="btn btn-primary btn-sm" href="' . url('superadmin/productsubcategory/' . $row->id . '/edit') . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>';
+                    }else{
+                    $btn .=  '<a class="btn btn-info btn-sm" href="' . url('staff/productsubcategory/' . $row->id . '/edit') . '"><i class="fa-solid fa-list"></i> Edit</a>';
+                    }
                                 return $btn;
                     })
 
@@ -81,7 +95,7 @@ class ProductSubCategoryController extends Controller
             'description' => $request->description,
             'status' => $request->status
         ];
-    
+
 
         ProductsubCategory::create($productsubCategoryArr);
 
@@ -100,10 +114,10 @@ class ProductSubCategoryController extends Controller
         ->where('productsub_categories.user_id', $request->session()->get('user_id'))
         ->select('productsub_categories.*', 'product_categories.name as category_name')
         ->first();
-    
+
         return view('productsubcategory.show',compact('productsubCategory'));
 
-       
+
 
     }
 
@@ -117,7 +131,7 @@ class ProductSubCategoryController extends Controller
         return response()->json($subcategories);
 
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -162,7 +176,7 @@ class ProductSubCategoryController extends Controller
             'status' => $request->status
         ];
 
-  
+
         $productsubCategory->update($productsubCategoryArr);
 
         return redirect()->route('productsubcategory.index')

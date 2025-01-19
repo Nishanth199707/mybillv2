@@ -9,14 +9,14 @@
                     <div class="card-header d-flex justify-content-between align-items-center mb-3">
                         <h5 class="mb-0">View Product Category</h5>
                     </div>
-                   
+
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-1">
                             <!-- Add New Product Category Button aligned to the left -->
                             <a class="btn btn-primary btn-sm" href="{{ route('productcategory.create') }}">
                                 <i class="fa fa-arrow-left"></i> Add New Product Category
                             </a>
-                          
+
                             <!-- Add Product Sub Category Button aligned to the right -->
                             <a class="btn btn-primary btn-sm" href="{{ route('productsubcategory.create') }}">
                                 <i class="fa fa-arrow-left"></i> Add Product Sub Category
@@ -44,20 +44,25 @@
 
     <div class="content-backdrop fade"></div>
 </div>
+@if(session()->get('user_type') == 'admin')
+<input type="hidden" id="category_url" value="{{ route('productcategory.index') }}">
+@else
+<input type="hidden" id="category_url" value="{{ route('sproductcategory.index') }}">
+@endif
 <!-- Content wrapper -->
 
 <script type="text/javascript">
     $(document).ready(function() {
-
         if ($.fn.DataTable.isDataTable('#zero-config')) {
             $('#zero-config').DataTable().destroy();
         }
+        var url1 = $("#category_url").val();
         // Initialize DataTable
         $('#zero-config').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('productcategory.index') }}",
+                url: url1,
                 error: function(xhr, error, code) {
                     console.error('Error fetching data:', error);
                     alert('Failed to load data.');

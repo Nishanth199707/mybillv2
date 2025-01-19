@@ -40,6 +40,11 @@
 
 
     <div class="content-backdrop fade"></div>
+    @if(session()->get('user_type') == 'admin')
+    <input type="hidden" id="purchase_url" value="{{ route('purchasereturns.index') }}">
+    @else
+    <input type="hidden" id="purchase_url" value="{{ route('spurchasereturns.index') }}">
+    @endif
 </div>
 <!-- Content wrapper -->
 
@@ -49,12 +54,12 @@
         if ($.fn.DataTable.isDataTable('#zero-config')) {
             $('#zero-config').DataTable().destroy();
         }
-
+        var url1 = $("#purchase_url").val();
         // Initialize DataTable
         var table = $('#zero-config').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('purchasereturns.index') }}",
+            ajax: url1,
             columns: [
                 {
                     data: null,

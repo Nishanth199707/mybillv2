@@ -559,7 +559,7 @@ $(document).ready(function () {
     });
 
     function addImeiRow() {
-        var rowId = $('.imei-fields-container').data('row') || 0; 
+        var rowId = $('.imei-fields-container').data('row') || 0;
         var imeiGroup = `
             <div class="input-group mb-2">
                 <input type="text" class="form-control imei-field" name="imei[${rowId}][]" placeholder="ENTER IMEI" />

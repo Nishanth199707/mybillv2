@@ -16,7 +16,7 @@
                         <h5 class="mb-0">Add New Product</h5>
                     </div>
                     <div class="card-body">
-                        <form id="product-form" method="POST" action="{{ route('product.store') }}"
+                        <form id="product-form" method="POST" @if(session()->get('user_type') == 'admin') action="{{ route('product.store') }}" @else action="{{ route('sproduct.store') }}" @endif
                             enctype="multipart/form-data">
                             @csrf
 

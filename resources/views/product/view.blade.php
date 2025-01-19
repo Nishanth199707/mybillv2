@@ -104,16 +104,24 @@
     </div>
 
     <div class="content-backdrop fade"></div>
+    @if(session()->get('user_type') == 'admin')
+    <input type="hidden" id="category_url" value="{{ route('productcategory.categoryindex') }}">
+    <input type="hidden" id="product_url" value="{{ route('product.index') }}">
+    @else
+    <input type="hidden" id="category_url" value="{{ route('sproductcategory.categoryindex') }}">
+    <input type="hidden" id="product_url" value="{{ route('sproduct.index') }}">
+    @endif
 </div>
 <!-- Content wrapper -->
 
 <script type="text/javascript">
     $(document).ready(function() {
+        var url1 = $("#category_url").val();
         const gstAvailable = "<?php echo $businessCategory->gstavailable; ?>";
 
         // Function to fetch categories
         $.ajax({
-            url: "{{ route('productcategory.categoryindex') }}",
+            url: url1,
             method: 'GET',
             success: function(data) {
                 // Populate category filter options
@@ -150,13 +158,13 @@
 
 
 
-
+        var url2 = $("#product_url").val();
         var table = $('#zero-config').DataTable({
             searching: true,
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('product.index') }}",
+                url: url2,
                 data: function(d) {
                     d.categoryFilter = $('#categoryFilter').val();
                     d.subcategoryFilter = $('#subcategoryFilter').val();

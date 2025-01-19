@@ -295,8 +295,15 @@
                 <ul class="list-unstyled menu-categories" id="accordionExample">
 
 
-                    <li class="menu {{ Route::is('superadmin.home') ? 'active' : '' }}">
+
+                        @if(session()->get('user_type') == 'admin')
+                        <li class="menu {{ Route::is('superadmin.home') ? 'active' : '' }}">
                         <a href="{{ route('superadmin.home') }}" class="dropdown-toggle">
+                         @else
+                         <li class="menu {{ Route::is('staff.home') ? 'active' : '' }}">
+                            <a href="{{ route('staff.home') }}" class="dropdown-toggle">
+                         @endif
+
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -379,11 +386,18 @@
                             <span>Products</span>
                         </div>
                     </li>
+                    @if(session()->get('user_type') == 'admin')
                     <li
                         class="menu {{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index') ? 'active' : '' }}">
                         <a href="#products" data-bs-toggle="collapse"
                             aria-expanded="{{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index') ? 'true' : 'false' }}"
                             class="dropdown-toggle">
+                            @else
+                            <li class="menu {{ Request::routeIs('sproductcategory.create') || Request::routeIs('sproductsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('sproductcategory.index') || Request::routeIs('sproductsubcategory.index') || Request::routeIs('sproduct.index') ? 'active' : '' }}">
+                        <a href="#products" data-bs-toggle="collapse"
+                            aria-expanded="{{ Request::routeIs('productcategory.create') || Request::routeIs('sproductsubcategory.create') || Request::routeIs('sproduct.create') || Request::routeIs('sproductcategory.index') || Request::routeIs('sproductsubcategory.index') || Request::routeIs('sproduct.index') ? 'true' : 'false' }}"
+                            class="dropdown-toggle">
+                            @endif
                             <div class="">
                                 <svg width="800px" height="800px" viewBox="0 0 20 20"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -409,22 +423,71 @@
                                 </svg>
                             </div>
                         </a>
+                        @if(session()->get('user_type') == 'admin')
                         <ul class="collapse submenu list-unstyled {{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index') ? 'show' : '' }}"
                             id="products" data-bs-parent="#accordionExample">
+                            @else
+                            <ul class="collapse submenu list-unstyled {{ Request::routeIs('sproductcategory.create') || Request::routeIs('sproductsubcategory.create') || Request::routeIs('sproduct.create') || Request::routeIs('sproductcategory.index') || Request::routeIs('sproductsubcategory.index') || Request::routeIs('sproduct.index') ? 'show' : '' }}"
+                            id="products" data-bs-parent="#accordionExample">
+                            @endif
+                            @if(session()->get('user_type') == 'admin')
                             <li class="{{ Request::routeIs('productcategory.create') ? 'active' : '' }}"><a
-                                    href="{{ route('productcategory.create') }}">Add Category</a></li>
+                                    href="{{ route('productcategory.create') }}">
+                            @else
+                            <li class="{{ Request::routeIs('sproductcategory.create') ? 'active' : '' }}"><a
+                                href="{{ route('sproductcategory.create') }}">
+                            @endif
+
+                                    Add Category</a></li>
+                            @if(session()->get('user_type') == 'admin')
                             <li class="{{ Request::routeIs('productsubcategory.create') ? 'active' : '' }}"><a
-                                    href="{{ route('productsubcategory.create') }}">Add Sub Category</a></li>
+                                    href="{{ route('productsubcategory.create') }}">
+                            @else
+                            <li class="{{ Request::routeIs('sproductsubcategory.create') ? 'active' : '' }}"><a
+                                href="{{ route('sproductsubcategory.create') }}">
+                            @endif
+                                    Add Sub Category</a></li>
+
+                            @if(session()->get('user_type') == 'admin')
                             <li class="{{ Request::routeIs('product.create') ? 'active' : '' }}"><a
-                                    href="{{ route('product.create') }}">Add Product</a></li>
+                                    href="{{ route('product.create') }}">
+                            @else
+                            <li class="{{ Request::routeIs('sproduct.create') ? 'active' : '' }}"><a
+                                href="{{ route('sproduct.create') }}">
+                            @endif
+                            Add Product</a></li>
+                            @if(session()->get('user_type') == 'admin')
                             <li class="{{ Request::routeIs('productcategory.index') ? 'active' : '' }}"><a
-                                    href="{{ route('productcategory.index') }}">View Category</a></li>
-                            <li class="{{ Request::routeIs('productsubcategory.index') ? 'active' : '' }}"><a
-                                    href="{{ route('productsubcategory.index') }}">View Sub Category</a></li>
+                            href="{{ route('productcategory.index') }}">
+                            @else
+                            <li class="{{ Request::routeIs('sproductcategory.index') ? 'active' : '' }}"><a
+                                href="{{ route('sproductcategory.index') }}">
+                            @endif
+                                    View Category</a></li>
+                            @if(session()->get('user_type') == 'admin')
+                                <li class="{{ Request::routeIs('productsubcategory.index') ? 'active' : '' }}"><a
+                                    href="{{ route('productsubcategory.index') }}">
+                            @else
+                            <li class="{{ Request::routeIs('sproductsubcategory.index') ? 'active' : '' }}"><a
+                                href="{{ route('sproductsubcategory.index') }}">
+                            @endif
+                            View Sub Category</a></li>
+                            @if(session()->get('user_type') == 'admin')
                             <li class="{{ Request::routeIs('product.index') ? 'active' : '' }}"><a
-                                    href="{{ route('product.index') }}">View Product</a></li>
+                                    href="{{ route('product.index') }}">
+                            @else
+                            <li class="{{ Request::routeIs('sproduct.index') ? 'active' : '' }}"><a
+                                href="{{ route('sproduct.index') }}">
+                            @endif
+                             Product</a></li>
+                             @if(session()->get('user_type') == 'admin')
                             <li class="{{ Request::routeIs('product.disablelist') ? 'active' : '' }}"><a
-                                    href="{{ route('product.disablelist') }}">Disable Product</a></li>
+                                    href="{{ route('product.disablelist') }}">
+                            @else
+                            <li class="{{ Request::routeIs('sproduct.disablelist') ? 'active' : '' }}"><a
+                                href="{{ route('sproduct.disablelist') }}">
+                            @endif
+                            Disable Product</a></li>
                         </ul>
                     </li>
 
@@ -508,8 +571,13 @@
                                             href="{{ route('purchase.create') }}">Add Purchase</a></li>
                                     <li class="{{ Route::is('purchase.index') ? 'active' : '' }}"><a
                                             href="{{ route('purchase.index') }}">View Purchase</a></li>
-                                    <li class="{{ Route::is('purchasereturns.index') ? 'active' : '' }}"><a
-                                            href="{{ route('purchasereturns.index') }}">Purchase Return</a></li>
+                                            @if(session()->get('user_type') == 'admin')
+                                            <li class="{{ Route::is('purchasereturns.index') ? 'active' : '' }}"><a
+                                                href="{{ route('purchasereturns.index') }}">Purchase Return</a></li>
+                                             @else
+                                             <li class="{{ Route::is('spurchasereturns.index') ? 'active' : '' }}"><a
+                                                href="{{ route('spurchasereturns.index') }}">Purchase Return</a></li>
+                                             @endif
                                 </ul>
                             </li>
                         @endif

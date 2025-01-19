@@ -93,16 +93,24 @@
     </div>
 
     <div class="content-backdrop fade"></div>
+    <div class="content-backdrop fade"></div>
+    @if(session()->get('user_type') == 'admin')
+    <input type="hidden" id="category_url" value="{{ route('productcategory.categoryindex') }}">
+    <input type="hidden" id="product_url" value="{{ route('product.disablelist') }}">
+    @else
+    <input type="hidden" id="category_url" value="{{ route('sproductcategory.categoryindex') }}">
+    <input type="hidden" id="product_url" value="{{ route('sproduct.disablelist') }}">
+    @endif
 </div>
 <!-- Content wrapper -->
 
 <script type="text/javascript">
     $(document).ready(function() {
         const gstAvailable = "<?php echo $businessCategory->gstavailable; ?>";
-
+        var url1 = $("#category_url").val();
         // Function to fetch categories
         $.ajax({
-            url: "{{ route('productcategory.categoryindex') }}",
+            url: url1,
             method: 'GET',
             success: function(data) {
                 // Populate category filter options
@@ -145,7 +153,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('product.disablelist') }}",
+                url: "",
                 data: function(d) {
                     d.categoryFilter = $('#categoryFilter').val();
                     d.subcategoryFilter = $('#subcategoryFilter').val();
