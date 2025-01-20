@@ -26,6 +26,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\SubUserController;
+use App\Http\Controllers\AuditAccessController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -294,6 +295,15 @@ Route::middleware(['auth',  UserAccess::class . ':superadmin,staff', 'is_verify_
         Route::put('/{id}', [SubUserController::class, 'update'])->name('update');
         Route::delete('/{id}', [SubUserController::class, 'destroy'])->name('destroy');
     });
+
+
+    Route::resource('audit-access', AuditAccessController::class);
+    Route::get('audit-access/{auditAccess}/status/{status}', [AuditAccessController::class, 'changeStatus'])->name('audit-access.change-status');
+    Route::get('/audit-access/clients', [AuditAccessController::class, 'clientList'])->name('audit-access.client-list');
+    Route::get('/audit-access/{client}/sale-report', [AuditAccessController::class, 'downloadSaleReport'])->name('audit-access.download-sale-report');
+    Route::get('/audit-access/{client}/purchase-report', [AuditAccessController::class, 'downloadPurchaseReport'])->name('audit-access.download-purchase-report');
+
+
 });
 /*------------------------------------------
 --------------------------------------------
