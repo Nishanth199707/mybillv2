@@ -108,6 +108,9 @@
         }
         $business = Business::select('*')->where('user_id', $user_id)->first();
         $permission = SubUser::select('permissions')->where('user_id', $user_id)->first();
+        if(!empty($permissions)){
+            $permissionsd = json_decode($permission->permissions);
+        }
         // dd($permission);
     @endphp
     <!-- BEGIN LOADER -->
@@ -578,8 +581,6 @@
 
                     @if ($business != null)
                         @if ($business->business_category == 'Mobile & Accessories')
-
-                            @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permission && isset($permission->permissions['service']) && $permission->permissions['service'] === 'true'))
                                 <li
                                     class="menu {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'active' : '' }}">
                                     <a href="#service" data-bs-toggle="collapse"
@@ -620,23 +621,24 @@
                                                 View Service
                                             </a>
                                         </li>
+                                        @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permission && isset($permission->permissions['service']) && $permission->permissions['service'] === 'true'))
                                         <li class="{{ Route::is('repairs.cashReceived') ? 'active' : '' }}">
                                             <a href="{{ route('repairs.cashReceived') }}">
                                                 Service Cash
                                             </a>
                                         </li>
+                                        @endif
                                     </ul>
                                 </li>
                             @else
                             @endif
 
                         @endif
-                    @endif
 
                     <!-- Payments Menu -->
 
                     {{-- {{$authUser->usertype}}     --}}
-                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permission && isset($permission->permissions['payment']) && $permission->permissions['payment'] === 'true'))
+                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permissionsd && isset($permissionsd->payment) && $permissionsd->payment == 'true'))
                     <li
                             class="menu {{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'active' : '' }}">
                             <a href="#payments" data-bs-toggle="collapse"
@@ -732,8 +734,7 @@
                     </li>
 
                     <!-- Cash & Bank Menu -->
-
-                    @if ($authUser->usertype === 'superadmin' || ($subuser !== null &&  $permission && isset($permission->permissions['cash_bank']) && $permission->permissions['cash_bank'] === 'true'))
+                    @if ($authUser->usertype === 'superadmin' || ($subuser !== null &&  $permissionsd && isset($permissionsd->cash_bank) && $permissionsd->cash_bank == 'true'))
                         <li
                             class="menu {{ Route::is('sales.cash_received_ledger') || Route::is('sales.bankLedger') ? 'active' : '' }}">
                             <a href="#cashBank" data-bs-toggle="collapse"
@@ -814,7 +815,7 @@
                         @endif
                     @endif
                     <!-- Reports Menu -->
-                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permission && isset($permission->permissions['payment']) && $permission->permissions['payment'] === 'true'))
+                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permissionsd && isset($permissionsd->report) && $permissionsd->report == 'true'))
 
                         <li
                             class="menu {{ Route::is('sale.gstreport') || Route::is('purchase.gstreport') ? 'active' : '' }}">
@@ -885,6 +886,7 @@
                     @else
                     @endif
                     <!-- Settings Menu -->
+                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permissionsd && isset($permissionsd->settings) && $permissionsd->settings == 'true'))
                     <li
                         class="menu {{ Route::is('settings.index') || Route::is('business.indexshow') ? 'active' : '' }}">
                         <a href="#settings" data-bs-toggle="collapse"
@@ -933,7 +935,7 @@
                             @endif
                         </ul>
                     </li>
-
+                    @endif
                     <div class="ps__rail-y" style="top: 932px; height: 666px; right: 0px;">
                         <div class="ps__thumb-y" tabindex="0" style="top: 372px; height: 265px;"></div>
                     </div>
