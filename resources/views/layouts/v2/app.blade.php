@@ -110,6 +110,8 @@
         $permission = SubUser::select('permissions')->where('user_id', $user_id)->first();
         if(!empty($permissions)){
             $permissionsd = json_decode($permission->permissions);
+        }else{
+            $permissionsd ="";
         }
         // dd($permission);
     @endphp
@@ -383,7 +385,7 @@
                         </div>
                     </li>
                     <li
-                        class="menu {{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index') ? 'active' : '' }}">
+                        class="menu {{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.disablelis') || Request::routeIs('product.index') ? 'active' : '' }}">
                         <a href="#products" data-bs-toggle="collapse"
                             aria-expanded="{{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index') ? 'true' : 'false' }}"
                             class="dropdown-toggle">
@@ -661,22 +663,22 @@
                                     </svg>
                                 </div>
                             </a>
-                            <ul class="collapse submenu list-unstyled {{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'show' : '' }}"
+                            <ul class="collapse submenu list-unstyled {{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('payment.receiptdet') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.paymentdet')  || Route::is('payment.cheque') ? 'show' : '' }}"
                                 id="payments" data-bs-parent="#accordionExample">
                                 <li><b class="pl-3">INWARD</b></li>
                                 <li class="{{ Route::is('partypayment.receivePayment') ? 'active' : '' }}"><a
                                         href="{{ route('partypayment.receivePayment') }}"> Add Receipt </a></li>
                                 <li class="{{ Route::is('payment.receipt') ? 'active' : '' }}"><a
                                         href="{{ route('payment.receipt') }}"> View Receipt </a></li>
-                                <li class="{{ Route::is('payment.receipt') ? 'active' : '' }}"><a
-                                        href="{{ route('payment.receipt') }}"> Creditors </a></li>
+                                <li class="{{ Route::is('payment.receiptdet') ? 'active' : '' }}"><a
+                                        href="{{ route('payment.receiptdet') }}"> Creditors </a></li>
                                 <li><b class="pl-3">OUTWARD</b></li>
                                 <li class="{{ Route::is('partypayment.addPayment') ? 'active' : '' }}"><a
                                         href="{{ route('partypayment.addPayment') }}"> Add Payment </a></li>
                                 <li class="{{ Route::is('payment.payment') ? 'active' : '' }}"><a
                                         href="{{ route('payment.payment') }}"> View Payment </a></li>
-                                <li class="{{ Route::is('payment.payment') ? 'active' : '' }}"><a
-                                        href="{{ route('payment.payment') }}"> Debtors </a></li>
+                                <li class="{{ Route::is('payment.paymentdet') ? 'active' : '' }}"><a
+                                        href="{{ route('payment.paymentdet') }}"> Debtors </a></li>
                                 <li><b class="pl-3">CHEQUE</b></li>
                                 <li class="{{ Route::is('payment.cheque') ? 'active' : '' }}"><a
                                         href="{{ route('payment.cheque') }}"> View Cheque </a></li>

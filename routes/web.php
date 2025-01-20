@@ -182,6 +182,7 @@ Route::middleware(['auth',  UserAccess::class . ':superadmin,staff', 'is_verify_
         return view('front.payment_home', compact('plan'));
     })->name('pricing');
 
+    Route::get('/staff/home', [HomeController::class, 'staffHome'])->name('staff.home');
     Route::get('/hsn-codes', [ProductController::class, 'getHsnCodes'])->name('hsn.codes');
     Route::get('/superadmin/home', [HomeController::class, 'superadminHome'])->name('superadmin.home');
     Route::resource('/superadmin/business', BusinessController::class);
@@ -207,7 +208,9 @@ Route::middleware(['auth',  UserAccess::class . ':superadmin,staff', 'is_verify_
     Route::get('/superadmin/receivepayment', [PartyController::class, 'receivePayment'])->name('partypayment.receivePayment');
     Route::get('/superadmin/addpayment', [PartyController::class, 'addPayment'])->name('partypayment.addPayment');
     Route::get('/superadmin/viewreceipt', [PartyController::class, 'viewReceipt'])->name('payment.receipt');
+    Route::get('/superadmin/paymentview', [PartyController::class, 'viewReceiptdet'])->name('payment.receiptdet');
     Route::get('/superadmin/viewpayment', [PartyController::class, 'viewPayment'])->name('payment.payment');
+    Route::get('/superadmin/viewpaymentdet', [PartyController::class, 'paymentdet'])->name('payment.paymentdet');
     Route::get('/superadmin/viewCheque', [PartyController::class, 'viewCheque'])->name('payment.cheque');
 
     Route::post('/party/filter/transactions/{party}', [PartyController::class, 'filterTransactions'])->name('party.filter.transactions');

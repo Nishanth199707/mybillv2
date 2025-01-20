@@ -53,7 +53,7 @@ class HomeController extends Controller
      */
     public function staffHome()
     {
-        return view('managerHome');
+        return view('staff.managerHome');
     }
 
     /**
