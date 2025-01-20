@@ -99,12 +99,10 @@
         $user_id = session('user_id');
         $subuser = session('sub_user');
 
-        if($subuser != null){
-
+        if ($subuser != null) {
             $authUser = User::select('*')->where('id', $subuser)->first();
-        }else{
+        } else {
             $authUser = User::select('*')->where('id', $user_id)->first();
-
         }
         $business = Business::select('*')->where('user_id', $user_id)->first();
         $permission = SubUser::select('permissions')->where('user_id', $user_id)->first();
@@ -208,7 +206,8 @@
                         </div>
                     </a>
 
-                    <div class="dropdown-menu position-absolute" aria-labelledby="userProfileDropdown" style="width:235px !important;">
+                    <div class="dropdown-menu position-absolute" aria-labelledby="userProfileDropdown"
+                        style="width:235px !important;">
                         <div class="user-profile-section">
                             <div class="media mx-auto">
                                 <div class="emoji me-2">
@@ -579,7 +578,12 @@
                     @if ($business != null)
                         @if ($business->business_category == 'Mobile & Accessories')
 
-                            @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permission && isset($permission->permissions['service']) && $permission->permissions['service'] === 'true'))
+                            @if (
+                                $authUser->usertype === 'superadmin' ||
+                                    ($subuser !== null &&
+                                        $permission &&
+                                        isset($permission->permissions['service']) &&
+                                        $permission->permissions['service'] === 'true'))
                                 <li
                                     class="menu {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'active' : '' }}">
                                     <a href="#service" data-bs-toggle="collapse"
@@ -636,8 +640,13 @@
                     <!-- Payments Menu -->
 
                     {{-- {{$authUser->usertype}}     --}}
-                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permission && isset($permission->permissions['payment']) && $permission->permissions['payment'] === 'true'))
-                    <li
+                    @if (
+                        $authUser->usertype === 'superadmin' ||
+                            ($subuser !== null &&
+                                $permission &&
+                                isset($permission->permissions['payment']) &&
+                                $permission->permissions['payment'] === 'true'))
+                        <li
                             class="menu {{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'active' : '' }}">
                             <a href="#payments" data-bs-toggle="collapse"
                                 aria-expanded="{{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'true' : 'false' }}"
@@ -733,7 +742,12 @@
 
                     <!-- Cash & Bank Menu -->
 
-                    @if ($authUser->usertype === 'superadmin' || ($subuser !== null &&  $permission && isset($permission->permissions['cash_bank']) && $permission->permissions['cash_bank'] === 'true'))
+                    @if (
+                        $authUser->usertype === 'superadmin' ||
+                            ($subuser !== null &&
+                                $permission &&
+                                isset($permission->permissions['cash_bank']) &&
+                                $permission->permissions['cash_bank'] === 'true'))
                         <li
                             class="menu {{ Route::is('sales.cash_received_ledger') || Route::is('sales.bankLedger') ? 'active' : '' }}">
                             <a href="#cashBank" data-bs-toggle="collapse"
@@ -814,8 +828,12 @@
                         @endif
                     @endif
                     <!-- Reports Menu -->
-                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permission && isset($permission->permissions['payment']) && $permission->permissions['payment'] === 'true'))
-
+                    @if (
+                        $authUser->usertype === 'superadmin' ||
+                            ($subuser !== null &&
+                                $permission &&
+                                isset($permission->permissions['payment']) &&
+                                $permission->permissions['payment'] === 'true'))
                         <li
                             class="menu {{ Route::is('sale.gstreport') || Route::is('purchase.gstreport') ? 'active' : '' }}">
                             <a href="#reports" data-bs-toggle="collapse"
@@ -824,8 +842,8 @@
                                 <div class="">
                                     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                        viewBox="0 0 295.238 295.238" style="enable-background:new 0 0 295.238 295.238;"
-                                        xml:space="preserve">
+                                        viewBox="0 0 295.238 295.238"
+                                        style="enable-background:new 0 0 295.238 295.238;" xml:space="preserve">
                                         <g>
                                             <g>
                                                 <rect x="85.714" y="100" style="fill:#F9BA48;" width="100"
@@ -884,6 +902,40 @@
                         </li>
                     @else
                     @endif
+
+                    <li
+                        class="menu {{ Route::is('audit-access.index') || Route::is('audit-access.create') ? 'active' : '' }}">
+                        <a href="#audit-access" data-bs-toggle="collapse"
+                            aria-expanded="{{ Route::is('audit-access.index') || Route::is('audit-access.create') ? 'true' : 'false' }}"
+                            class="dropdown-toggle">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield">
+                                    <path d="M12 22s8-4 8-10V5L12 2 4 5v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                                <span>Audit Access</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-chevron-right">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </div>
+                        </a>
+                        <ul class="collapse submenu list-unstyled {{ Route::is('audit-access.index') || Route::is('audit-access.create') ? 'show' : '' }}"
+                            id="audit-access" data-bs-parent="#accordionExample">
+                            <li class="{{ Route::is('audit-access.create') ? 'active' : '' }}">
+                                <a href="{{ route('audit-access.create') }}"> Request Access </a>
+                            </li>
+                            <li class="{{ Route::is('audit-access.index') ? 'active' : '' }}">
+                                <a href="{{ route('audit-access.index') }}"> Manage Requests </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <!-- Settings Menu -->
                     <li
                         class="menu {{ Route::is('settings.index') || Route::is('business.indexshow') ? 'active' : '' }}">
@@ -933,6 +985,7 @@
                             @endif
                         </ul>
                     </li>
+
 
                     <div class="ps__rail-y" style="top: 932px; height: 666px; right: 0px;">
                         <div class="ps__thumb-y" tabindex="0" style="top: 372px; height: 265px;"></div>
