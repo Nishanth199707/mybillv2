@@ -38,7 +38,6 @@ class UserAccess
         if ($auth_user->usertype === 'staff') {
             $request->session()->put('user_id', $auth_user->parent_id);
             $request->session()->put('sub_user', $userId);
-            $request->session()->put('user_type', 'staff');
             $request->session()->put('gstavailable', $gstavailable);
 
             return $next($request);
@@ -47,7 +46,6 @@ class UserAccess
         // Handle superadmin-specific logic
         if ($auth_user->usertype === 'superadmin') {
             $request->session()->put('user_id', $userId);
-            $request->session()->put('user_type', 'admin');
             $request->session()->put('gstavailable', $gstavailable);
 
             return $next($request);

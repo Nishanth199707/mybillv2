@@ -21,10 +21,10 @@
                       <!-- <small class="text-muted float-end">Default label</small> -->
                     </div>
                     <div class="card-body">
-                      <form method="POST"  @if(session()->get('user_type') == 'admin') action="{{ route('productsubcategory.update', $productsubCategory->id) }}"  @else action="{{ route('productcategory.update',$productCategory->id) }}" @endif enctype="multipart/form-data">
+                      <form method="POST" action="{{ route('productcategory.update',$productCategory->id) }}" enctype="multipart/form-data">
                       @csrf
                       @method('PUT')
-
+                     
                         <div class="mb-3">
                           <label class="form-label">Name</label>
                           <input type="text" class="form-control" name="name" value="{{ $productCategory->name }}" placeholder="Enter the Category Name" />
@@ -81,7 +81,7 @@
             </div>
             <!-- / Content -->
 
-
+          
 
             <div class="content-backdrop fade"></div>
           </div>

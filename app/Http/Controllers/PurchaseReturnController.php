@@ -22,21 +22,14 @@ class PurchaseReturnController extends Controller
     {
         if ($request->ajax()) {
             $data = PurchaseReturn::select('*')->where('user_id', $request->session()->get('user_id'))->orderBy('id', 'DESC')->get();
-            $data->user_type = $request->session()->get('user_type');
+
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    if( $row->user_type == 'admin'){
-                        $showUrl = route('purchasereturns.show', $row->id);
-                        $deleteUrl =  route('purchasereturns.destroy', $row->id);
-                    }else{
-                        $showUrl = route('spurchasereturns.show', $row->id);
-                        $deleteUrl =  route('spurchasereturns.destroy', $row->id);
-                    }
-                    $btn = '<form action="' .$deleteUrl. '" method="POST" style="display:inline;">
+                    $btn = '<form action="' . route('purchasereturns.destroy', $row->id) . '" method="POST" style="display:inline;">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="' . csrf_token() . '">
-                            <a class="btn btn-info btn-sm" href="' .$showUrl  . '"><i class="fa-solid fa-list"></i> Show</a>
+                            <a class="btn btn-info btn-sm" href="' . route('purchasereturns.show', $row->id) . '"><i class="fa-solid fa-list"></i> Show</a>
                             <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
                         </form>';
                     return $btn;

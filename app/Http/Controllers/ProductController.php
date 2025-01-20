@@ -49,7 +49,6 @@ class ProductController extends Controller
     {
         if ($request->ajax()) {
             $data = ProductCategory::where('user_id', $request->session()->get('user_id'))->get();
-            $data->user_type = $request->session()->get('user_type');
 
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -57,15 +56,9 @@ class ProductController extends Controller
                     return '<img src="' . asset('uploads/category/' . $row->image) . '" width="50" height="50" alt="Category Image">';
                 })
                 ->addColumn('action', function($row) {
-                if( $row->user_type == 'admin'){
                     $editUrl = url('superadmin/productcategory/' . $row->id . '/edit');
                     $showUrl = url('superadmin/productcategory/' . $row->id);
                     $deleteUrl = url('superadmin/productcategory/' . $row->id);
-                }else{
-                    $editUrl = url('staff/productcategory/' . $row->id . '/edit');
-                    $showUrl = url('staff/productcategory/' . $row->id);
-                    $deleteUrl = url('staff/productcategory/' . $row->id);
-                }
 
                     return '
                         <form action="' . $deleteUrl . '" method="POST" style="display:inline; ">
@@ -109,7 +102,7 @@ class ProductController extends Controller
 
             // Get the filtered data
             $data = $products->get();
-            $data->user_type = $request->session()->get('user_type');
+
 
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -123,27 +116,16 @@ class ProductController extends Controller
                 })
                 ->addColumn('action', function ($row) {
 
-                    if( $row->user_type == 'admin'){
-                        $editUrl = url('superadmin/product/' . $row->id . '/edit');
-                        $showUrl = url('superadmin/product/' . $row->id);
-                        $deleteUrl = url('superadmin/product/' . $row->id);
-                    }else{
-                        $editUrl = url('staff/product/' . $row->id . '/edit');
-                        $showUrl = url('staff/product/' . $row->id);
-                        $deleteUrl = url('staff/product/' . $row->id);
-                    }
-
                    $query = SaleDetail::query();
                    $query->where('sale_details.product_id', $row->id);
                    $query->where('sale_details.user_id', $row->user_id);
                    $data1 = $query->first();
-
                     if(empty($data1)){
-                        return '<form action="' . $deleteUrl . '" method="POST" style="display:inline;" onsubmit="return confirm(\'Are you sure you want to delete this Product?\')">
+                        return '<form action="' . url('superadmin/product/' . $row->id) . '" method="POST" style="display:inline;" onsubmit="return confirm(\'Are you sure you want to delete this Product?\')">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <a class="btn btn-info btn-sm" href="' . $showUrl . '"><i class="fa-solid fa-list"></i> Show</a>
-                        <a class="btn btn-primary btn-sm" href="' . $editUrl . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                        <a class="btn btn-info btn-sm" href="' . url('superadmin/product/' . $row->id) . '"><i class="fa-solid fa-list"></i> Show</a>
+                        <a class="btn btn-primary btn-sm" href="' . url('superadmin/product/' . $row->id . '/edit') . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
                         <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
                     </form>';
                     }else{
@@ -338,16 +320,9 @@ class ProductController extends Controller
                     }
                 })
                 ->addColumn('action', function ($row) {
-                    if( $row->user_type == 'admin'){
-                        $showUrl = url('superadmin/product/' . $row->id);
-                        $enableUrl = url('superadmin/product/enable/' . $row->id);
-                    }else{
-                        $showUrl = url('staff/product/' . $row->id);
-                        $enableUrl = url('staff/product/enable/' . $row->id);
-                    }
 
-                        return '                        <a class="btn btn-info btn-sm" href="' . $showUrl . '"><i class="fa-solid fa-list"></i> Show</a>
-                        <a class="btn btn-primary btn-sm" href="' . $$enableUrl . '"><i class="fa-solid fa-pen-to-square"></i> Enable</a>
+                        return '                        <a class="btn btn-info btn-sm" href="' . url('superadmin/product/' . $row->id) . '"><i class="fa-solid fa-list"></i> Show</a>
+                        <a class="btn btn-primary btn-sm" href="' . url('superadmin/product/enable/' . $row->id ) . '"><i class="fa-solid fa-pen-to-square"></i> Enable</a>
                         ';
 
                 })

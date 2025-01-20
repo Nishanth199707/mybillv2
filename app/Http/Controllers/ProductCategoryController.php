@@ -17,7 +17,6 @@ class ProductCategoryController extends Controller
         //
         if ($request->ajax()) {
             $data = ProductCategory::select('*')->where('user_id', $request->session()->get('user_id'))->get();
-            $data->user_type = $request->session()->get('user_type');
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('image', function ($row) {
@@ -25,27 +24,12 @@ class ProductCategoryController extends Controller
                     return $image;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<form';
-                    if( $row->user_type == 'admin'){
-                    $btn .=  'action="' . url('superadmin/productcategory/' . $row->id . '') . '"';
-                    }else{
-                    $btn .=  'action="' . url('staff/sproductcategory/' . $row->id . '') . '"';
-                    }
-
-                   $btn .= 'method="POST" onsubmit="return confirm(\'Are you sure you want to delete this Category?\')">
+                    $btn = '<form action="' . url('superadmin/productcategory/' . $row->id . '') . '" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this Category?\')">
                                 <input type="hidden" name="_method" value="DELETE">
-                                <input type="hidden" name="_token" value="' . csrf_token() . '">';
-                    if( $row->user_type == 'admin'){
-                    $btn .=  '<a class="btn btn-info btn-sm" href="' . url('superadmin/productcategory/' . $row->id . '') . '"><i class="fa-solid fa-list"></i> Show</a>';
-                    }else{
-                    $btn .=  '<a class="btn btn-info btn-sm" href="' . url('staff/productcategory/' . $row->id . '') . '"><i class="fa-solid fa-list"></i> Show</a>';
-                    }
-                    if( $row->user_type == 'admin'){
-                    $btn .=  ' <a class="btn btn-primary btn-sm" href="' . url('superadmin/productcategory/' . $row->id . '/edit') . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>';
-                    }else{
-                    $btn .=  '<a class="btn btn-info btn-sm" href="' . url('staff/productcategory/' . $row->id . '/edit') . '"><i class="fa-solid fa-list"></i> Edit</a>';
-                    }
-                    $btn .=  '     <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
+                                <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                <a class="btn btn-info btn-sm" href="' . url('superadmin/productcategory/' . $row->id . '') . '"><i class="fa-solid fa-list"></i> Show</a>
+                                <a class="btn btn-primary btn-sm" href="' . url('superadmin/productcategory/' . $row->id . '/edit') . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
                                 </form>';
                     return $btn;
                 })

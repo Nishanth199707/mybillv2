@@ -20,7 +20,7 @@
                             <!-- <small class="text-muted float-end">Default label</small> -->
                         </div>
                         <div class="card-body">
-                            <form  @if(session()->get('user_type') == 'admin') action="{{ route('productsubcategory.update', $productsubCategory->id) }}"  @else action="{{ route('productsubcategory.update',$productsubCategory->id) }}" @endif
+                            <form method="POST" action="{{ route('productsubcategory.update', $productsubCategory->id) }}"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
