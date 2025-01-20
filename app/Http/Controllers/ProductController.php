@@ -168,20 +168,43 @@ class ProductController extends Controller
     {
         $search = $request->input('q'); // 'q' is the default search term used by Select2
 
+        $user_id = $request->session()->get('user_id');
+        if (!$user_id) {
+            return response()->json(['error' => 'User not authenticated'], 401); // Handle case when user_id is not found in session
+        }
+
+        $businessCategory = Business::select('business_category','gstavailable')
+                                    ->where('user_id', '=', $user_id)
+                                    ->first();
+
+        if (!$businessCategory) {
+            return response()->json(['error' => 'Business information not found'], 404);
+        }
+
         $hsnCodes = HsnCode::query()
             ->when($search, function ($query, $search) {
                 return $query->where('code', 'like', "%{$search}%")
                              ->orWhere('description', 'like', "%{$search}%");
-            })
-            ->orderBy('code', 'ASC')
-            ->select('code', 'description')
-            ->paginate(10); // Adjust the pagination size as needed
+            });
+
+        // Check the business category and filter accordingly
+        if ($businessCategory->business_category == 'Accounting & CA') {
+            $hsnCodes->where('type', 2);
+        } else {
+            $hsnCodes->where('type', 1);
+        }
+
+        // Ordering and pagination
+        $hsnCodes = $hsnCodes->orderBy('code', 'ASC')
+                             ->select('code', 'description')
+                             ->paginate(10); // Adjust the pagination size as needed
 
         return response()->json([
-            'results' => $hsnCodes->items(), // Select2 expects 'results' as the key
+            'results' => $hsnCodes->items(), // Send paginated items to Select2
             'pagination' => ['more' => $hsnCodes->hasMorePages()],
         ]);
     }
+
 
     public function store(Request $request)
     {
