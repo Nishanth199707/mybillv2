@@ -173,108 +173,7 @@ Route::middleware(['auth', 'user-access:admin', 'is_verify_email'])->group(funct
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout')->middleware('clear.all');
 });
 
-Route::middleware(['auth', UserAccess::class . ':staff'])->group(function () {
-        Route::get('/staff/home', [HomeController::class, 'staffHome'])->name('staff.home');
-
-
-    Route::resource('/business', BusinessController::class);
-    Route::get('/myprofile', [BusinessController::class, 'indexshow'])->name('business.indexshow');
-    Route::resource('/users', UserController::class);
-    Route::get('/settings', [BusinessController::class, 'ebillsettings'])->name('ebill.settings');
-    Route::get('/users/', [UserController::class, 'index'])->name('users.index');
-    Route::resource('/productcategory', ProductCategoryController::class);
-    Route::resource('/productsubcategory', ProductSubCategoryController::class);
-    Route::get('productsubcategory', [ProductController::class, 'getSubcategories'])->name('productsubcategory.index');
-    Route::get('productcategory', [ProductController::class, 'getCategories'])->name('productcategory.index');
-    Route::get('/hsn-codes', [ProductController::class, 'getHsnCodes'])->name('hsn.codes');
-    Route::get('/productsubcategory', [ProductSubCategoryController::class, 'subcategoryindex'])->name('productsubcategory.subcategoryindex');
-    Route::get('/productcategory', [ProductCategoryController::class, 'categoryindex'])->name('productcategory.categoryindex');
-    Route::get('/disablelist', [ProductController::class, 'disablelist'])->name('product.disablelist');
-
-    Route::resource('/product', ProductController::class);
-    Route::get('/product/disable/{id}', [ProductController::class, 'disable'])->name('product.disable');
-    Route::get('/product/enable/{id}', [ProductController::class, 'enable'])->name('product.enable');
-    Route::get('/get-brands/{categoryId}', [ProductController::class, 'getBrandsByCategory']);
-
-    Route::resource('/party', PartyController::class);
-    Route::post('/party/ajax', [PartyController::class, 'partypayment'])->name('partypayment.ajaxsave');
-    Route::get('/receivepayment', [PartyController::class, 'receivePayment'])->name('partypayment.receivePayment');
-    Route::get('/addpayment', [PartyController::class, 'addPayment'])->name('partypayment.addPayment');
-    Route::get('/viewreceipt', [PartyController::class, 'viewReceipt'])->name('payment.receipt');
-    Route::get('/viewpayment', [PartyController::class, 'viewPayment'])->name('payment.payment');
-    Route::get('/viewCheque', [PartyController::class, 'viewCheque'])->name('payment.cheque');
-
-    Route::post('/party/filter/transactions/{party}', [PartyController::class, 'filterTransactions'])->name('party.filter.transactions');
-    Route::post('/party/filter/ledger/{party}', [PartyController::class, 'filterLedger'])->name('party.filter.ledger');
-    Route::post('/payments/{id}', [PartyController::class, 'paymentdestroy'])->name('payments.paydestroy');
-
-    Route::resource('/sale', SaleController::class);
-    Route::get('/sales/cash-received-ledger', [SaleController::class, 'cashReceivedLedger'])->name('sales.cash_received_ledger');
-    Route::get('/BankLedger', [SaleController::class, 'bankLedger'])->name('sales.bankLedger');
-
-
-    Route::resource('/salereturns', SaleReturnController::class);
-    Route::resource('/purchase', PurchaseController::class);
-    Route::resource('/purchasereturns', PurchaseReturnController::class);
-
-    Route::resource('/quotations', QuotationController::class);
-    Route::get('/expense/index', [ExpenseController::class, 'index'])->name('expense.index');
-    Route::get('/expense', [ExpenseController::class, 'create'])->name('expense.create');
-    Route::post('/store', [ExpenseController::class, 'store'])->name('expense.store');
-
-    Route::get('/category', [ExpenseController::class, 'category'])->name('expense.category');
-    Route::post('/expense/store', [ExpenseController::class, 'categorystore'])->name('expensecategory.store');
-    Route::post('/expense/distroy', [ExpenseController::class, 'categorydestroy'])->name('expensecategory.distroy');
-    Route::get('/expense/categoryedit/{id}', [ExpenseController::class, 'categoryedit'])->name('expense.categoryedit');
-    Route::get('/expense/view/{id}', [ExpenseController::class, 'view'])->name('expense.view');
-    Route::get('/expense/edit/{id}', [ExpenseController::class, 'edit'])->name('expense.edit');
-    Route::get('/expense/delete/{id}', [ExpenseController::class, 'delete'])->name('expense.delete');
-    Route::post('/expense/update', [ExpenseController::class, 'update'])->name('expense.update');
-    // Route::get('/report/profit', [ExpenseController::class, 'profit_report'])->name('expense.profit');
-    Route::resource('repairs', RepairController::class);
-    Route::get('/cash-received', [RepairController::class, 'cashReceived'])->name('repairs.cashReceived');
-    Route::get('repairs/{repair}/bill', [RepairController::class, 'showBill'])->name('repairs.bill');
-    Route::post('/repairs/{id}/update_status', [RepairController::class, 'updateStatus']);
-
-    Route::resource('/financiers', FinancierController::class);
-    Route::put('/emi-received/{id}', [FinancierController::class, 'updateStatus'])->name('emi-received.update');
-
-    Route::get('/financiers/', [FinancierController::class, 'index'])->name('financiers.index');
-    Route::post('/financiers/ajaxsave', [FinancierController::class, 'ajaxstore'])->name('financiers.ajaxsave');
-
-    Route::get('fetch-financiers', [FinancierController::class, 'fetchfinanciers']);
-
-    Route::get('/salereturn', [SaleController::class, 'salesreturnindex'])->name('salesreturn.index');
-    Route::get('/salereturn/store', [SaleController::class, 'salereturnstore'])->name('salesreturn.store');
-
-    Route::get('/purchasereturn', [PurchaseController::class, 'purchasereturnindex'])->name('purchasereturn.index');
-    // Route::get('/purchasereturn', [PurchaseController::class,'purchasereturnstore'])->name('purchasereturn.store');
-
-    // Route::resource('/gstreport', GstReportController::class);
-    Route::get('/salereport', [GstReportController::class, 'salereport'])->name('sale.gstreport');
-    Route::get('/purchasereport', [GstReportController::class, 'purchasereport'])->name('purchase.gstreport');
-    Route::get('/stockreport', [GstReportController::class, 'stockreport'])->name('stock.gstreport');
-
-    Route::get('gst-sale-export', [GstReportController::class, 'saleexport'])->name('gst.salereport');
-    Route::get('gst-purchase-export', [GstReportController::class, 'purchaseexport'])->name('gst.purchasereport');
-    Route::get('gst-stock-export', [GstReportController::class, 'stockexport'])->name('gst.stockreport');
-    Route::get('party-export', [GstReportController::class, 'partyexport'])->name('gst.Partyreport');
-    Route::get('service-export', [GstReportController::class, 'serviceexport'])->name('gst.Servicereport');
-    Route::get('/export/stock-pdf', [GstReportController::class, 'generatePdf'])->name('stock.pdf.export');
-
-    // Route::get('/sale/invoice', [SaleController::class, 'showdata'])->name('sale.invoice');
-    Route::get('autocomplete', [SaleController::class, 'autocomplete'])->name('autocomplete');
-    Route::get('partyautocomplete', [PartyController::class, 'partyautocomplete'])->name('partyautocomplete');
-    Route::get('purchaseautocomplete', [PurchaseController::class, 'purchaseautocomplete'])->name('purchaseautocomplete');
-
-    Route::post('/product/ajaxsave', [ProductController::class, 'storeAjax'])->name('product.ajaxsave');
-    Route::post('/party/ajaxsave', [PartyController::class, 'ajaxstore'])->name('party.ajaxsave');
-    // Route::get('/invoice/{invoice_id}', [SaleController::class, 'invoice'])->name('invoice');
-    Route::get('gst-export', [GstReportController::class, 'export'])->name('gst.export');
-
-});
-
-Route::middleware(['auth',  UserAccess::class . ':superadmin', 'is_verify_email'])->group(function () {
+Route::middleware(['auth',  UserAccess::class . ':superadmin,staff', 'is_verify_email'])->group(function () {
     Route::post('superadmin/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('superadmin.logout');
 
     Route::get('/subscription/expired', [App\Http\Controllers\Auth\LoginController::class, 'expired'])->name('subscription.expired');
@@ -284,7 +183,8 @@ Route::middleware(['auth',  UserAccess::class . ':superadmin', 'is_verify_email'
         return view('front.payment_home', compact('plan'));
     })->name('pricing');
 
-
+    Route::get('/staff/home', [HomeController::class, 'staffHome'])->name('staff.home');
+    Route::get('/hsn-codes', [ProductController::class, 'getHsnCodes'])->name('hsn.codes');
     Route::get('/superadmin/home', [HomeController::class, 'superadminHome'])->name('superadmin.home');
     Route::resource('/superadmin/business', BusinessController::class);
     Route::get('/superadmin/myprofile', [BusinessController::class, 'indexshow'])->name('business.indexshow');
@@ -309,7 +209,9 @@ Route::middleware(['auth',  UserAccess::class . ':superadmin', 'is_verify_email'
     Route::get('/superadmin/receivepayment', [PartyController::class, 'receivePayment'])->name('partypayment.receivePayment');
     Route::get('/superadmin/addpayment', [PartyController::class, 'addPayment'])->name('partypayment.addPayment');
     Route::get('/superadmin/viewreceipt', [PartyController::class, 'viewReceipt'])->name('payment.receipt');
+    Route::get('/superadmin/paymentview', [PartyController::class, 'viewReceiptdet'])->name('payment.receiptdet');
     Route::get('/superadmin/viewpayment', [PartyController::class, 'viewPayment'])->name('payment.payment');
+    Route::get('/superadmin/viewpaymentdet', [PartyController::class, 'paymentdet'])->name('payment.paymentdet');
     Route::get('/superadmin/viewCheque', [PartyController::class, 'viewCheque'])->name('payment.cheque');
 
     Route::post('/party/filter/transactions/{party}', [PartyController::class, 'filterTransactions'])->name('party.filter.transactions');
