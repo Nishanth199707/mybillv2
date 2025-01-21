@@ -1740,33 +1740,30 @@
     });
 
 
-    $(document).on('input', '.imei-field', function() {
-        var imeiField = $(this);
+    $(document).on('input', '.imei-field', function () {
+    var imeiField = $(this);
+    var row = imeiField.closest('.imei-fields-container').data('row');
+    var nextRow = imeiField.closest('.input-group').next('.input-group');
 
-        if (imeiField.val().trim() !== '') {
-            var row = imeiField.closest('.imei-fields-container').data('row');
-            var nextRow = imeiField.closest('.input-group').next('.input-group');
+    if (nextRow.length === 0) {
+        addImeiRow(row);
+    }
 
-            if (nextRow.length === 0) {
-                addImeiRow(row);
-            }
+    updateQuantity(row);
 
-            updateQuantity(row);
-        }
-        function addImeiRow(row) {
+    function addImeiRow(row) {
         var container = $(`.imei-fields-container[data-row="${row}"]`);
 
         var newInput = `
-        <div class="input-group mb-2">
-            <input type="text" class="form-control imei-field" name="imei[${row}][]" placeholder="ENTER IMEI" />
-            <button type="button" class="btn btn-outline-secondary remove-imei">Remove</button>
-        </div>
-    `;
-
+            <div class="input-group mb-2">
+                <input type="text" class="form-control imei-field" name="imei[${row}][]" placeholder="ENTER IMEI" />
+                <button type="button" class="btn btn-outline-secondary remove-imei">Remove</button>
+            </div>
+        `;
         container.append(newInput);
 
         // Handle removing an IMEI field
-        container.find('.remove-imei').on('click', function() {
+        container.find('.remove-imei').last().on('click', function () {
             $(this).parent().remove();
             updateQuantity(row);
             calculateRow(row);
@@ -1775,7 +1772,21 @@
 
         updateQuantity(row);
     }
-    });
+});
+
+// Add keydown event listener for Enter key navigation
+$(document).on('keydown', '.imei-field', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent form submission on Enter
+        var inputs = document.querySelectorAll('.imei-field');
+        var index = Array.prototype.indexOf.call(inputs, this);
+        var nextInput = inputs[index + 1]; // Get the next input element
+        if (nextInput) {
+            nextInput.focus(); // Focus on the next input
+        }
+    }
+});
+
 
     function updateQuantity(row) {
         var imeiFields = $(`.imei-fields-container[data-row="${row}"] .imei-field`);

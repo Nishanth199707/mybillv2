@@ -18,12 +18,9 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Expense Ref</th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>Date</th>
-                                    <th>Amount</th>
-                                    <th>Payment Type</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -50,7 +47,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('expense.index') }}",
+                url: "{{ route('expense.categorylist') }}",
                 error: function(xhr, error, code) {
                     console.error('Error fetching data:', error);
                     alert('Failed to load data.');
@@ -64,10 +61,6 @@
                     title: '#'
                 },
                 {
-                    data: 'expense_ref',
-                    title: 'Expense Ref'
-                },
-                {
                     data: 'name',
                     title: 'Name'
                 },
@@ -76,16 +69,8 @@
                     title: 'Description'
                 },
                 {
-                    data: 'dateofexpense',
-                    title: 'Date'
-                },
-                {
-                    data: 'amount',
-                    title: 'Amount'
-                },
-                {
-                    data: 'cash_type',
-                    title: 'Payment Type'
+                    data: 'status',
+                    title: 'Status'
                 },
                 {
                     data: 'action',

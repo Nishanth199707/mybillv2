@@ -686,9 +686,9 @@
                     @else
                     @endif
                     <!-- Expense Menu -->
-                    <li class="menu {{ Route::is('expense') || Route::is('expense') ? 'active' : '' }}">
+                    <li class="menu {{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') ? 'active' : '' }}">
                         <a href="#expense" data-bs-toggle="collapse"
-                            aria-expanded="{{ Route::is('expense') || Route::is('expense') ? 'true' : 'false' }}"
+                            aria-expanded="{{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') ? 'true' : 'false' }}"
                             class="dropdown-toggle">
                             <div class="d-flex align-items-center">
                                 <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px"
@@ -711,24 +711,29 @@
                                 </svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ Route::is('expense.category') || Route::is('expense.category') ? 'show' : '' }}"
+                        <ul class="collapse submenu list-unstyled {{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') || Route::is('expense.categorylist') ? 'show' : '' }}"
                             id="expense" data-bs-parent="#accordionExample">
 
                             <li class="{{ Route::is('expense.category') ? 'active' : '' }}">
                                 <a href="{{ route('expense.category') }}">
-                                    Expense Category
+                                    Expense
                                 </a>
                             </li>
 
-                            <li class="{{ Route::is('expense.create') ? 'active' : '' }}">
+                            {{-- <li class="{{ Route::is('expense.create') ? 'active' : '' }}">
                                 <a href="{{ route('expense.create') }}">
                                     Expense Create
                                 </a>
-                            </li>
+                            </li> --}}
 
                             <li class="{{ Route::is('expense.index') ? 'active' : '' }}">
                                 <a href="{{ route('expense.index') }}">
                                     Expense List
+                                </a>
+                            </li>
+                            <li class="{{ Route::is('expense.categorylist') ? 'active' : '' }}">
+                                <a href="{{ route('expense.categorylist') }}">
+                                    Expense Category List
                                 </a>
                             </li>
                         </ul>

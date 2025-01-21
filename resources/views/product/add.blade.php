@@ -16,8 +16,7 @@
                         <h5 class="mb-0">Add New Product</h5>
                     </div>
                     <div class="card-body">
-                        <form id="product-form" method="POST" action="{{ route('product.store') }}"
-                            enctype="multipart/form-data">
+                        <form id="product-form" method="POST" action="{{ route('product.store') }}" enctype="multipart/form-data">
                             @csrf
 
                             <!-- Product Details -->
@@ -377,7 +376,6 @@
     <div class="content-backdrop fade"></div>
 </div>
 <!-- Content wrapper -->
-
 <script>
     $(document).ready(function() {
 
@@ -585,6 +583,18 @@ $(document).ready(function () {
             </div>
         `;
         $('.imei-fields-container').append(imeiGroup);
+        const inputs = document.querySelectorAll('.imei-field');
+                    inputs.forEach((input, index) => {
+                        input.addEventListener('keypress', function(event) {
+                        if (event.key === 'Enter') {
+                        event.preventDefault(); // Prevent form submission on Enter
+                            const nextInput = inputs[index + 1]; // Get the next input element
+                            if (nextInput) {
+                        nextInput.focus(); // Focus on the next input
+                    }
+                }
+                });
+            });
     }
 });
 

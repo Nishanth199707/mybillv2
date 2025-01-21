@@ -41,18 +41,22 @@
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Invoice No</th>
                                         <th>Date</th>
+                                        <th>Invoice No</th>
                                         <th>Party Name</th>
-                                        <th>Cash Received</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
+                                        <th>Closing Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($cashReceivedLedger as $transaction)
                                     <tr>
-                                        <td>{{ $transaction->invoice }}</td>
                                         <td>{{ \Carbon\Carbon::parse($transaction->date)->format('d M, Y') }}</td>
+                                        <td>{{ $transaction->invoice }}</td>
                                         <td>{{ $transaction->party_name }}</td>
+                                        <td>{{$transaction->debit}}</td>
+                                        <td>{{$transaction->credit }}</td>
                                         <td>₹ {{ number_format($transaction->amount, 2) }}</td>
                                     </tr>
                                     @endforeach
