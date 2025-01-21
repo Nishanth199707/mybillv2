@@ -186,7 +186,7 @@
                                             <label class="form-label">Cash Type</label>
                                             <select name="cash_type" required id="cash_type" class="form-select">
                                                 @php
-                                                    $cash_type = ['cash' => 'Cash', 'credit' => 'Credit'];
+                                                    $cash_type = ['cash' => 'Cash', 'bank' => 'Bank'];
                                                 @endphp
                                                 @foreach ($cash_type as $key => $val)
                                                     <option @if (old('cash_type') == $key) selected @endif
@@ -204,7 +204,7 @@
                          <div style="text-align: right;">
 
                              <button id="saleFormSubmit" type="submit"
-                                 class="btn btn-primary float-right mb-2">Bill</button>
+                                 class="btn btn-primary float-right mb-2">Save</button>
                          </div>
                          <input type="hidden" name="totQues" id="totQues" value="1" />
                 </form>

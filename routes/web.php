@@ -231,11 +231,15 @@ Route::middleware(['auth',  UserAccess::class . ':superadmin,staff', 'is_verify_
     Route::get('/expense/index', [ExpenseController::class, 'index'])->name('expense.index');
     Route::get('/superadmin/expense', [ExpenseController::class, 'create'])->name('expense.create');
     Route::post('/superadmin/store', [ExpenseController::class, 'store'])->name('expense.store');
+    Route::post('/superadmin/storenew', [ExpenseController::class, 'storenew'])->name('expense.storenew');
 
     Route::get('/superadmin/category', [ExpenseController::class, 'category'])->name('expense.category');
     Route::post('/expense/store', [ExpenseController::class, 'categorystore'])->name('expensecategory.store');
-    Route::post('/expense/distroy', [ExpenseController::class, 'categorydestroy'])->name('expensecategory.distroy');
+    Route::post('/expensecat/distroy', [ExpenseController::class, 'categorydestroy'])->name('expensecategory.distroy');
+    Route::post('/expense/distroy', [ExpenseController::class, 'expensedestroy'])->name('expense.distroy');
     Route::get('/expense/categoryedit/{id}', [ExpenseController::class, 'categoryedit'])->name('expense.categoryedit');
+    Route::get('/expense/expenseedit/{id}', [ExpenseController::class, 'expenseedit'])->name('expense.expenseedit');
+    Route::get('/expense/categorylist', [ExpenseController::class, 'categorylist'])->name('expense.categorylist');
     Route::get('/expense/view/{id}', [ExpenseController::class, 'view'])->name('expense.view');
     Route::get('/expense/edit/{id}', [ExpenseController::class, 'edit'])->name('expense.edit');
     Route::get('/expense/delete/{id}', [ExpenseController::class, 'delete'])->name('expense.delete');
