@@ -1046,7 +1046,7 @@ class SaleController extends Controller
         $to_Date = date_create($request->to_date);
         $toDate = date_format($to_Date, "d-m-Y");
 
-        $cashReceivedLedger = PartyPayment::join('parties', 'party_payments.party_id', '=', 'parties.id')
+        $cashReceivedLedger = PartyPayment::join('parties', 'party_payments.party_id', '=', 'parties.id','left')
             ->where('party_payments.user_id', $user_id)
             // ->where('party_payments.invoice_no', 'like', '%REC%')
             ->where('party_payments.mode_of_payment', 'cash')
@@ -1055,6 +1055,8 @@ class SaleController extends Controller
                 'party_payments.invoice_no as invoice',
                 'parties.name as party_name',
                 // 'party_payments.debit as amount',
+                'party_payments.debit',
+                'party_payments.credit',
                 'party_payments.paid_date as date'
             )
             ->orderBy('party_payments.id', 'DESC');
@@ -1081,13 +1083,15 @@ class SaleController extends Controller
 
         $onlinecashReceivedLedger = PartyPayment::join('parties', 'party_payments.party_id', '=', 'parties.id','left')
             ->where('party_payments.user_id', $user_id)
-            ->where('party_payments.invoice_no', 'like', '%REC%')
+            // ->where('party_payments.invoice_no', 'like', '%REC%')
             ->whereNotIn('party_payments.mode_of_payment', ['cash'])
             ->select(
                 'parties.id as party_id',
                 'party_payments.invoice_no as invoice',
                 'parties.name as party_name',
-                'party_payments.debit as amount',
+                // 'party_payments.debit as amount',
+                'party_payments.debit',
+                'party_payments.credit',
                 'party_payments.paid_date as date'
             )
             ->orderBy('party_payments.id', 'DESC');

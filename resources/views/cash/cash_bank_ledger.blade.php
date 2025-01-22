@@ -50,17 +50,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                    $total = 0;
+                                    @endphp
                                     @foreach ($cashReceivedLedger as $transaction)
                                     <tr>
                                         <td>{{ \Carbon\Carbon::parse($transaction->date)->format('d M, Y') }}</td>
                                         <td>{{ $transaction->invoice }}</td>
-                                        <td>{{ $transaction->party_name }}</td>
-                                        <td>{{$transaction->debit}}</td>
-                                        <td>{{$transaction->credit }}</td>
-                                        <td>₹ {{ number_format($transaction->amount, 2) }}</td>
+                                        <td>@if(!empty($transaction->party_name)){{ $transaction->party_name }}@else{{ 'Expense' }} @endif</td>
+                                        <td>{{ $transaction->debit }}</td>
+                                        <td>{{ $transaction->credit }}</td>
+                                        @php
+                                        $line_total = $transaction->credit - $transaction->debit; // Correct calculation
+                                        $total += $line_total; // Correct assignment
+                                        @endphp
+                                        <td>₹ {{ number_format($total, 2) }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
