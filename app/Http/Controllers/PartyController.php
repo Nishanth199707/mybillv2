@@ -849,7 +849,53 @@ class PartyController extends Controller
 
         return view('party.viewReceipt', compact('data'));
     }
+    public function viewReceiptdet(Request $request)
+    {
+        $userId = $request->session()->get('user_id');
 
+        $data = Party::select(
+            'parties.id as party_id',
+            'parties.name as party_name',
+            \DB::raw('(SELECT closing_balance
+                        FROM party_payments pp
+                        WHERE pp.party_id = parties.id
+                        AND pp.user_id = ?
+                        ORDER BY pp.id DESC
+                        LIMIT 1) as amount')
+        )
+        ->where('parties.user_id', $userId)
+        ->where('parties.transaction_type', 'purchase')
+        ->addBinding($userId, 'select') // Adding the userId for the main query binding
+        ->get();
+
+
+
+
+        // dd( $data  ,$userId);
+
+        return view('party.viewReceipt_det', compact('data'));
+    }
+    public function paymentdet(Request $request)
+    {
+        $userId = $request->session()->get('user_id');
+
+        $data = Party::select(
+            'parties.id as party_id',
+            'parties.name as party_name',
+            \DB::raw('(SELECT closing_balance
+                        FROM party_payments pp
+                        WHERE pp.party_id = parties.id
+                        AND pp.user_id = ?
+                        ORDER BY pp.id DESC
+                        LIMIT 1) as amount')
+        )
+        ->where('parties.user_id', $userId)
+        ->where('parties.transaction_type', 'sale')
+        ->addBinding($userId, 'select') // Adding the userId for the main query binding
+        ->get();
+
+        return view('party.viewPayment_det', compact('data'));
+    }
     public function viewPayment(Request $request)
     {
         $userId = $request->session()->get('user_id');
