@@ -13,11 +13,40 @@ use Illuminate\Support\Facades\File;
 
 class AuditAccessController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $auditAccesses = AuditAccess::with(['auditor', 'targetUser'])->orderBy('id', 'desc')->get();
+        $user_id = $request->session()->get('user_id');
+        $loggedInUser = Business::where('user_id', $user_id)->first();
+
+        if ($loggedInUser->business_category === 'Accounting & CA') {
+            $auditAccesses = AuditAccess::where('auditor_id', $user_id)->with(['auditor', 'targetUser'])->orderBy('id', 'desc')->get();
+        } else {
+            $auditAccesses = AuditAccess::where('target_user_id', $user_id)->with(['auditor', 'targetUser'])->orderBy('id', 'desc')->get();
+        }
         return view('auditaccess.view', compact('auditAccesses'));
     }
+
+    public function searchAuditors(Request $request)
+{
+    $searchTerm = $request->get('search');
+    $auditors = Business::where('business_category', 'Accounting & CA')
+        ->where('user_id', 'LIKE', "%$searchTerm%")
+        ->select('user_id', 'company_name')
+        ->get();
+
+    return response()->json($auditors);
+}
+
+public function searchClients(Request $request)
+{
+    $searchTerm = $request->get('search');
+    $clients = Business::where('business_category', '!=', 'Accounting & CA')
+        ->where('user_id', 'LIKE', "%$searchTerm%")
+        ->select('user_id', 'company_name')
+        ->get();
+
+    return response()->json($clients);
+}
 
     public function create(Request $request)
     {

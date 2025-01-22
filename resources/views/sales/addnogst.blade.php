@@ -395,7 +395,7 @@
                                             <select name="cash_type" required id="cash_type" class="form-select">
                                                 <option value="">Select Cash Type</option>
                                                 @php
-                                                $cash_type = [ 'cash' => 'Cash','credit' => 'Credit'];
+                                                $cash_type = [ 'cash' => 'Cash','credit' => 'Credit','online'  => 'online'];
                                                 @endphp
                                                 @foreach ($cash_type as $key => $val)
                                                 <option @if(old('cash_type')==$key) selected @endif value="{{$key}}">{{$val}}</option>

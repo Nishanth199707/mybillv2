@@ -25,12 +25,21 @@
                             <div class="row">
                                 <div class="col-md-2 mb-1">
                                     <label class="form-label">Item Type</label>
-                                    <select name="item_type" id="item_type" class="form-select">
-                                        <option value="sale" @if (old('item_type')=='sale' ) selected @endif>Sale
-                                        </option>
+                                 
+                                        @if($businessCategory->gstavailable == 'yes')
+                                        <select name="item_type" id="item_type" class="form-select">
+                                            <option value="sale" @if (old('item_type')=='sale' ) selected @endif>Sale
+                                            </option>
                                         <option value="service" @if (old('item_type')=='service' ) selected @endif>
                                             Service</option>
-                                    </select>
+                                        </select>
+                                            @else
+                                            <select name="item_type" id="item_type" class="form-select" disabled>
+                                                <option value="sale" @if (old('item_type')=='sale' ) selected @endif>Sale
+                                                </option>
+                                         
+                                            </select>
+                                            @endif
                                     @if ($errors->has('item_type'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('item_type') }}</strong>
@@ -79,11 +88,13 @@
                                 </div>
 
                                 <div class="col-md-3 mb-1">
+                                    @if($businessCategory->gstavailable == 'yes')
                                     @if($businessCategory->business_category == 'Accounting & CA')
                                     <label class="form-label">SAC Code</label>
                                     @else
                                     <label class="form-label">HSN Code</label>
                                     @endif
+                                  
                                     {{-- <input type="text" class="form-control" name="hsn_code"
                                         value="{{ old('hsn_code') }}" /> --}}
                                         <select name="hsn_code" id="hsn_code" class="form-select">
@@ -92,6 +103,8 @@
                                                 value="{{ $code->code }}">{{ $code->code.'-'.$code->description }}</option>
                                             @endforeach --}}
                                         </select>
+                                        @else
+                                        @endif
                                     @if ($errors->has('hsn_code'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('hsn_code') }}</strong>
