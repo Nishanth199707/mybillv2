@@ -307,7 +307,9 @@ Route::middleware(['auth',  UserAccess::class . ':superadmin,staff', 'is_verify_
     Route::get('/audit-access/{client}/sale-report', [AuditAccessController::class, 'downloadSaleReport'])->name('audit-access.download-sale-report');
     Route::get('/audit-access/{client}/purchase-report', [AuditAccessController::class, 'downloadPurchaseReport'])->name('audit-access.download-purchase-report');
 
-
+    Route::get('/ajax/auditors', [AuditAccessController::class, 'searchAuditors']);
+    Route::get('/ajax/clients', [AuditAccessController::class, 'searchClients']);
+    
 });
 /*------------------------------------------
 --------------------------------------------

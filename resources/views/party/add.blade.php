@@ -66,9 +66,10 @@
                                 </div>
 
                                 @else
-                                <div class="col-md-3">
-                                    <label class="form-label">Party Type</label>
-                                    <select name="party_type" id="party_type" class="form-select">
+                                <input type="hidden" name="party_type" id="party_type" value="unregistered">
+                                {{-- <div class="col-md-3">
+                                    <label class="form-label">Party Type</label> 
+                                        <select name="party_type" id="party_type" class="form-select">
                                         @php
                                         $party_type = [
                                         'unregistered' => 'Unregistered',
@@ -83,12 +84,12 @@
                                         <strong>{{ $errors->first('party_type') }}</strong>
                                     </span>
                                     @enderror
-                                </div>
+                                </div> --}}
                                 @endif
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <label class="form-label">State</label>
-                                        <select name="state" class="form-select">
+                                        <select name="state" class="form-select" disabled>
                                             <option value="" disabled {{ empty($business->state) ? 'selected' : '' }}>Select State</option>
                                             <option value="Andhra Pradesh" {{ $business->state == 'Andhra Pradesh' ? 'selected' : '' }}>Andhra Pradesh</option>
                                             <option value="Arunachal Pradesh" {{ $business->state == 'Arunachal Pradesh' ? 'selected' : '' }}>Arunachal Pradesh</option>
@@ -285,35 +286,62 @@
 <!-- Content wrapper -->
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const partyTypeSelect = document.getElementById('party_type');
         const gstinField = document.getElementById('gstin-field');
         const saleRadio = document.getElementById('sale');
         const purchaseRadio = document.getElementById('purchase');
         const shippingAddressSection = document.getElementById('shipping-address-section');
+        const billingAddress1 = document.getElementById('billing_address_1');
+        const billingAddress2 = document.getElementById('billing_address_2');
+        const billingPincode = document.getElementById('billing_pincode');
+        const shippingAddress1 = document.getElementById('shipping_address_1');
+        const shippingAddress2 = document.getElementById('shipping_address_2');
+        const shippingPincode = document.getElementById('shipping_pincode');
 
         // Function to toggle GSTIN field visibility
         function toggleGstinField() {
-            if (partyTypeSelect.value === 'registered') {
-                gstinField.style.display = 'block';
-                // $('.checkgst').addClass('readonly');
-            } else {
-                // $('.checkgst').removeClass('readonly');
-                gstinField.style.display = 'none';
-                $('#name').val('');
-                            $('#billing_address_1').val('');
-                            $('#billing_address_2').val('');
-                            $('#billing_pincode').val('');
+            if (partyTypeSelect && gstinField) {
+                if (partyTypeSelect.value === 'registered') {
+                    gstinField.style.display = 'block';
+                } else {
+                    gstinField.style.display = 'none';
+                    if (billingAddress1) billingAddress1.value = '';
+                    if (billingAddress2) billingAddress2.value = '';
+                    if (billingPincode) billingPincode.value = '';
+                }
             }
         }
 
         // Function to toggle Shipping Address section visibility
         function toggleAddressFields() {
-            if (saleRadio.checked) {
-                shippingAddressSection.style.display = 'block';
-            } else {
-                shippingAddressSection.style.display = 'none';
+            if (saleRadio && shippingAddressSection) {
+                if (saleRadio.checked) {
+                    shippingAddressSection.style.display = 'block';
+                } else if (purchaseRadio) {
+                    shippingAddressSection.style.display = 'none';
+                }
             }
+        }
+
+        // Function to copy billing address to shipping address
+        function copyBillingToShipping() {
+            if (shippingAddress1 && billingAddress1) {
+                shippingAddress1.value = billingAddress1.value;
+            }
+            if (shippingAddress2 && billingAddress2) {
+                shippingAddress2.value = billingAddress2.value;
+            }
+            if (shippingPincode && billingPincode) {
+                shippingPincode.value = billingPincode.value;
+            }
+        }
+
+        // Function to clear shipping address fields
+        function clearShippingAddress() {
+            if (shippingAddress1) shippingAddress1.value = '';
+            if (shippingAddress2) shippingAddress2.value = '';
+            if (shippingPincode) shippingPincode.value = '';
         }
 
         // Initial checks
@@ -321,36 +349,39 @@
         toggleAddressFields();
 
         // Event listener for Party Type dropdown change
-        partyTypeSelect.addEventListener('change', function() {
-            toggleGstinField();
-        });
+        if (partyTypeSelect) {
+            partyTypeSelect.addEventListener('change', toggleGstinField);
+        }
 
         // Event listeners for Transaction Type radio buttons change
-        document.querySelectorAll('input[name="transaction_type"]').forEach(function(element) {
-            element.addEventListener('change', function() {
-                toggleAddressFields();
-            });
+        document.querySelectorAll('input[name="transaction_type"]').forEach(function (element) {
+            element.addEventListener('change', toggleAddressFields);
         });
-        document.querySelectorAll('input[name="same_address"]').forEach(function(element) {
-            element.addEventListener('change', function() {
+
+        // Event listeners for Same Address radio buttons change
+        document.querySelectorAll('input[name="same_address"]').forEach(function (element) {
+            element.addEventListener('change', function () {
                 if (this.value === 'yes') {
-                    // Copy business address to shipping address
-                    document.getElementById('shipping_address_1').value = document
-                        .getElementById('billing_address_1').value;
-                    document.getElementById('shipping_address_2').value = document
-                        .getElementById('billing_address_2').value;
-                    document.getElementById('shipping_pincode').value = document.getElementById(
-                        'billing_pincode').value;
+                    copyBillingToShipping();
                 } else {
-                    // Clear shipping address
-                    document.getElementById('shipping_address_1').value = '';
-                    document.getElementById('shipping_address_2').value = '';
-                    document.getElementById('shipping_pincode').value = '';
+                    clearShippingAddress();
                 }
             });
         });
+
+        // Event listeners for real-time billing address input updates
+        [billingAddress1, billingAddress2, billingPincode].forEach(function (field) {
+            if (field) {
+                field.addEventListener('input', function () {
+                    if (document.querySelector('input[name="same_address"]:checked')?.value === 'yes') {
+                        copyBillingToShipping();
+                    }
+                });
+            }
+        });
     });
 </script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

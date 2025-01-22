@@ -1,76 +1,78 @@
 @extends('layouts.v2.app')
 @section('content')
-<style>
-    .invalid-feedback {
-        display: block;
-    }
+    <style>
+        .invalid-feedback {
+            display: block;
+        }
 
-    .totalstyle1 {
-        width: 50%;
-        border: 0;
-        /* height: 100%; */
-        /* margin-left: 20px; */
-    }
+        .totalstyle1 {
+            width: 50%;
+            border: 0;
+            /* height: 100%; */
+            /* margin-left: 20px; */
+        }
 
-    .totalstyle {
-        /* width: 50%; */
-        border: 0;
-        /* height: 100%; */
-        /* margin-left: 20px; */
-        /* overflow: hidden; */
-        position: relative;
-        padding: 0;
-        background: inherit;
-        font-weight: bolder;
-        font-size: 30px;
-    }
+        .totalstyle {
+            /* width: 50%; */
+            border: 0;
+            /* height: 100%; */
+            /* margin-left: 20px; */
+            /* overflow: hidden; */
+            position: relative;
+            padding: 0;
+            background: inherit;
+            font-weight: bolder;
+            font-size: 30px;
+        }
 
-    .totalstyle1:focus,
-    .totalstyle:focus {
-        outline: none;
-        /* This removes the focus outline */
-        /* Your other styles */
-    }
+        .totalstyle1:focus,
+        .totalstyle:focus {
+            outline: none;
+            /* This removes the focus outline */
+            /* Your other styles */
+        }
 
-    .totalstyle--input:focus {
-        outline: none;
-        /* Removes the default focus outline */
-        /* Additional styles if needed */
-    }
+        .totalstyle--input:focus {
+            outline: none;
+            /* Removes the default focus outline */
+            /* Additional styles if needed */
+        }
 
-    .gsttable tr,
-    .gsttable {
-        width: 100%;
-    }
+        .gsttable tr,
+        .gsttable {
+            width: 100%;
+        }
 
-    /* .gsttable td:nth-child(1) {
-        width: 10%;
-    } */
+        /* .gsttable td:nth-child(1) {
+            width: 10%;
+        } */
 
-    .gsttable td {
-        width: 17%;
-        display: inline-block;
-        /* overflow: hidden; */
-        margin: 5px;
-        text-align: center;
-        /* display: inline-flex; */
-    }
+        .gsttable td {
+            width: 17%;
+            display: inline-block;
+            /* overflow: hidden; */
+            margin: 5px;
+            text-align: center;
+            /* display: inline-flex; */
+        }
 
 
-    .avl_stock {
-        padding: 0 10px;
-    }
+        .avl_stock {
+            padding: 0 10px;
+        }
 
-    /* .card {
-        background-color: #114b3a;
-        color: #fff !important;
-    } */
-    .border {
-    border: solid 1px #dee2e6 !important;
-}
-#addrow{font-size: 12px;}
+        /* .card {
+            background-color: #114b3a;
+            color: #fff !important;
+        } */
+        .border {
+            border: solid 1px #dee2e6 !important;
+        }
 
-</style>
+        #addrow {
+            font-size: 12px;
+        }
+    </style>
     <!-- Content wrapper -->
     <div class="content-wrapper">
         <script type="text/javascript">
@@ -104,8 +106,8 @@
                 <div class="col-12">
                     <div class="card mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center mb-3">
-                        <h5 ><span class="text-muted fw-light"></span>Quotation</h5>
-     
+                            <h5><span class="text-muted fw-light"></span>Quotation</h5>
+
                             <!-- <small class="text-muted float-end">Default label</small> -->
                         </div>
                         <div id="validation-errors-sale"></div>
@@ -131,11 +133,10 @@
                                         <label class="form-label">Address</label>
                                         <textarea style="border: 2px solid transparent" class="form-control party" id="party_detail" disabled></textarea>
                                         <small>Phone : </small>
-                                        <input style="border: 2px solid transparent" type="text"  class="party"
+                                        <input style="border: 2px solid transparent" type="text" class="party"
                                             id="partyphone" disabled>
 
-                                            <input  type="hidden"  class="state"
-                                            id="state" >
+                                        <input type="hidden" class="state" id="state">
                                     </div>
 
 
@@ -203,7 +204,7 @@
                                             name="item_description1" />
                                         <input type="hidden" class="form-control product_id" name="product_id1" />
                                         <!--  <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#basicModal">+</button> --> 
+                                            data-bs-target="#basicModal">+</button> -->
                                     </div>
                                     <div class="col-md-2 border p-2">
                                         <input class="form-control uprice" type="text" dataid="1"
@@ -541,12 +542,15 @@
 
                                     <div class="col-md-4 fv-plugins-icon-container">
                                         <label class="form-label">Cash Type</label>
-                                        <select name="cash_type" required id="cash_type" class="form-select">
+                                        {{-- <select name="cash_type" required id="cash_type" class="form-select">
                                             <option value="">Select Cash Type</option>
                                             <option value="quotation" @if (old('cash_type') == 'quotation') selected @endif>
                                                 Quotation</option>
                                             
-                                        </select>
+                                        </select> --}}
+                                        <input type="text" readonly name="cash_type" required id="cash_type"
+                                            class="form-control" value="quotation">
+
                                         @if ($errors->has('cash_type'))
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $errors->first('cash_type') }}</strong>
@@ -569,12 +573,12 @@
 
 
 
-                      
-<div style="text-align: right;">
 
-    <button id="saleFormSubmit" type="submit"
-        class="btn btn-primary float-right mb-2">Bill</button>
-</div>
+                        <div style="text-align: right;">
+
+                            <button id="saleFormSubmit" type="submit"
+                                class="btn btn-primary float-right mb-2">Bill</button>
+                        </div>
 
                 </form>
             </div>
@@ -1354,11 +1358,11 @@ aria-hidden="true">
 
 
                                     return {
-                                        label: product.item_name 
-                                             + imeiValue ,
+                                        label: product.item_name +
+                                            imeiValue,
                                         sale_price: product
-                                            .sale_price 
-                                            || '0',
+                                            .sale_price ||
+                                            '0',
                                         gst_rate: product
                                             .gst_rate || '0',
                                         discount: '0',
@@ -1489,7 +1493,7 @@ aria-hidden="true">
 
     function initCalculation() {
 
- 
+
 
         document.querySelectorAll('.qtybox').forEach(function(element) {
             element.addEventListener('keyup', function() {
@@ -1535,7 +1539,8 @@ aria-hidden="true">
                     document.getElementById("taxableamount" + dRecid).setAttribute(
                         'data-taxable-amount', gstValue);
 
-                    document.getElementById("total_amount" + dRecid).value = Math.round(totalAmountWithGST); // Fixed to 2 decimal places
+                    document.getElementById("total_amount" + dRecid).value = Math.round(
+                        totalAmountWithGST); // Fixed to 2 decimal places
                 } else {
                     var totValue = (parseFloat(qtyValue) * parseFloat(uPriceVal));
 
@@ -1583,53 +1588,65 @@ aria-hidden="true">
                     if (!isNaN(gstvaldataValue)) {
                         totalGstAmount += gstvaldataValue / 2;
                         totalIgstAmount += gstvaldataValue;
-                                  var businessState = document.getElementById("state").value;
-                            // Update corresponding GST fields based on GST value
-                             if(businessState != "Tamil Nadu"){
-                                    if (gstValue == 28) {
-                                        $('.twentyeight').show();
-                        
-                                        document.getElementById("taxAmount_28_igst").value = totalIgstAmount.toFixed(2);
-                                    }
-                                    if (gstValue == 18) {
-                                        $('.eighteen').show();
-                          
-                                        document.getElementById("taxAmount_18_igst").value = totalIgstAmount.toFixed(2);
-                                    }
-                                    if (gstValue == 12) {
-                                        $('.twelve').show();
-                                    
-                                        document.getElementById("taxAmount_12_igst").value = totalIgstAmount.toFixed(2);
-                                    }
-                                    if (gstValue == 5) {
-                                        $('.five').show();
-                                        
-                                        document.getElementById("taxAmount_5_igst").value = totalIgstAmount.toFixed(2);
-                                    }
-                                }else{
-                                    if (gstValue == 28) {
-                                        $('.twentyeight').show();
-                                        document.getElementById("taxAmount_28_cgst").value = totalGstAmount.toFixed(2);
-                                        document.getElementById("taxAmount_28_sgst").value = totalGstAmount.toFixed(2);
-                                    }
-                                    if (gstValue == 18) {
-                                        $('.eighteen').show();
-                                        document.getElementById("taxAmount_18_cgst").value = totalGstAmount.toFixed(2);
-                                        document.getElementById("taxAmount_18_sgst").value = totalGstAmount.toFixed(2);
-                                    }
-                                    if (gstValue == 12) {
-                                        $('.twelve').show();
-                                        document.getElementById("taxAmount_12_cgst").value = totalGstAmount.toFixed(2);
-                                        document.getElementById("taxAmount_12_sgst").value = totalGstAmount.toFixed(2);
-                                    }
-                                    if (gstValue == 5) {
-                                        $('.five').show();
-                                        document.getElementById("taxAmount_5_cgst").value = totalGstAmount.toFixed(2);
-                                        document.getElementById("taxAmount_5_sgst").value = totalGstAmount.toFixed(2);
-                                    }
-                                }
+                        var businessState = document.getElementById("state").value;
+                        // Update corresponding GST fields based on GST value
+                        if (businessState != "Tamil Nadu") {
+                            if (gstValue == 28) {
+                                $('.twentyeight').show();
+
+                                document.getElementById("taxAmount_28_igst").value =
+                                    totalIgstAmount.toFixed(2);
                             }
-                    });
+                            if (gstValue == 18) {
+                                $('.eighteen').show();
+
+                                document.getElementById("taxAmount_18_igst").value =
+                                    totalIgstAmount.toFixed(2);
+                            }
+                            if (gstValue == 12) {
+                                $('.twelve').show();
+
+                                document.getElementById("taxAmount_12_igst").value =
+                                    totalIgstAmount.toFixed(2);
+                            }
+                            if (gstValue == 5) {
+                                $('.five').show();
+
+                                document.getElementById("taxAmount_5_igst").value =
+                                    totalIgstAmount.toFixed(2);
+                            }
+                        } else {
+                            if (gstValue == 28) {
+                                $('.twentyeight').show();
+                                document.getElementById("taxAmount_28_cgst").value =
+                                    totalGstAmount.toFixed(2);
+                                document.getElementById("taxAmount_28_sgst").value =
+                                    totalGstAmount.toFixed(2);
+                            }
+                            if (gstValue == 18) {
+                                $('.eighteen').show();
+                                document.getElementById("taxAmount_18_cgst").value =
+                                    totalGstAmount.toFixed(2);
+                                document.getElementById("taxAmount_18_sgst").value =
+                                    totalGstAmount.toFixed(2);
+                            }
+                            if (gstValue == 12) {
+                                $('.twelve').show();
+                                document.getElementById("taxAmount_12_cgst").value =
+                                    totalGstAmount.toFixed(2);
+                                document.getElementById("taxAmount_12_sgst").value =
+                                    totalGstAmount.toFixed(2);
+                            }
+                            if (gstValue == 5) {
+                                $('.five').show();
+                                document.getElementById("taxAmount_5_cgst").value =
+                                    totalGstAmount.toFixed(2);
+                                document.getElementById("taxAmount_5_sgst").value =
+                                    totalGstAmount.toFixed(2);
+                            }
+                        }
+                    }
+                });
 
 
                 document.querySelectorAll('.discount').forEach(function(element) {
@@ -1708,49 +1725,74 @@ aria-hidden="true">
                             const gstvaldataValue = parseFloat(element.value);
                             if (!isNaN(gstvaldataValue)) {
                                 totalGstAmount += gstvaldataValue / 2;
-                                                var businessState = document.getElementById("state").value;
+                                var businessState = document.getElementById(
+                                    "state").value;
                                 // Update corresponding GST fields based on GST value
-                             if(businessState != "Tamil Nadu"){
+                                if (businessState != "Tamil Nadu") {
                                     if (gstValue == 28) {
                                         $('.twentyeight').show();
-                        
-                                        document.getElementById("taxAmount_28_igst").value = gstvaldataValue.toFixed(2);
+
+                                        document.getElementById(
+                                                "taxAmount_28_igst").value =
+                                            gstvaldataValue.toFixed(2);
                                     }
                                     if (gstValue == 18) {
                                         $('.eighteen').show();
-                          
-                                        document.getElementById("taxAmount_18_igst").value = gstvaldataValue.toFixed(2);
+
+                                        document.getElementById(
+                                                "taxAmount_18_igst").value =
+                                            gstvaldataValue.toFixed(2);
                                     }
                                     if (gstValue == 12) {
                                         $('.twelve').show();
-                                    
-                                        document.getElementById("taxAmount_12_igst").value = gstvaldataValue.toFixed(2);
+
+                                        document.getElementById(
+                                                "taxAmount_12_igst").value =
+                                            gstvaldataValue.toFixed(2);
                                     }
                                     if (gstValue == 5) {
                                         $('.five').show();
-                                        
-                                        document.getElementById("taxAmount_5_igst").value = gstvaldataValue.toFixed(2);
+
+                                        document.getElementById(
+                                                "taxAmount_5_igst").value =
+                                            gstvaldataValue.toFixed(2);
                                     }
-                                }else{
+                                } else {
                                     if (gstValue == 28) {
                                         $('.twentyeight').show();
-                                        document.getElementById("taxAmount_28_cgst").value = totalGstAmount.toFixed(2);
-                                        document.getElementById("taxAmount_28_sgst").value = totalGstAmount.toFixed(2);
+                                        document.getElementById(
+                                                "taxAmount_28_cgst").value =
+                                            totalGstAmount.toFixed(2);
+                                        document.getElementById(
+                                                "taxAmount_28_sgst").value =
+                                            totalGstAmount.toFixed(2);
                                     }
                                     if (gstValue == 18) {
                                         $('.eighteen').show();
-                                        document.getElementById("taxAmount_18_cgst").value = totalGstAmount.toFixed(2);
-                                        document.getElementById("taxAmount_18_sgst").value = totalGstAmount.toFixed(2);
+                                        document.getElementById(
+                                                "taxAmount_18_cgst").value =
+                                            totalGstAmount.toFixed(2);
+                                        document.getElementById(
+                                                "taxAmount_18_sgst").value =
+                                            totalGstAmount.toFixed(2);
                                     }
                                     if (gstValue == 12) {
                                         $('.twelve').show();
-                                        document.getElementById("taxAmount_12_cgst").value = totalGstAmount.toFixed(2);
-                                        document.getElementById("taxAmount_12_sgst").value = totalGstAmount.toFixed(2);
+                                        document.getElementById(
+                                                "taxAmount_12_cgst").value =
+                                            totalGstAmount.toFixed(2);
+                                        document.getElementById(
+                                                "taxAmount_12_sgst").value =
+                                            totalGstAmount.toFixed(2);
                                     }
                                     if (gstValue == 5) {
                                         $('.five').show();
-                                        document.getElementById("taxAmount_5_cgst").value = totalGstAmount.toFixed(2);
-                                        document.getElementById("taxAmount_5_sgst").value = totalGstAmount.toFixed(2);
+                                        document.getElementById(
+                                                "taxAmount_5_cgst").value =
+                                            totalGstAmount.toFixed(2);
+                                        document.getElementById(
+                                                "taxAmount_5_sgst").value =
+                                            totalGstAmount.toFixed(2);
                                     }
                                 }
                             }
@@ -2115,8 +2157,6 @@ aria-hidden="true">
     });
 </script>
 
-<
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const partyTypeSelect = document.getElementById('party_type');
@@ -2242,7 +2282,7 @@ aria-hidden="true">
 
             if (gstRate > 0 && includingTax > 0) {
                 const salePrice = includingTax / (1 + gstRate / 100);
-                
+
 
                 const gstAmount = includingTax - salePrice;
                 salePriceField.value = salePrice.toFixed(2);
