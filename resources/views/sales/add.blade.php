@@ -499,6 +499,21 @@
                                                             class="totalstyle1" name="tax_amount_5_igst"
                                                             id="taxAmount_5_igst"></td>
                                                 </tr>
+                                                <tr class="col-12 zero">
+                                                    <td class="col-4">0%</td>
+                                                    <td class="col-2">₹ <input type="text" readonly value="0"
+                                                            class="totalstyle1" name="taxable0Amount"
+                                                            id="taxable0Amount"></td>
+                                                    <td class="col-2">₹ <input type="text" readonly value="0"
+                                                            class="totalstyle1" name="tax_amount_0_cgst"
+                                                            id="tax_amount_0_cgst"></td>
+                                                    <td class="col-2">₹ <input type="text" readonly value="0"
+                                                            class="totalstyle1" name="tax_amount_0_sgst"
+                                                            id="tax_amount_0_sgst"></td>
+                                                    <td class="col-2">₹ <input type="text" readonly value="0"
+                                                            class="totalstyle1" name="tax_amount_0_igst"
+                                                            id="tax_amount_0_igst"></td>
+                                                </tr>
                                             </table>
 
                                         </div>
@@ -1755,7 +1770,7 @@
 
 
 
-                if (gstValue > 0) {
+                if (gstValue != '') {
                     var totValue = (parseFloat(qtyValue) * parseFloat(uPriceVal));
                     var totdiscValue = totValue - DisVal;
                     var percentage = parseFloat(gstValue) / 100;
@@ -1803,6 +1818,10 @@
                         if (gstValue == 5) {
                             $('.five').show();
                             document.getElementById("taxable5Amount").value = total_Amount;
+                        }
+                        if (gstValue == 0) {
+                            $('.zero').show();
+                            document.getElementById("taxable0Amount").value = total_Amount;
                         }
                     }
                 });

@@ -185,10 +185,10 @@ class ExpenseController extends Controller
         $category = '';
         $expense = new Expense();
         $lastid_expens = Expense::where('user_id', $userId)->orderBy('id', 'desc')->first();
-        $lastInvoiceNumber = (int)str_replace('EXPN', '', $lastid_expens->expense_ref);
         if($lastid_expens == null){
             $lastInvoiceNumber = 0;
         }else{
+            $lastInvoiceNumber = (int)str_replace('EXPN', '', $lastid_expens->expense_ref);
             $lastInvoiceNumber = $lastInvoiceNumber;
         }
         $exp_id = "EXPN" . str_pad($lastInvoiceNumber + 1, 4, "0", STR_PAD_LEFT);

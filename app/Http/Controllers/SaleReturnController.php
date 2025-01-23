@@ -141,7 +141,6 @@ class SaleReturnController extends Controller
 
                 'bill_type' => 'sale',
             ];
-
             $saleReturn = SaleReturn::create($saleReturnData);
 
             for ($i = 1; $i <= $request->totQues; $i++) {
@@ -229,6 +228,16 @@ class SaleReturnController extends Controller
     {
         $user_id = $request->session()->get('user_id');
 
+        $salereturn_total = SaleReturn::where('id', $salereturn->id)
+        ->select(
+            '*',
+            DB::raw('SUM(tax_amount_28_cgst + tax_amount_18_cgst + tax_amount_12_cgst + tax_amount_5_cgst) as total_cgst'),
+            DB::raw('SUM(tax_amount_28_sgst + tax_amount_18_sgst + tax_amount_12_sgst + tax_amount_5_sgst) as total_sgst'),
+            DB::raw('SUM(tax_amount_28_igst + tax_amount_18_igst + tax_amount_12_igst + tax_amount_5_igst) as total_igst')
+        )
+        ->groupBy('id')
+        ->first();
+
         $saledetail = SaleReturnDetail::join('products', 'products.id', '=', 'sale_return_details.product_id')
             ->where('sale_return_details.sale_return_id', '=', $salereturn->id)
             ->groupBy(
@@ -258,7 +267,7 @@ class SaleReturnController extends Controller
         ->join('setting_details', 'settings.id', '=', 'setting_details.settings_id')
         ->select('settings.*', 'setting_details.signature_image', 'setting_details.description_text')
         ->first();
-        return view('saleReturn.' . $setting->invoice, compact('business', 'party', 'salereturn', 'saledetail'));
+        return view('saleReturn.' . $setting->invoice, compact('business', 'party', 'salereturn', 'saledetail','setting','salereturn_total'));
     }
 
     public function edit($id)

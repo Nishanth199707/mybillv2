@@ -160,6 +160,8 @@
                                     </option>
                                     <option value="5" {{ $product->gst_rate == '5' ? 'selected' : '' }}>5%
                                     </option>
+                                    <option value="0" {{ $product->gst_rate == '0' ? 'selected' : '' }}>0%
+                                    </option>
                                 </select>
                                 @error('gst_rate')
                                 <span class="invalid-feedback" role="alert">
@@ -376,13 +378,13 @@
 
                 const includingTax = parseFloat(includingTaxField.value) || 0;
                 // alert(includingTax);
-                if (gstRate > 0 && includingTax != 0) {
+                if ( includingTax != 0) {
                     const taxableAmount = includingTax / (1 + gstRate / 100);
                     const gstAmount = includingTax - taxableAmount;
 
                     salePriceField.value = taxableAmount.toFixed(2);
                     gstAmountField.value = gstAmount.toFixed(2);
-                } else if (gstRate > 0 && includingTax === 0) {
+                } else if (includingTax === 0) {
                     const taxableAmount = parseFloat(salePriceField.value) || 0;
                     const gstAmount = taxableAmount * (gstRate / 100);
                     const includingTax = taxableAmount + gstAmount;
@@ -399,7 +401,7 @@
                 salePriceField.readOnly = false;
 
                 const taxableAmount = parseFloat(salePriceField.value) || 0;
-                if (gstRate > 0 && taxableAmount > 0) {
+                if (taxableAmount > 0) {
                     const gstAmount = taxableAmount * (gstRate / 100);
                     const includingTax = taxableAmount + gstAmount;
 
@@ -421,13 +423,13 @@
 
                 const includingTax = parseFloat(purchaseIncludingTaxField.value) || 0;
 
-                if (gstRate > 0 && includingTax != 0) {
+                if (includingTax != 0) {
                     const taxableAmount = includingTax / (1 + gstRate / 100);
                     const gstAmount = includingTax - taxableAmount;
 
                     purchasePriceField.value = taxableAmount.toFixed(2);
                     purchaseGstAmountField.value = gstAmount.toFixed(2);
-                } else if (gstRate > 0 && includingTax === 0) {
+                } else if (includingTax === 0) {
                     const taxableAmount = parseFloat(purchasePriceField.value) || 0;
                     const gstAmount = taxableAmount * (gstRate / 100);
                     const includingTax = taxableAmount + gstAmount;
@@ -445,7 +447,7 @@
                 purchaseGstAmountField.readOnly = true;
 
                 const taxableAmount = parseFloat(purchasePriceField.value) || 0;
-                if (gstRate > 0 && taxableAmount > 0) {
+                if ( taxableAmount > 0) {
                     const gstAmount = taxableAmount * (gstRate / 100);
                     const includingTax = taxableAmount + gstAmount;
 

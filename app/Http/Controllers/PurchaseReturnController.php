@@ -177,7 +177,7 @@ class PurchaseReturnController extends Controller
                     // Start from 1 if no previous invoice exists
                     $nextInvoiceNumber = 1;
                 }
-                $invoice_no = $this->invoice_num($nextInvoiceNumber, 2, $prefix);
+                $invoice_no = $this->invoice_num($nextInvoiceNumber, 4, $prefix);
 
                 if ($latestPayment) {
                     $opening_balance = $latestPayment->closing_balance;

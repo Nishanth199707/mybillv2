@@ -16,10 +16,12 @@ class CreateExpensesTable extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->string('expense_ref');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->decimal('exp_type');
+            $table->decimal('user_id');
             $table->date('dateofexpense');
             $table->decimal('amount', 10, 2);
             $table->string('cash_type');
+            $table->string('description',500);
             $table->timestamps(); // This adds `created_at` and `updated_at` columns
         });
     }

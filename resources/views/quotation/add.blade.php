@@ -546,7 +546,7 @@
                                             <option value="">Select Cash Type</option>
                                             <option value="quotation" @if (old('cash_type') == 'quotation') selected @endif>
                                                 Quotation</option>
-                                            
+
                                         </select> --}}
                                         <input type="text" readonly name="cash_type" required id="cash_type"
                                             class="form-control" value="quotation">
@@ -577,7 +577,7 @@
                         <div style="text-align: right;">
 
                             <button id="saleFormSubmit" type="submit"
-                                class="btn btn-primary float-right mb-2">Bill</button>
+                                class="btn btn-primary float-right mb-2">Save</button>
                         </div>
 
                 </form>

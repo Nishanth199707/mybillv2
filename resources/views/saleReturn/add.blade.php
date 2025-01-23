@@ -198,7 +198,7 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description1" />
                                     </div> -->
                                     <div class="border p-2 input-group col-md-3" style="width: 25%;">
-                                        <div class="elemimei" style="width: 70%;">
+                                        <div class="elemimei" style="width: 100%;">
                                             <div class="input-group mb-2">
                                                 <input class="form-control product_name" tabindex="1"
                                                     name="item_description1" />
@@ -254,7 +254,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="border p-2 input-group col-md-3" style="width: 25%;">
-                                        <div class="elemimei" style="width: 70%;">
+                                        <div class="elemimei" style="width: 100%;">
                                             <div class="input-group mb-2">
                                                 <input class="form-control product_name" tabindex="1"
                                                     name="item_description2" />
@@ -311,7 +311,7 @@
                                 <!-- Row 3 -->
                                 <div class="row">
                                     <div class="border p-2 input-group col-md-3" style="width: 25%;">
-                                        <div class="elemimei" style="width: 70%;">
+                                        <div class="elemimei" style="width: 100%;">
                                             <div class="input-group mb-2">
                                                 <input class="form-control product_name" tabindex="1"
                                                     name="item_description3" />
@@ -368,7 +368,7 @@
                                 <!-- Row 4 -->
                                 <div class="row">
                                     <div class="border p-2 input-group col-md-3" style="width: 25%;">
-                                        <div class="elemimei" style="width: 70%;">
+                                        <div class="elemimei" style="width: 100%;">
                                             <div class="input-group mb-2">
                                                 <input class="form-control product_name" tabindex="1"
                                                     name="item_description4" />
@@ -425,7 +425,7 @@
                                 <!-- Row 5 -->
                                 <div class="row">
                                     <div class="border p-2 input-group col-md-3" style="width: 25%;">
-                                        <div class="elemimei" style="width: 70%;">
+                                        <div class="elemimei" style="width: 100%;">
                                             <div class="input-group mb-2">
                                                 <input class="form-control product_name" tabindex="1"
                                                     name="item_description5" />
@@ -491,7 +491,7 @@
                                     <!-- <div class="col-md-3 border p-2"> -->
                                     <!-- Total Amount: ₹ -->
                                     <input type="hidden" readonly class="totalstyle" name="totalAmountDisplay"
-                                        id="totalAmountDisplay" value="0" />
+                                        id="totalAmountDisplay"  />
 
                                     <!-- </div> -->
 
@@ -508,61 +508,61 @@
                                                 </tr>
                                                 <tr class="rate-28">
                                                     <td>28%</td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="taxable28Amount"
                                                             id="taxable28Amount"></td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="tax_amount_28_cgst"
                                                             id="taxAmount_28_cgst"></td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="tax_amount_28_sgst"
                                                             id="taxAmount_28_sgst"></td>
-                                                            <td>₹ <input type="text" readonly value="0"
+                                                            <td>₹ <input type="text" readonly
                                                                 class="totalstyle1" name="tax_amount_28_igst"
                                                                 id="taxAmount_28_igst"></td>
                                                 </tr>
                                                 <tr class="rate-18">
                                                     <td>18%</td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="taxable18Amount"
                                                             id="taxable18Amount"></td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="tax_amount_18_cgst"
                                                             id="taxAmount_18_cgst"></td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="tax_amount_18_sgst"
                                                             id="taxAmount_18_sgst"></td>
-                                                            <td>₹ <input type="text" readonly value="0"
+                                                            <td>₹ <input type="text" readonly
                                                                 class="totalstyle1" name="tax_amount_18_igst"
                                                                 id="taxAmount_18_igst"></td>
                                                 </tr>
                                                 <tr class="rate-12">
                                                     <td>12%</td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="taxable12Amount"
                                                             id="taxable12Amount"></td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="tax_amount_12_cgst"
                                                             id="taxAmount_12_cgst"></td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="tax_amount_12_sgst"
                                                             id="taxAmount_12_sgst"></td>
-                                                            <td>₹ <input type="text" readonly value="0"
+                                                            <td>₹ <input type="text" readonly
                                                                 class="totalstyle1" name="tax_amount_12_igst"
                                                                 id="taxAmount_12_igst"></td>
                                                 </tr>
                                                 <tr class="rate-5">
                                                     <td>5%</td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="taxable5Amount"
                                                             id="taxable5Amount"></td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="tax_amount_5_cgst"
                                                             id="taxAmount_5_cgst"></td>
-                                                    <td>₹ <input type="text" readonly value="0"
+                                                    <td>₹ <input type="text" readonly
                                                             class="totalstyle1" name="tax_amount_5_sgst"
                                                             id="taxAmount_5_sgst"></td>
-                                                            <td>₹ <input type="text" readonly value="0"
+                                                            <td>₹ <input type="text" readonly
                                                                 class="totalstyle1" name="tax_amount_5_igst"
                                                                 id="taxAmount_5_igst"></td>
                                                 </tr>
@@ -573,12 +573,12 @@
 
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <b class="mt-1">Tax: ₹</b> <input type="text" readonly value="0"
+                                        <b class="mt-1">Tax: ₹</b> <input type="text" readonly
                                             class="totalstyle" name="tax_amount" id="taxAmount">
                                     </div>
                                     <div class="col-md-3 border p-2">
                                         <b class="mt-1">Net Amount: ₹</b> <input readonly type="text"
-                                            class="totalstyle" value="0" name="net_amount" id="netAmount">
+                                            class="totalstyle"  name="net_amount" id="netAmount">
 
 
 
@@ -590,14 +590,14 @@
                                 <label>CGST (%)</label>
                                 <input type="text" class="form-control border-bottom" placeholder="CGST Rate" name="cgst_rate" id="cgst" oninput="calculateNetAmount()">
                                 <span class="float-right gststyle" id="cgstDisplay">0</span>
-                                <input type="hidden" id="cgstAmount" name="cgst_amount" value="0">
+                                <input type="hidden" id="cgstAmount" name="cgst_amount" >
                                 </div>
 
                                  <div class="col-md-3">
                                 <label>SGST (%)</label>
                                 <input type="text" class="form-control border-bottom" placeholder="SGST Rate" name="sgst_rate" id="sgst" oninput="calculateNetAmount()">
                                 <span class="float-right gststyle" id="sgstDisplay">0</span>
-                                <input type="hidden" id="sgstAmount" name="sgst_amount" value="0">
+                                <input type="hidden" id="sgstAmount" name="sgst_amount" >
                                 </div>
 
 
@@ -605,7 +605,7 @@
                                     <label>IGST (%)</label>
                                     <input type="text" class="form-control border-bottom" placeholder="IGST Rate" name="igst_rate" id="igst" oninput="calculateNetAmount()">
                                     <span class="float-right gststyle" id="igstDisplay">0</span>
-                                    <input type="hidden" id="igstAmount" name="igst_amount" value="0">
+                                    <input type="hidden" id="igstAmount" name="igst_amount" >
                                 </div> -->
 
                                     <!-- <div class="col-md-3">
@@ -615,11 +615,11 @@
                                         </li>
                                         <li>
                                             <b>Tax:</b> ₹ <span type="text" id="taxDisplay">0</span>
-                                            <input type="hidden" value="0" name="tax_amount" id="taxAmount">
+                                            <input type="hidden"  name="tax_amount" id="taxAmount">
                                         </li>
                                         <li>
                                             <b>Net Amount:</b> ₹ <span type="text" id="netAmountDisplay">0</span>
-                                            <input type="hidden" value="0" name="net_amount" id="netAmount">
+                                            <input type="hidden"  name="net_amount" id="netAmount">
                                         </li>
                                     </ul>
                                 </div> -->
@@ -632,28 +632,16 @@
                                     </div> -->
                                         <input type="hidden" name="totQues" id="totQues" value="5" /></td>
                                         <input type="hidden" value="" name="invoice_url" id="invoice_url">
-
-                                        <div class="col-md-4 fv-plugins-icon-container">
-                                            <label class="form-label">Cash Type</label>
-                                            <select name="cash_type" required id="cash_type" class="form-select">
-                                                <option value="">Select Cash Type</option>
-                                                <option value="credit_note">Credit Note</option>
-                                                
-                                            </select>
-                                            @if ($errors->has('cash_type'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('cash_type') }}</strong>
-                                                </span>
-                                            @enderror
-                                    </div>
+                                        <input type="hidden" value="credit_note" name="cash_type" id="cash_type">
                                 </div>
                             </div>
                         </div>
 
-
-                        <!-- <button type="submit" class="btn btn-primary">Send</button> -->
-                        <button id="saleFormSubmit" type="submit"
-                            class="btn btn-primary float-right mb-2">Bill</button>
+                        <div style="text-align: right;">
+                            <!-- <button type="submit" class="btn btn-primary">Send</button> -->
+                            <button id="saleFormSubmit" type="submit"
+                                class="btn btn-primary float-right mb-2">Save</button>
+                        </div>
 
                 </form>
             </div>
@@ -1419,11 +1407,11 @@
                 const gstPerCategory = taxableAmount;
                 const cgst = gstPerCategory / 2;
                 const sgst = gstPerCategory / 2;
-               
+
 
                 cgstElement.value = cgst.toFixed(2);
                 sgstElement.value = sgst.toFixed(2);
-                
+
             }else{
                 const gstPerCategory = taxableAmount;
                 const igst = gstPerCategory;
@@ -1739,7 +1727,7 @@
             type: "POST",
             dataType: 'json',
             success: function(data) {
-               
+
                 $('#partyForm').trigger("reset");
                 $('#basicModal1').modal('hide');
                 $('#partysaveBtn').html('Save Changes');
