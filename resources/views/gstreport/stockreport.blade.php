@@ -12,7 +12,7 @@
                         </div>
                         <div class="card-body">
                             <div style="display: flex; align-items: center; gap: 10px; margin: 20px 0px;">
-                                
+
                                 <div>
                                     <strong>Category:</strong>
                                     <select id="categoryFilter" class="form-control">
@@ -30,13 +30,15 @@
                                 <div>
                                     <button class="btn btn-primary mt-3 filter">Filter</button>
                                 </div>
-                                <div class="btn-group text-end"> 
+                                <div class="btn-group text-end">
                                 <button href="{{ route('gst.stockreport') }}" class="btn btn-outline-primary mt-3 export">Excel</button>
                                 <button href="javascript:void(0);" class="btn btn-outline-primary btn-download contenttopdf1 mt-3">Pdf</button>
                                 <button href="#" class="btn btn-outline-success mt-3">Share</button>
                             </div>
                             </div>
-
+                            <div style="margin-bottom: 20px;" class="text-end">
+                             <h5>Total Stock Amount: <span id="total-sale-amount">0.00</span></h5>
+                            </div>
                             <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-start">
                                 <a class="btn btn-primary mb-3 export" href="{{ route('gst.stockreport') }}"><i class="fa fa-arrow-left"></i> Excel</a>
                             </div> -->
@@ -47,6 +49,8 @@
                                         <th>#</th>
                                         <th>Product Name</th>
                                         <th>Stock</th>
+                                        <th>Price</th>
+                                        <th>Stock Price</th>
                                         <th>Category</th>
                                         <th>Subcategory</th>
                                         <th>IMEI</th>
@@ -74,7 +78,7 @@
             $(function() {
                 // Fetch categories
                 $.ajax({
-                    url: "{{ route('productcategory.categoryindex') }}", 
+                    url: "{{ route('productcategory.categoryindex') }}",
                     method: 'GET',
                     success: function(data) {
                         $.each(data, function(index, category) {
@@ -90,12 +94,12 @@
 
                 // Fetch subcategories when category is selected
                 $('#categoryFilter').change(function() {
-                   
+
                     var categoryId = $(this).val();
                     // alert(categoryId);
                     if (categoryId) {
                         $.ajax({
-                            url: '/get-brands/' + categoryId, 
+                            url: '/get-brands/' + categoryId,
                             type: 'GET',
                             dataType: 'json',
                             success: function(data) {
@@ -122,7 +126,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "{{ route('stock.gstreport') }}", 
+                        url: "{{ route('stock.gstreport') }}",
                         data: function(d) {
                             const category = $('#categoryFilter').val();
                             const subcategory = $('#subcategoryFilter').val();
@@ -134,21 +138,24 @@
                             console.error("XHR: ", xhr);
                         },
                         dataSrc: function(json) {
-                            console.log("Fetched Data:", json); 
+                            console.log("Fetched Data:", json);
+                            $('#total-sale-amount').text(json.total_amount.toFixed(2));
                             return json.data;
                         }
                     },
                     columns: [
-                        { 
-                            data: null, 
-                            orderable: false, 
+                        {
+                            data: null,
+                            orderable: false,
                             render: function(data, type, row, meta) {
                                 return meta.settings._iDisplayStart + meta.row + 1;
-                            }, 
-                            title: '#' 
+                            },
+                            title: '#'
                         },
                         { data: 'item_name', title: 'Product Name' },
                         { data: 'total_stock', title: 'Stock' },
+                        { data: 'price_det', title: 'Price' },
+                        { data: 'stock_price', title: 'Stock Price' },
                         { data: 'category', title: 'Category' },
                         { data: 'subcategory_name', title: 'Subcategory' },
                         { data: 'imei_list', title: 'IMEI' }
@@ -176,12 +183,12 @@
 
                 // Export button click event
                 $(".export").click(function(event) {
-                    event.preventDefault(); 
-                    
+                    event.preventDefault();
+
                     const category = $('#categoryFilter').val();
                     const subcategory = $('#subcategoryFilter').val();
-                    
-          
+
+
                 window.location.href = "{{ route('gst.stockreport') }}"  + "?category=" + category +
                         "&subcategory=" + subcategory ;
                 });
@@ -219,7 +226,7 @@
                         row.imei_list
                         .replace(/<br\s*\/?>/gi, '\n')
                         ]);
-                    
+
 
                     // Generate PDF Table
                     doc.autoTable({

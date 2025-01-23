@@ -24,7 +24,7 @@
                             <div class="row">
                                 <div class="col-md-2 mb-1">
                                     <label class="form-label">Item Type</label>
-                                 
+
                                         @if($businessCategory->gstavailable == 'yes')
                                         <select name="item_type" id="item_type" class="form-select">
                                             <option value="sale" @if (old('item_type')=='sale' ) selected @endif>Sale
@@ -36,7 +36,7 @@
                                             <select name="item_type" id="item_type" class="form-select" disabled>
                                                 <option value="sale" @if (old('item_type')=='sale' ) selected @endif>Sale
                                                 </option>
-                                         
+
                                             </select>
                                             @endif
                                     @if ($errors->has('item_type'))
@@ -93,7 +93,7 @@
                                     @else
                                     <label class="form-label">HSN Code</label>
                                     @endif
-                                  
+
                                     {{-- <input type="text" class="form-control" name="hsn_code"
                                         value="{{ old('hsn_code') }}" /> --}}
                                         <select name="hsn_code" id="hsn_code" class="form-select">
@@ -179,6 +179,7 @@
                                         <option value="18">18 %</option>
                                         <option value="12">12 %</option>
                                         <option value="5">5 %</option>
+                                        <option value="0">0 %</option>
                                     </select>
 
                                     @if ($errors->has('gst_rate'))

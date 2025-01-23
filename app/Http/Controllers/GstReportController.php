@@ -208,55 +208,58 @@ class GstReportController extends Controller
 
     public function purchasereport(Request $request)
     {
-        // Check if the request is an AJAX request
         if ($request->ajax()) {
-            $data = Purchase::select(
+            $query = Purchase::select(
                 'purchases.id as purchase_id',
                 'businesses.company_name', // Correct the column name if necessary
-                'products.item_name', // Correct the column name if necessary
                 'purchases.created_at',
                 'purchases.party',
                 'purchases.net_amount',
                 'purchases.purchase_date',
-                'purchases.purchase_no',
+                'purchases.purchase_no'
             )
-            ->join('businesses', 'businesses.id', '=', 'purchases.business_id')
-            ->join('purchase_details', 'purchase_details.purchase_id', '=', 'purchases.id')
-            ->join('products', 'products.id', '=', 'purchase_details.product_id')
-            ->join('productsub_categories', 'productsub_categories.id', '=', 'products.sub_category_id')
+            ->leftJoin('businesses', 'businesses.id', '=', 'purchases.business_id') // Use LEFT JOIN
+            ->leftJoin('purchase_details', 'purchase_details.purchase_id', '=', 'purchases.id') // Use LEFT JOIN
             ->where('purchases.user_id', $request->session()->get('user_id'));
 
-        if ($request->filled('from_date') && $request->filled('to_date')) {
-            $fromDate = $request->input('from_date') . ' 00:00:00';
-            $toDate = $request->input('to_date') . ' 23:59:59';
-            $data->whereBetween('purchases.created_at', [$fromDate, $toDate]);
+            // Filter by date range
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $query->whereBetween('purchases.created_at', [
+                    $request->input('from_date') . ' 00:00:00',
+                    $request->input('to_date') . ' 23:59:59',
+                ]);
+            }
+            $totalAmount = $query->sum(DB::raw('purchases.net_amount'));
+            // Group by purchases.id to ensure uniqueness
+            $query->groupBy(
+                'purchases.id',
+                'businesses.company_name',
+                'purchases.created_at',
+                'purchases.party',
+                'purchases.net_amount',
+                'purchases.purchase_date',
+                'purchases.purchase_no'
+            );
+
+            // Calculate total amount
+            $data = $query->get();
+            $totalAmount = 0;
+            foreach($data as $data1){
+                $totalAmount += $data1->net_amount;
+            }
+
+            // Return DataTables response
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->with('totalAmount', $totalAmount)
+                ->addColumn('action', function ($row) {
+                    return '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
 
-        if ($request->filled('subcategory') && $request->subcategory !== 'all') {
-            $subcategoryId = $request->input('subcategory');
-            $data->where('products.sub_category_id', $subcategoryId);
-        }
 
-        if ($request->filled('category') && $request->category !== 'all') {
-            $categoryId = $request->input('category');
-            $data->where('products.category', $categoryId);
-        }
-
-        $data->orderBy('purchases.id', 'DESC');
-        $totalAmount = $data->sum('net_amount');
-
-        return Datatables::of($data)
-            ->addIndexColumn()
-            ->with('totalAmount', $totalAmount)
-            ->addColumn('action', function ($row) {
-                return '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
-
-        }
-
-        // If the request is not AJAX, return the regular view
         return view('gstreport.purchasereport');
     }
 
@@ -274,6 +277,10 @@ class GstReportController extends Controller
                     'products.id',
                     'products.item_name', // Select product name to group by
                     'products.category',
+                    'products.sale_price',
+                    'products.purchase_price',
+                    'products.price_type',
+                    'products.gst_rate',
                     'productsub_categories.name as subcategory_name',
                     'products.stock as total_stock', // Aggregate stock
                     DB::raw('GROUP_CONCAT(purchase_custom_details.field_value SEPARATOR ", ") as imei') // Aggregate IMEIs
@@ -307,14 +314,33 @@ class GstReportController extends Controller
                 // dd($products);
                 // After fetching the results, group IMEIs by product
                 $products->map(function ($product) {
+
+                    if($product->price_type == 'with_tax'){
+                        $price_det = (($product->purchase_price/100)*$product->gst_rate) + $product->purchase_price;
+                    }else{
+                        $price_det = $product->purchase_price;
+                    }
+                    $product->price_det = round($price_det,2);
+
+                    $stock_price = $product->total_stock * $product->price_det;
+                    $product->stock_price = ($stock_price ? $stock_price : 0);
                     // Collect all IMEI values associated with each product
-                    $product->imei_list = DB::table('purchase_custom_details')->where('product_id', $product->id)
+                    $product->imei_list = DB::table('purchase_custom_details')->where('product_id', $product->id)->where('stock','>',0)
                         ->pluck('field_value')->toArray();
                 });
+
+
+
+
+                $total_amount = 0;
+                foreach($products as $data2){
+                    $total_amount += $data2->total_stock * $data2->price_det;
+                }
 
                 // Return the data to DataTables
                 return DataTables::of($products)
                     ->addIndexColumn() // Add an index column for row numbers
+                    ->with('total_amount', $total_amount)
                     ->editColumn('total_stock', function ($row) {
                         return $row->total_stock ?? 0; // Return 0 if stock is null
                     })
