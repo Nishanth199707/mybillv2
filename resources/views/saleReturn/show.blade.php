@@ -218,7 +218,7 @@
                                                         <div class="row gy-3"
                                                             style="width: 100%!important;margin-left:.2px;">
                                                             <div class="col-12 text-center">
-                                                                <h4 class="heading-with-underline text-4">Tax Invoice
+                                                                <h4 class="heading-with-underline text-4">CREDIT NOTE
                                                                 </h4>
                                                             </div>
                                                             <div class="col-sm-3"
@@ -590,19 +590,19 @@
                                                                                 Total</td>
                                                                             <td class="text-center fw-700"
                                                                                 style="padding: 6px;">
-                                                                                {{ $salereturn->totalAmountDisplay }}
+                                                                                {{ $salereturn->totalAmountDisplay ? $salereturn->totalAmountDisplay : 0 }}
                                                                             </td>
                                                                             <td class="text-center fw-700"
                                                                                 style="padding: 6px;">
-                                                                                {{ $salereturn->total_cgst }}
+                                                                                {{ $salereturn_total->total_cgst ? $salereturn_total->total_cgst : 0 }}
                                                                             </td>
                                                                             <td class="text-center fw-700"
                                                                                 style="padding: 6px;">
-                                                                                {{ $salereturn->total_sgst }}
+                                                                                {{ $salereturn_total->total_sgst ? $salereturn_total->total_sgst : 0 }}
                                                                             </td>
                                                                             <td class="text-center fw-700"
                                                                                 style="padding: 6px;">
-                                                                                {{ $salereturn->total_igst }}
+                                                                                {{ $salereturn_total->total_igst ?  $salereturn_total->total_igst : 0 }}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
