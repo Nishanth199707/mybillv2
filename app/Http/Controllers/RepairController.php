@@ -124,7 +124,7 @@ class RepairController extends Controller
 
         // dd($request->all());
         // Create a new repair record
-        Repair::create([
+      $repair =  Repair::create([
             'business_id' => $business->id,
             'user_id' => $request->session()->get('user_id'),
             'service_no' => $request->service_no,
@@ -146,6 +146,19 @@ class RepairController extends Controller
             'model' => $request->model,
             'cash_received' => $request->cash_received,
         ]);
+        // PartyPayment
+            $partyPaymentArr = [
+                'user_id' => $request->session()->get('user_id'),
+                'business_id' => $business_id->id,
+                'transaction_type' =>  'service-'.$repair->id.'',
+                'invoice_no' => $request->service_no,
+                'paid_date' => $request->repair_date,
+                'credit' => $request->cash_received,
+                'payment_type' => 'credit',
+                'opening_balance' => $request->cash_received,
+                'closing_balance' => $request->net_amount,
+            ];
+            PartyPayment::create($partyPaymentArr);
 
         return redirect()->route('repairs.index')->with('success', 'Repair request Created successfully.');
     }
@@ -207,7 +220,18 @@ class RepairController extends Controller
             'model' => $request->model,
             'cash_received' => $request->cash_received,
         ]);
-
+        $partyPaymentArr = [
+            'user_id' => $request->session()->get('user_id'),
+            'business_id' => $business_id->id,
+            'transaction_type' =>  'service-'.$repair->id.'',
+            'invoice_no' => $request->service_no,
+            'paid_date' => $request->repair_date,
+            'credit' => $request->cash_received,
+            'payment_type' => 'credit',
+            'opening_balance' => $request->cash_received,
+            'closing_balance' => $request->net_amount,
+        ];
+        $updated = PartyPayment::where('transaction_type', 'service-' . $repair->id)->update($partyPaymentArr);
         return redirect()->route('repairs.index')->with('success', 'Repair request updated successfully.');
     }
 

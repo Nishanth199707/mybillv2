@@ -1068,7 +1068,9 @@ class SaleController extends Controller
 
         $cashReceivedLedger = $cashReceivedLedger->get();
 
-        $totalCashReceived = $cashReceivedLedger->sum('amount');
+        $totalCashdebit = $cashReceivedLedger->sum('debit');
+        $totalCashcredit = $cashReceivedLedger->sum('credit');
+        $totalCashReceived = $totalCashdebit - $totalCashcredit;
 
         return view('cash.cash_bank_ledger', compact('business', 'cashReceivedLedger', 'totalCashReceived'));
     }
@@ -1103,7 +1105,9 @@ class SaleController extends Controller
 
         // Execute the query
         $onlinecashReceivedLedger = $onlinecashReceivedLedger->get();
-        $totalOnlineCashReceived = $onlinecashReceivedLedger->sum('amount');
+        $totalCashdebit = $onlinecashReceivedLedger->sum('debit');
+        $totalCashcredit = $onlinecashReceivedLedger->sum('credit');
+        $totalOnlineCashReceived = $totalCashdebit - $totalCashcredit;
 
         return view('cash.bank_ledger', compact('business',  'onlinecashReceivedLedger', 'totalOnlineCashReceived'));
     }

@@ -307,12 +307,12 @@
 
                 <ul class="list-unstyled menu-categories" id="accordionExample">
 
-                    @if(session()->get('user_type') == 'admin')
-                    <li class="menu {{ Route::is('superadmin.home') ? 'active' : '' }}">
-                        <a href="{{ route('superadmin.home') }}" class="dropdown-toggle">
-                    @else
+                    @if($subuser)
                     <li class="menu {{ Route::is('staff.home') ? 'active' : '' }}">
                         <a href="{{ route('staff.home') }}" class="dropdown-toggle">
+                    @else
+                    <li class="menu {{ Route::is('superadmin.home') ? 'active' : '' }}">
+                        <a href="{{ route('superadmin.home') }}" class="dropdown-toggle">
                     @endif
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
