@@ -1,6 +1,28 @@
 @extends('layouts.v2.app')
 
 @section('content')
+@php
+use App\Models\Business;
+use App\Models\SubUser;
+use App\Models\User;
+
+$user_id = session('user_id');
+$subuser = session('sub_user');
+
+if ($subuser != null) {
+    $authUser = User::select('*')->where('id', $subuser)->first();
+} else {
+    $authUser = User::select('*')->where('id', $user_id)->first();
+}
+$business = Business::select('*')->where('user_id', $user_id)->first();
+$permission = SubUser::select('permissions')->where('user_id', $user_id)->first();
+if(!empty($permissions)){
+    $permissionsd = json_decode($permission->permissions);
+}else{
+    $permissionsd ="";
+}
+// dd($permission);
+@endphp
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
         <!-- Header -->
@@ -9,6 +31,7 @@
             <div class="card-body">
                 <header class="d-flex justify-content-between align-items-center mb-4">
                     <h1>{{ strtoupper($data->name) }}</h1>
+                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permissionsd && isset($permissionsd->payment) && $permissionsd->payment == 'true'))
                     <div>
                         <!-- Button to Open Modal -->
                         @if ($data->transaction_type == 'sale')
@@ -24,6 +47,7 @@
                         @endif
 
                     </div>
+                    @endif
                 </header>
 
                 <!-- Tabs navs -->

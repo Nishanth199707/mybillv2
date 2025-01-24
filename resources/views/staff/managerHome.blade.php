@@ -1,6 +1,29 @@
 @extends('layouts.v2.app')
 
 @section('content')
+
+@php
+use App\Models\Business;
+use App\Models\SubUser;
+use App\Models\User;
+
+$user_id = session('user_id');
+$subuser = session('sub_user');
+
+if ($subuser != null) {
+    $authUser = User::select('*')->where('id', $subuser)->first();
+} else {
+    $authUser = User::select('*')->where('id', $user_id)->first();
+}
+$business = Business::select('*')->where('user_id', $user_id)->first();
+$permission = SubUser::select('permissions')->where('user_id', $user_id)->first();
+if(!empty($permissions)){
+    $permissionsd = json_decode($permission->permissions);
+}else{
+    $permissionsd ="";
+}
+// dd($permission);
+@endphp
         <!-- Content wrapper -->
             <div class="content-wrapper">
                 <!-- Content -->
@@ -21,6 +44,7 @@
                                             <i class="bx bx-plus me-1"></i> Add Purchase
                                         </a>
 
+                                        @if($subuser !== null && $permissionsd && isset($permissionsd->payment) && $permissionsd->payment == 'true')
                                         <!-- Add Receipt Button -->
                                         <a href="{{ route('partypayment.receivePayment') }}"
                                             class="btn btn-success mb-2 align-items-center rounded-pill me-2">
@@ -31,6 +55,7 @@
                                             class="btn btn-warning mb-2 align-items-center rounded-pill">
                                             <i class="bx bx-plus me-1"></i> Add Payment
                                         </a>
+                                        @endif
                                      <a href="{{ route('partypayment.addPayment') }}"
                                         class="btn mb-2 align-items-center rounded-pill" style="background-color: cadetblue;color:#ffff;">
                                         <i class="bx bx-plus me-1"></i> Add Product
