@@ -84,7 +84,8 @@
                 return {
                     results: data.map(item => ({
                         id: item.user_id,
-                        text: `${item.user_id} - ${item.company_name}`
+                        value: item.user_id,
+                        text: `${item.company_name}`
                     }))
                 };
             },
@@ -108,7 +109,8 @@
                 return {
                     results: data.map(item => ({
                         id: item.user_id,
-                        text: `${item.user_id} - ${item.company_name}`
+                        value: item.user_id,
+                        text: `${item.company_name}`
                     }))
                 };
             },
