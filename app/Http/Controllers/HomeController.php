@@ -51,9 +51,19 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function staffHome()
+    public function staffHome(Request $request)
     {
-        return view('staff.managerHome');
+        $auth_user = $request->session()->get('user_id');
+        $business = Business::select('*')->where('user_id', $auth_user)->first();
+        $payments = PartyPayment::where('mode_of_payment', 'cheque')
+        // ->where('collection_date', $currentDate)
+        ->where('payment_type', 'waiting')
+        ->join('parties', 'party_payments.party_id', '=', 'parties.id')
+        ->select('party_payments.*', 'parties.name as party_name')
+        ->where('party_payments.user_id', $request->session()->get('user_id'))
+        ->orderBy('party_payments.collection_date')
+        ->get();
+        return view('staff.managerHome', compact('business','payments'));
     }
 
     /**

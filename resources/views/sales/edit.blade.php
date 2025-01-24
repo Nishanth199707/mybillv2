@@ -91,7 +91,7 @@
                                 <div class="col-md-4 fv-plugins-icon-container">
                                     <label class="form-label" for="formValidationName">Invoice No</label>
                                     <input disabled type="text" id="formValidationName" class="form-control" readonly
-                                        placeholder="John Doe" value="{{ $invoice_no }}" name="invoice_no">
+                                        placeholder=" " value="{{ $invoice_no }}" name="invoice_no">
 
                                 </div>
                             </div>

@@ -139,7 +139,7 @@
                                     <div class="col-md-2 fv-plugins-icon-container">
                                         <label class="form-label" for="formValidationName">Invoice No</label>
                                         <input type="text" id="formValidationName" class="form-control" readonly
-                                            placeholder="John Doe" value="{{ $invoice_no }}" name="return_invoice_no">
+                                            placeholder=" " value="{{ $invoice_no }}" name="return_invoice_no">
 
                                     </div>
                                     <div class="col-md-2 fv-plugins-icon-container">

@@ -15,29 +15,6 @@
                 <div class="row">
                     <div class="col-lg-12 mb-4 order-0">
                         <div class="row">
-
-                            <div class="col-md-6 mb-4">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">Congratulations &nbsp;&nbsp;
-                                            @if (Auth::user())
-                                                {{ Auth::user()->name }}
-                                            @endif🎉
-                                        </h5>
-                                        <p class="mb-4">
-                                            You have done <span class="fw-medium">72%</span> more sales today.
-                                            @if ($business == null)
-                                                <br>
-                                                <a href="{{ route('business.create') }}"
-                                                    class="btn btn-outline-primary">Complete Your Profile</a>
-                                            @endif
-                                            <br>
-
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="col-md-6 mb-4">
                                 <div class="card">
                                     <div class="card-body">
