@@ -20,6 +20,7 @@ class SaleReturn extends Model
         'taxable18Amount',
         'taxable12Amount',
         'taxable5Amount',
+        'taxable0Amount',
         'tax_amount_28_cgst',
         'tax_amount_28_sgst',
         'tax_amount_18_cgst',

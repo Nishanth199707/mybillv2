@@ -84,6 +84,17 @@
             color: #999;
             /* Gray out text */
         }
+        .sidebarCollapse {
+    width: 250px; /* Adjust width as needed */
+    background-color: #ff7e6e;
+    padding: 5px;
+    z-index:9999;
+    position: relative;
+    right: 7px;
+    top: 325px;
+    font-size: 21px;
+  }
+
     </style>
 
 
@@ -126,7 +137,7 @@
     <!--  BEGIN NAVBAR  -->
     <div class="header-container" style="background:linear-gradient(to right,#ff9e6f, #ff746e );">
         <header class="header navbar navbar-expand-sm expand-header">
-            <div id="sidebars">
+            {{-- <div id="sidebars">
 
                 <a href="javascript:void(0);" class="btn-toggle sidebarCollapse" data-placement="bottom"
                     style="color: #fff;">
@@ -138,7 +149,7 @@
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </a>
-            </div>
+            </div> --}}
             <ul class="navbar-item theme-brand flex-row  text-center">
                 <li class="nav-item theme-logo">
                     <a href="#">
@@ -280,9 +291,7 @@
 
         <!--  BEGIN SIDEBAR  -->
         <div class="sidebar-wrapper sidebar-theme">
-
             <nav id="sidebar" class="side_bar" style="margin-top:-40px;">
-
 
                 <!-- Sidebar content goes here -->
 
@@ -425,7 +434,7 @@
                                     href="{{ route('productcategory.index') }}">View Category</a></li>
                             <li class="{{ Request::routeIs('productsubcategory.index') ? 'active' : '' }}"><a
                                     href="{{ route('productsubcategory.index') }}">View Sub Category</a></li>
-                            <li class="{{ Request::routeIs('product.index') || Request::is('superadmin/product*') ? 'active' : '' }}"><a
+                            <li class="{{ Request::routeIs('product.index') ? 'active' : '' }}"><a
                                     href="{{ route('product.index') }}">View Product</a></li>
                             <li class="{{ Request::routeIs('product.disablelist') ? 'active' : '' }}"><a
                                     href="{{ route('product.disablelist') }}">Disable Product</a></li>
@@ -444,7 +453,7 @@
                         </div>
                     </li>
                     <li
-                        class="menu {{ Request::routeIs('party.create') || Request::routeIs('party.index') ? 'active' : '' }}">
+                        class="menu {{ Request::routeIs('party.create') || Request::routeIs('party.index') || Request::is('superadmin/party/*') ? 'active' : '' }}">
                         <a href="#party" data-bs-toggle="collapse"
                             aria-expanded="{{ Request::routeIs('party.create') || Request::routeIs('party.index') ? 'true' : 'false' }}"
                             class="dropdown-toggle">
@@ -466,7 +475,7 @@
                                 </svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ Request::routeIs('party.create') || Request::routeIs('party.index') ? 'show' : '' }}"
+                        <ul class="collapse submenu list-unstyled {{ Request::routeIs('party.create') || Request::routeIs('party.index') || Request::is('superadmin/party/*') ? 'show' : '' }}"
                             id="party" data-bs-parent="#accordionExample">
                             <li class="{{ Request::routeIs('party.create') ? 'active' : '' }}"><a
                                     href="{{ route('party.create') }}">Add Party</a></li>
@@ -481,9 +490,9 @@
                     @if ($business != null)
                         @if ($business->business_category != 'Accounting & CA')
                             <li
-                                class="menu {{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') ? 'active' : '' }}">
+                                class="menu {{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') || Request::is('superadmin/purchasereturns/create') ? 'active' : '' }}">
                                 <a href="#purchase" data-bs-toggle="collapse"
-                                    aria-expanded="{{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') ? 'true' : 'false' }}"
+                                    aria-expanded="{{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') || Request::is('superadmin/purchasereturns/create') ? 'true' : 'false' }}"
                                     class="dropdown-toggle">
                                     <div class="">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"
@@ -506,13 +515,13 @@
                                         </svg>
                                     </div>
                                 </a>
-                                <ul class="collapse submenu list-unstyled {{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') ? 'show' : '' }}"
+                                <ul class="collapse submenu list-unstyled {{ Request::is('purchase*') || Route::is('purchase.create') || Route::is('purchase.index') || Route::is('purchasereturns.index') || Request::is('superadmin/purchasereturns/create') ? 'show' : '' }}"
                                     id="purchase" data-bs-parent="#accordionExample">
                                     <li class="{{ Route::is('purchase.create') ? 'active' : '' }}"><a
                                             href="{{ route('purchase.create') }}">Add Purchase</a></li>
                                     <li class="{{ Route::is('purchase.index') ? 'active' : '' }}"><a
                                             href="{{ route('purchase.index') }}">View Purchase</a></li>
-                                    <li class="{{ Route::is('purchasereturns.index') ? 'active' : '' }}"><a
+                                    <li class="{{ Route::is('purchasereturns.index') || Request::is('superadmin/purchasereturns/create') ? 'active' : '' }}"><a
                                             href="{{ route('purchasereturns.index') }}">Purchase Return</a></li>
                                 </ul>
                             </li>
@@ -521,9 +530,9 @@
 
                     <!-- Sales Menu -->
                     <li
-                        class="menu {{ Route::is('sale.create') || Route::is('sale.index') || Route::is('salereturns.index') ? 'active' : '' }}">
+                        class="menu {{ Route::is('sale.create') || Route::is('sale.index') || Route::is('salereturns.index') || Request::is('superadmin/sale/*')  || Request::is('superadmin/salereturns/create') ? 'active' : '' }}">
                         <a href="#sales" data-bs-toggle="collapse"
-                            aria-expanded="{{ Route::is('sale.create') || Route::is('sale.index') || Route::is('salereturns.index') ? 'true' : 'false' }}"
+                            aria-expanded="{{ Route::is('sale.create') || Route::is('sale.index') || Route::is('salereturns.index') || Request::is('superadmin/sale/*')  || Request::is('superadmin/salereturns/create') ? 'true' : 'false' }}"
                             class="dropdown-toggle">
                             <div class="">
                                 <svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -551,19 +560,19 @@
                                 </svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ Route::is('sale.create') || Route::is('sale.index') || Route::is('salereturns.index') ? 'show' : '' }}"
+                        <ul class="collapse submenu list-unstyled {{ Route::is('sale.create') || Route::is('sale.index') || Route::is('salereturns.index') || Request::is('superadmin/sale/*') || Request::is('superadmin/salereturns/create') ? 'show' : '' }}"
                             id="sales" data-bs-parent="#accordionExample">
                             <li class="{{ Route::is('sale.create') ? 'active' : '' }}"><a
                                     href="{{ route('sale.create') }}">Add Sale</a></li>
                             <li class="{{ Route::is('sale.index') ? 'active' : '' }}"><a
                                     href="{{ route('sale.index') }}">View Sale</a></li>
-                            <li class="{{ Route::is('salereturns.index') ? 'active' : '' }}"><a
+                            <li class="{{ Route::is('salereturns.index')  || Request::is('superadmin/salereturns/create') ? 'active' : '' }}"><a
                                     href="{{ route('salereturns.index') }}">Sales Return</a></li>
                         </ul>
                     </li>
 
                     <!-- Quotation Menu -->
-                    <li class="menu {{ Route::is('quotations.index') ? 'active' : '' }}">
+                    <li class="menu {{ Route::is('quotations.index') || Request::is('superadmin/quotations/create') ? 'active' : '' }}">
                         <a href="{{ route('quotations.index') }}" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -583,9 +592,9 @@
                     @if ($business != null)
                         @if ($business->business_category == 'Mobile & Accessories')
                                 <li
-                                    class="menu {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'active' : '' }}">
+                                    class="menu {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') || Request::is('repairs/*')  ? 'active' : '' }}">
                                     <a href="#service" data-bs-toggle="collapse"
-                                        aria-expanded="{{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'true' : 'false' }}"
+                                        aria-expanded="{{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') || Request::is('repairs/*') ? 'true' : 'false' }}"
                                         class="dropdown-toggle">
                                         <div class="">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -610,7 +619,7 @@
                                             </svg>
                                         </div>
                                     </a>
-                                    <ul class="collapse submenu list-unstyled {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'show' : '' }}"
+                                    <ul class="collapse submenu list-unstyled {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') || Request::is('repairs/*') ? 'show' : '' }}"
                                         id="service" data-bs-parent="#accordionExample">
                                         <li class="{{ Route::is('repairs.create') ? 'active' : '' }}">
                                             <a href="{{ route('repairs.create') }}">
@@ -686,9 +695,9 @@
                     @else
                     @endif
                     <!-- Expense Menu -->
-                    <li class="menu {{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') ? 'active' : '' }}">
+                    <li class="menu {{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') || Request::is('expense/expenseedit/*') || Request::is('expense/categoryedit/*')  ? 'active' : '' }}">
                         <a href="#expense" data-bs-toggle="collapse"
-                            aria-expanded="{{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') ? 'true' : 'false' }}"
+                            aria-expanded="{{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') || Request::is('expense/expenseedit/*') || Request::is('expense/categoryedit/*') ? 'true' : 'false' }}"
                             class="dropdown-toggle">
                             <div class="d-flex align-items-center">
                                 <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px"
@@ -711,7 +720,7 @@
                                 </svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') || Route::is('expense.categorylist') ? 'show' : '' }}"
+                        <ul class="collapse submenu list-unstyled {{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') || Route::is('expense.categorylist') || Request::is('expense/expenseedit/*') || Request::is('expense/categoryedit/*')  ? 'show' : '' }}"
                             id="expense" data-bs-parent="#accordionExample">
 
                             <li class="{{ Route::is('expense.category') ? 'active' : '' }}">
@@ -928,9 +937,9 @@
                     <!-- Settings Menu -->
                     @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permissionsd && isset($permissionsd->settings) && $permissionsd->settings == 'true'))
                     <li
-                        class="menu {{ Route::is('settings.index') || Route::is('business.indexshow') ? 'active' : '' }}">
+                        class="menu {{ Route::is('settings.index') || Route::is('business.indexshow') || Request::is('settings/*')  || Request::is('superadmin/business/*') ? 'active' : '' }}">
                         <a href="#settings" data-bs-toggle="collapse"
-                            aria-expanded="{{ Route::is('settings.index') || Route::is('settings.invoice') || Route::is('settings.profile') ? 'true' : 'false' }}"
+                            aria-expanded="{{ Route::is('settings.index') || Route::is('settings.invoice') || Route::is('settings.profile') || Request::is('settings/*')  || Request::is('superadmin/business/*') ? 'true' : 'false' }}"
                             class="dropdown-toggle">
                             <div class="">
                                 <svg width="800" height="800" viewBox="0 0 36 36"
@@ -952,7 +961,7 @@
                                 </svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ Route::is('settings.index') || Route::is('business.indexshow') ? 'show' : '' }}"
+                        <ul class="collapse submenu list-unstyled {{ Route::is('settings.index') || Route::is('business.indexshow') || Request::is('settings/*') || Request::is('superadmin/business/*') ||  Route::is('ebill.settings') ? 'show' : '' }}"
                             id="settings" data-bs-parent="#accordionExample">
                             <li class="{{ Route::is('settings.index') ? 'active' : '' }}">
                                 <a href="{{ route('settings.index') }}">
@@ -989,7 +998,9 @@
         <!--  BEGIN CONTENT AREA  -->
         <div id="content" class="main-content">
 
-
+            <a href="javascript:void(0);" class="btn-toggle sidebarCollapse" data-placement="bottom"
+            style="color: #ffff;">&#9754;
+        </a>
             {{-- <div class="container"> --}}
 
             <!--  BEGIN BREADCRUMBS  -->

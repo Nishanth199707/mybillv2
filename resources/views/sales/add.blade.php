@@ -750,7 +750,7 @@
                             </div>
                             <div style="text-align: right;">
                                 <button id="saleFormSubmit" type="submit"
-                                    class="btn btn-primary float-right mb-2" style="background:linear-gradient(to right,#ff746e, #ff9e6f);border:none;">Save and Print</button>
+                                    class="btn btn-primary float-right mb-2" style="background:linear-gradient(to right,#ff746e, #ff9e6f);border:none;">Bill</button>
                             </div>
 
 
