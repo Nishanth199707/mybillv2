@@ -201,9 +201,9 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description1" />
                                     </div> -->
                                     <div class="border p-2 input-group col-md-3" style="width: 25%;">
-                                        <div class="elemimei" style="width: 70%;">
+                                        <div class="elemimei" style="width: 100%;">
                                             <div class="input-group mb-2">
-                                                <input class="form-control product_name" tabindex="1"
+                                                <input class="form-control product_name"
                                                     name="item_description1" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id1" />
@@ -232,11 +232,11 @@
                                             name="rpqty1" id="rpqty1">
                                     </div>
                                     <div class="col-md-1 border p-2">
-                                        <input class="form-control qtybox" tabindex="1" type="text"
+                                        <input class="form-control qtybox"  type="text"
                                             dataid="1" name="qty1" id="qty1">
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control amountbox" tabindex="1" type="text"
+                                        <input class="form-control amountbox"   type="text"
                                             dataid="1" name="amount1" id="taxableamount1">
                                     </div>
 
@@ -251,15 +251,15 @@
                                             id="total_amount1" name="total_amount1">
                                     </div>
                                     <div class="col-md-1 border p-2">
-                                        <input class="form-control saleamount" tabindex="1" type="text"
+                                        <input class="form-control saleamount"   type="text"
                                             dataid="1" name="saleamount1" id="saleamount1">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="border p-2 input-group col-md-3" style="width: 25%;">
-                                        <div class="elemimei" style="width: 70%;">
+                                        <div class="elemimei" style="width: 100%;">
                                             <div class="input-group mb-2">
-                                                <input class="form-control product_name" tabindex="1"
+                                                <input class="form-control product_name"
                                                     name="item_description2" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id2" />
@@ -286,11 +286,11 @@
                                             name="rpqty2" id="rpqty2">
                                     </div>
                                     <div class="col-md-1 border p-2">
-                                        <input class="form-control qtybox" tabindex="1" type="text"
+                                        <input class="form-control qtybox"   type="text"
                                             dataid="2" name="qty2" id="qty2">
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control amountbox" tabindex="1" type="text"
+                                        <input class="form-control amountbox"   type="text"
                                             dataid="2" name="amount2" id="taxableamount2">
                                     </div>
                                     <div class="col-md-1 border p-2">
@@ -304,7 +304,7 @@
                                             id="total_amount2" name="total_amount2">
                                     </div>
                                     <div class="col-md-1 border p-2"> <!-- Added column for sale amount -->
-                                        <input class="form-control saleamount" tabindex="1" type="text"
+                                        <input class="form-control saleamount"   type="text"
                                             dataid="2" name="saleamount2" id="saleamount2">
                                     </div>
                                 </div>
@@ -313,9 +313,9 @@
                                 <!-- Row 3 -->
                                 <div class="row">
                                     <div class="border p-2 input-group col-md-3" style="width: 25%;">
-                                        <div class="elemimei" style="width: 70%;">
+                                        <div class="elemimei" style="width: 100%;">
                                             <div class="input-group mb-2">
-                                                <input class="form-control product_name" tabindex="1"
+                                                <input class="form-control product_name"
                                                     name="item_description3" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id3" />
@@ -342,11 +342,11 @@
                                             name="rpqty3" id="rpqty3">
                                     </div>
                                     <div class="col-md-1 border p-2">
-                                        <input class="form-control qtybox" tabindex="1" type="text"
+                                        <input class="form-control qtybox"   type="text"
                                             dataid="3" name="qty3" id="qty3">
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control amountbox" tabindex="1" type="text"
+                                        <input class="form-control amountbox"   type="text"
                                             dataid="3" name="amount3" id="taxableamount3">
                                     </div>
                                     <div class="col-md-1 border p-2">
@@ -360,7 +360,7 @@
                                             id="total_amount3" name="total_amount3">
                                     </div>
                                     <div class="col-md-1 border p-2"> <!-- Added column for sale amount -->
-                                        <input class="form-control saleamount" tabindex="1" type="text"
+                                        <input class="form-control saleamount"   type="text"
                                             dataid="3" name="saleamount3" id="saleamount3">
                                     </div>
                                 </div>
@@ -369,9 +369,9 @@
                                 <!-- Row 4 -->
                                 <div class="row">
                                     <div class="border p-2 input-group col-md-3" style="width: 25%;">
-                                        <div class="elemimei" style="width: 70%;">
+                                        <div class="elemimei" style="width: 100%;">
                                             <div class="input-group mb-2">
-                                                <input class="form-control product_name" tabindex="1"
+                                                <input class="form-control product_name"
                                                     name="item_description4" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id4" />
@@ -398,11 +398,11 @@
                                             name="rpqty4" id="rpqty4">
                                     </div>
                                     <div class="col-md-1 border p-2">
-                                        <input class="form-control qtybox" tabindex="1" type="text"
+                                        <input class="form-control qtybox"   type="text"
                                             dataid="4" name="qty4" id="qty4">
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control amountbox" tabindex="1" type="text"
+                                        <input class="form-control amountbox"   type="text"
                                             dataid="4" name="amount4" id="taxableamount4">
                                     </div>
                                     <div class="col-md-1 border p-2">
@@ -416,7 +416,7 @@
                                             id="total_amount4" name="total_amount4">
                                     </div>
                                     <div class="col-md-1 border p-2"> <!-- Added column for sale amount -->
-                                        <input class="form-control saleamount" tabindex="1" type="text"
+                                        <input class="form-control saleamount"   type="text"
                                             dataid="4" name="saleamount4" id="saleamount4">
                                     </div>
                                 </div>
@@ -425,9 +425,9 @@
                                 <!-- Row 5 -->
                                 <div class="row">
                                     <div class="border p-2 input-group col-md-3" style="width: 25%;">
-                                        <div class="elemimei" style="width: 70%;">
+                                        <div class="elemimei" style="width: 100%;">
                                             <div class="input-group mb-2">
-                                                <input class="form-control product_name" tabindex="1"
+                                                <input class="form-control product_name"
                                                     name="item_description5" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id5" />
@@ -454,11 +454,11 @@
                                             name="rpqty5" id="rpqty5">
                                     </div>
                                     <div class="col-md-1 border p-2">
-                                        <input class="form-control qtybox" tabindex="1" type="text"
+                                        <input class="form-control qtybox"   type="text"
                                             dataid="5" name="qty5" id="qty5">
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control amountbox" tabindex="1" type="text"
+                                        <input class="form-control amountbox"   type="text"
                                             dataid="5" name="amount5" id="taxableamount5">
                                     </div>
                                     <div class="col-md-1 border p-2">
@@ -472,7 +472,7 @@
                                             id="total_amount5" name="total_amount5">
                                     </div>
                                     <div class="col-md-1 border p-2"> <!-- Added column for sale amount -->
-                                        <input class="form-control saleamount" tabindex="1" type="text"
+                                        <input class="form-control saleamount"   type="text"
                                             dataid="5" name="saleamount5" id="saleamount5">
                                     </div>
                                 </div>
@@ -1421,9 +1421,9 @@
                 document.getElementById("addrow").insertAdjacentHTML('beforeend',
                     `<div class="row mb-3">` +
                     `<div class="border p-2 input-group col-md-3" style="width: 25%;">` +
-                    `<div class="elemimei" style="width: 70%;">` +
+                    `<div class="elemimei" style="width: 100%;">` +
                     `<div class="input-group mb-2">` +
-                    `<input class="form-control product_name" tabindex="1" name="item_description${cIncr}" />` +
+                    `<input class="form-control product_name"   name="item_description${cIncr}" />` +
                     `<input type="hidden" class="form-control product_id" name="product_id${cIncr}" />` +
                     `<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>` +
                     `</div>` +
@@ -1740,33 +1740,32 @@
     });
 
 
-    $(document).on('input', '.imei-field', function() {
-        var imeiField = $(this);
+    $(document).on('input', '.imei-field', function () {
+    var imeiField = $(this);
+    var row = imeiField.closest('.imei-fields-container').data('row');
+    var nextRow = imeiField.closest('.input-group').next('.input-group');
 
-        if (imeiField.val().trim() !== '') {
-            var row = imeiField.closest('.imei-fields-container').data('row');
-            var nextRow = imeiField.closest('.input-group').next('.input-group');
+    if (nextRow.length === 0) {
+        addImeiRow(row);
+    }
 
-            if (nextRow.length === 0) {
-                addImeiRow(row);
-            }
+    updateQuantity(row);
+    calculateRow(row);
+    updateTotals();
 
-            updateQuantity(row);
-        }
-        function addImeiRow(row) {
+    function addImeiRow(row) {
         var container = $(`.imei-fields-container[data-row="${row}"]`);
 
         var newInput = `
-        <div class="input-group mb-2">
-            <input type="text" class="form-control imei-field" name="imei[${row}][]" placeholder="ENTER IMEI" />
-            <button type="button" class="btn btn-outline-secondary remove-imei">Remove</button>
-        </div>
-    `;
-
+            <div class="input-group mb-2">
+                <input type="text" class="form-control imei-field" name="imei[${row}][]" placeholder="ENTER IMEI" />
+                <button type="button" class="btn btn-outline-secondary remove-imei">Remove</button>
+            </div>
+        `;
         container.append(newInput);
 
         // Handle removing an IMEI field
-        container.find('.remove-imei').on('click', function() {
+        container.find('.remove-imei').last().on('click', function () {
             $(this).parent().remove();
             updateQuantity(row);
             calculateRow(row);
@@ -1775,7 +1774,21 @@
 
         updateQuantity(row);
     }
-    });
+});
+
+// Add keydown event listener for Enter key navigation
+$(document).on('keydown', '.imei-field', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent form submission on Enter
+        var inputs = document.querySelectorAll('.imei-field');
+        var index = Array.prototype.indexOf.call(inputs, this);
+        var nextInput = inputs[index + 1]; // Get the next input element
+        if (nextInput) {
+            nextInput.focus(); // Focus on the next input
+        }
+    }
+});
+
 
     function updateQuantity(row) {
         var imeiFields = $(`.imei-fields-container[data-row="${row}"] .imei-field`);

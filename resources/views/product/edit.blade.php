@@ -194,9 +194,9 @@
                                             </div>
                                             <div class="modal-body">
                                                 <div class="imei-fields-container">
-                                                    @foreach ($unsoldProducts as $index => $product)
+                                                    @foreach ($unsoldProducts as $index => $product2)
                                                     <div class="input-group mb-2">
-                                                        <input type="text" class="form-control imei-field" name="imei[1][]" placeholder="ENTER IMEI" value="{{ $product->field_value}}" />
+                                                        <input type="text" class="form-control imei-field" name="imei[1][]" placeholder="ENTER IMEI" value="{{ $product2->field_value}}" />
                                                         <button type="button" class="btn btn-outline-danger remove-imei">Remove</button>
                                                     </div>
                                                     @endforeach
@@ -220,8 +220,8 @@
                                     <div id="imeiDisplayContainer" >
                                         <h5>IMEI Values:</h5>
                                         <ul id="imeiList">
-                                            @foreach ($unsoldProducts as $index => $product)
-                                            <li>{{ $product->field_value }}</li>
+                                            @foreach ($unsoldProducts as $index => $product1)
+                                            <li>{{ $product1->field_value }}</li>
                                             @endforeach
                                         </ul>
                                     </div>
@@ -247,7 +247,7 @@
                             <div class="row">
                                 <div class="col-md-3 mb-1" id="including-tax-container">
                                     <label class="form-label">Sales Price (Including Tax)</label>
-                                    <input type="text" class="form-control" id="including_tax" name="including_tax" />
+                                    <input type="text" class="form-control" id="including_tax" name="including_tax" value="{{ $product->price_type == 'without_tax' ? $product->sale_price : '' }}" />
                                     @error('including_tax')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -257,7 +257,7 @@
 
                                 <div class="col-md-3 mb-1" id="sale-price-container">
                                     <label class="form-label">Taxable Amount (Sale Price)</label>
-                                    <input type="text" class="form-control" id="sale_price" name="sale_price" value="{{ $product->sale_price }}" />
+                                    <input type="text" class="form-control" id="sale_price" name="sale_price" value="{{ $product->price_type == 'with_tax' ? $product->sale_price : '' }}" />
                                     @error('sale_price')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -322,7 +322,7 @@
                                 <div class="col-md-3 mb-1" id="purchase-including-tax-container">
                                     <label class="form-label">Purchase Price (Including Tax)</label>
                                     <input type="text" class="form-control" id="purchase_including_tax"
-                                        name="purchase_including_tax" value="{{ old('purchase_including_tax') }}" />
+                                        name="purchase_including_tax" value="{{ $product->price_type == 'without_tax' ? $product->purchase_price : '' }}" />
                                     @if ($errors->has('purchase_including_tax'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('purchase_including_tax') }}</strong>
@@ -334,7 +334,7 @@
                                 <div class="col-md-3 mb-1" id="purchase-price-container">
                                     <label class="form-label">Taxable Amount (Purchase Price)</label>
                                     <input type="text" class="form-control" id="purchase_price" name="purchase_price"
-                                        value="{{ $product->purchase_price }}" />
+                                        value="{{ $product->price_type == 'with_tax' ? $product->purchase_price : '' }}" />
                                     @if ($errors->has('purchase_price'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('purchase_price') }}</strong>
@@ -559,7 +559,7 @@ $(document).ready(function () {
     });
 
     function addImeiRow() {
-        var rowId = $('.imei-fields-container').data('row') || 0; 
+        var rowId = $('.imei-fields-container').data('row') || 0;
         var imeiGroup = `
             <div class="input-group mb-2">
                 <input type="text" class="form-control imei-field" name="imei[${rowId}][]" placeholder="ENTER IMEI" />
@@ -567,6 +567,19 @@ $(document).ready(function () {
             </div>
         `;
         $('.imei-fields-container').append(imeiGroup);
+        const inputs = document.querySelectorAll('.imei-field');
+                inputs.forEach((input, index) => {
+                    input.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                    event.preventDefault(); // Prevent form submission on Enter
+                        const nextInput = inputs[index + 1]; // Get the next input element
+                        if (nextInput) {
+                    nextInput.focus(); // Focus on the next input
+                }
+            }
+            });
+        });
+
     }
 });
 

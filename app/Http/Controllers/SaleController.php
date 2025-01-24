@@ -283,6 +283,7 @@ class SaleController extends Controller
             "taxable18Amount" => $request->taxable18Amount,
             "taxable12Amount" => $request->taxable12Amount,
             "taxable5Amount" => $request->taxable5Amount,
+            "taxable0Amount" => $request->taxable0Amount,
             "tax_amount_28_cgst" => $request->tax_amount_28_cgst,
             "tax_amount_28_sgst" => $request->tax_amount_28_sgst,
 
@@ -409,7 +410,7 @@ class SaleController extends Controller
                 'user_id' => $user_id,
                 'business_id' => $business_id->id,
                 'party_id' => $request->partyid,
-                'transaction_type' => 'sale',
+                'transaction_type' => 'sale-'.$saleInsert->id.'',
                 'invoice_no' => $request->invoice_no,
                 'paid_date' => $request->invoice_date,
                 'credit' => $request->net_amount,
@@ -424,7 +425,7 @@ class SaleController extends Controller
                 'user_id' => $user_id,
                 'business_id' => $business_id->id,
                 'party_id' => $request->partyid,
-                'transaction_type' => 'sale',
+                'transaction_type' =>  'sale-'.$saleInsert->id.'',
                 'invoice_no' => $request->invoice_no,
                 'paid_date' => $request->invoice_date,
                 'credit' => $request->net_amount,
@@ -472,7 +473,7 @@ class SaleController extends Controller
                 'user_id' => $user_id,
                 'business_id' => $business_id->id,
                 'party_id' => $request->partyid,
-                'transaction_type' => 'sale',
+                'transaction_type' =>  'sale-'.$saleInsert->id.'',
                 'invoice_no' => $invoice_no,
                 'paid_date' => $request->invoice_date,
                 'debit' => $request->cash_received,
@@ -1046,15 +1047,17 @@ class SaleController extends Controller
         $to_Date = date_create($request->to_date);
         $toDate = date_format($to_Date, "d-m-Y");
 
-        $cashReceivedLedger = PartyPayment::join('parties', 'party_payments.party_id', '=', 'parties.id')
+        $cashReceivedLedger = PartyPayment::join('parties', 'party_payments.party_id', '=', 'parties.id','left')
             ->where('party_payments.user_id', $user_id)
-            ->where('party_payments.invoice_no', 'like', '%REC%')
+            // ->where('party_payments.invoice_no', 'like', '%REC%')
             ->where('party_payments.mode_of_payment', 'cash')
             ->select(
                 'parties.id as party_id',
                 'party_payments.invoice_no as invoice',
                 'parties.name as party_name',
-                'party_payments.debit as amount',
+                // 'party_payments.debit as amount',
+                'party_payments.debit',
+                'party_payments.credit',
                 'party_payments.paid_date as date'
             )
             ->orderBy('party_payments.id', 'DESC');
@@ -1079,15 +1082,17 @@ class SaleController extends Controller
         $to_Date = date_create($request->to_date);
         $toDate = date_format($to_Date, "d-m-Y");
 
-        $onlinecashReceivedLedger = PartyPayment::join('parties', 'party_payments.party_id', '=', 'parties.id')
+        $onlinecashReceivedLedger = PartyPayment::join('parties', 'party_payments.party_id', '=', 'parties.id','left')
             ->where('party_payments.user_id', $user_id)
-            ->where('party_payments.invoice_no', 'like', '%REC%')
+            // ->where('party_payments.invoice_no', 'like', '%REC%')
             ->whereNotIn('party_payments.mode_of_payment', ['cash'])
             ->select(
                 'parties.id as party_id',
                 'party_payments.invoice_no as invoice',
                 'parties.name as party_name',
-                'party_payments.debit as amount',
+                // 'party_payments.debit as amount',
+                'party_payments.debit',
+                'party_payments.credit',
                 'party_payments.paid_date as date'
             )
             ->orderBy('party_payments.id', 'DESC');

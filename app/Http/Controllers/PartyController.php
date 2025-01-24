@@ -681,7 +681,7 @@ class PartyController extends Controller
                 'opening_balance' => $latestPayment->closing_balance,
                 'closing_balance' => $latestPayment->closing_balance,
             ];
-        } else if ($request->has('cheque_amount')) {
+        }elseif($request->has('cheque_amount')) {
 
             //  dd($request->all());
 
@@ -714,7 +714,7 @@ class PartyController extends Controller
             ];
             $payment = PartyPayment::where('party_id', $request->partyid)->where('id', $request->paymentid)->first();
             $payment->update(['payment_type' => 'collected']);
-        } else if ($request->mode_of_payment == 'scheme') {
+        }elseif($request->mode_of_payment == 'scheme') {
 
             $latestPayment = PartyPayment::where('party_id', $request->partyid)
                 ->orderBy('id', 'DESC')
@@ -728,10 +728,9 @@ class PartyController extends Controller
             // Fetch the last invoice based on the prefix
             $invoice_id = PartyPayment::where('user_id', $user_id)
                 ->where('debit', '!=', '0.00')
-                ->where('invoice_no', 'LIKE', "$prefix%") // Filter by prefix
-                ->orderBy('invoice_no', 'DESC')
+                ->where('invoice_no', 'LIKE', "%$prefix%") // Filter by prefix
+                ->orderBy('id', 'DESC')
                 ->first();
-
             if ($invoice_id) {
                 // Extract the numeric part from the last invoice number
                 $lastInvoiceNumber = (int) str_replace($prefix, '', $invoice_id->invoice_no);
@@ -763,9 +762,7 @@ class PartyController extends Controller
                 'opening_balance' => $opening_balance,
                 'closing_balance' => $closing_balance,
             ];
-
-            PartyPayment::create($partyPaymentArr);
-        } else {
+        }else{
 
             // dd($latestPayment->closing_balance);
 

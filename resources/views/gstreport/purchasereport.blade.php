@@ -21,22 +21,6 @@
                                 <input type="date" class="form-control" id="to_date" name="to_date" value="" />
                             </div>
 
-                            <!-- Category Filter Dropdown -->
-                            <div>
-                                <strong>Category:</strong>
-                                <select id="categoryFilter" class="form-control">
-                                    <option value="all">All Category</option>
-
-                                </select>
-                            </div>
-
-                            <!-- Subcategory (Brand) Filter Dropdown -->
-                            <div>
-                                <strong>Subcategory (Brand):</strong>
-                                <select id="subcategoryFilter" class="form-control">
-                                    <option value="all">All Subcategory</option>
-                                </select>
-                            </div>
                             <div>
                                 <button class="btn btn-primary mt-3 filter">Filter</button>
                             </div>
@@ -102,28 +86,7 @@
             }
         });
 
-        // Fetch Subcategories when a Category is selected
-        $('#categoryFilter').change(function() {
-            var categoryId = $(this).val();
-            if (categoryId) {
-                $.ajax({
-                    url: '/get-brands/' + categoryId,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#subcategoryFilter').empty().append('<option value="">Select Subcategory</option>');
-                        $.each(data, function(key, value) {
-                            $('#subcategoryFilter').append('<option value="' + value.id + '">' + value.name + '</option>');
-                        });
-                    },
-                    error: function() {
-                        alert('Unable to fetch subcategories (brands).');
-                    }
-                });
-            } else {
-                $('#subcategoryFilter').empty().append('<option value="">Select Subcategory</option>');
-            }
-        });
+
 
         // DataTable Initialization
         if ($.fn.DataTable.isDataTable('#zero-config')) {

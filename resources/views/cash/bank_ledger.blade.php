@@ -18,12 +18,12 @@
                             <div class="col-md-3"></div>
                             <div class="col-md-2">
                                 <label for="from_date" class="form-label">From Date</label>
-                                <input type="date" id="from_date" name="from_date" class="form-control" 
+                                <input type="date" id="from_date" name="from_date" class="form-control"
                                        value="{{ request('from_date') }}">
                             </div>
                             <div class="col-md-2">
                                 <label for="to_date" class="form-label">To Date</label>
-                                <input type="date" id="to_date" name="to_date" class="form-control" 
+                                <input type="date" id="to_date" name="to_date" class="form-control"
                                        value="{{ request('to_date') }}">
                             </div>
                             <div class="col-md-2 d-flex align-items-end">
@@ -40,19 +40,30 @@
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Invoice No</th>
                                         <th>Date</th>
+                                        <th>Invoice No</th>
                                         <th>Party Name</th>
-                                        <th>Bank Received</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
+                                        <th>Closing Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                    $total = 0;
+                                    @endphp
                                     @foreach ($onlinecashReceivedLedger as $transaction)
                                     <tr>
-                                        <td>{{ $transaction->invoice }}</td>
                                         <td>{{ \Carbon\Carbon::parse($transaction->date)->format('d M, Y') }}</td>
-                                        <td>{{ $transaction->party_name }}</td>
-                                        <td>₹ {{ number_format($transaction->amount, 2) }}</td>
+                                        <td>{{ $transaction->invoice }}</td>
+                                        <td>@if(!empty($transaction->party_name)){{ $transaction->party_name }}@else{{ 'Expense' }} @endif</td>
+                                        <td>{{ $transaction->debit }}</td>
+                                        <td>{{ $transaction->credit }}</td>
+                                        @php
+                                        $line_total = $transaction->credit - $transaction->debit; // Correct calculation
+                                        $total += $line_total; // Correct assignment
+                                        @endphp
+                                        <td>₹ {{ number_format($total, 2) }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -90,7 +101,7 @@
         const data = @json($onlinecashReceivedLedger).map((transaction, index) => [
             index + 1,
             transaction.invoice,
-            transaction.date, 
+            transaction.date,
             transaction.party_name,
             `₹ ${parseFloat(transaction.amount).toFixed(2)}`
         ]);

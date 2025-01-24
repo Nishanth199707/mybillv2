@@ -20,16 +20,28 @@ class ExpenseController extends Controller
     {
         $userId = $request->session()->get('user_id');
         if ($request->ajax()) {
-            $data = Expense::select('*')->where('user_id', $request->session()->get('user_id'))->get();
+            $data = Expense::select(
+                'expensecategories.name',
+                'expenses.expense_ref',
+                'expenses.id',
+                'expenses.amount',
+                'expenses.dateofexpense',
+                'expenses.description',
+                'expenses.cash_type'
+            )
+            ->join('expensecategories', 'expensecategories.id', '=', 'expenses.exp_type')->where('expenses.user_id', $request->session()->get('user_id'))->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('dateofexpense', function ($row) {
                     return date('d-m-Y', strtotime($row->dateofexpense));
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a class="btn btn-primary btn-sm" href="' . url('/expense/edit/' . $row->id . '') . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
-                            <a class="btn btn-primary btn-sm" href="' . url('/expense/view/' . $row->id . '') . '"><i class="fa-solid fa-eye"></i> View</a>
-                            <a class="btn btn-primary btn-sm" href="' . url('/expense/delete/' . $row->id . '') . '"><i class="fa-solid fa-distroy"></i> Delete</a>';
+                    $btn = '<form action="' .  route('expense.distroy')  . '" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this Category?\')">
+                                <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                <input type="hidden" name="id" value="' . $row->id . '">
+                                <a class="btn btn-primary btn-sm" href="' . url('/expense/expenseedit/' . $row->id . '') . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
+                                </form>';
 
                     return $btn;
                 })
@@ -138,6 +150,175 @@ class ExpenseController extends Controller
     {
         $userId = $request->session()->get('user_id');
         if ($request->ajax()) {
+            $data = Expense::select(
+                'expensecategories.name',
+                'expenses.expense_ref',
+                'expenses.id',
+                'expenses.amount',
+                'expenses.dateofexpense',
+                'expenses.description',
+                'expenses.cash_type'
+            )
+            ->join('expensecategories', 'expensecategories.id', '=', 'expenses.exp_type')
+            ->where('expenses.user_id', $request->session()->get('user_id'))
+            ->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->editColumn('image', function ($row) {
+                    $image = '<img src="' . asset('uploads/category/' . $row->image) . '" width="50" height="50">';
+                    return $image;
+                })
+                ->addColumn('action', function ($row) {
+                    $btn = '<form action="' .  route('expense.distroy')  . '" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this Category?\')">
+                                <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                <input type="hidden" name="id" value="' . $row->id . '">
+                                <a class="btn btn-primary btn-sm" href="' . url('/expense/expenseedit/' . $row->id . '') . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
+                                </form>';
+                    return $btn;
+                })
+
+                ->rawColumns(['image', 'action'])
+                ->make(true);
+        }
+        $categories = Expensecategory::where('user_id', $userId)->get();
+        $category = '';
+        $expense = new Expense();
+        $lastid_expens = Expense::where('user_id', $userId)->orderBy('id', 'desc')->first();
+        if($lastid_expens == null){
+            $lastInvoiceNumber = 0;
+        }else{
+            $lastInvoiceNumber = (int)str_replace('EXPN', '', $lastid_expens->expense_ref);
+            $lastInvoiceNumber = $lastInvoiceNumber;
+        }
+        $exp_id = "EXPN" . str_pad($lastInvoiceNumber + 1, 4, "0", STR_PAD_LEFT);
+        $expense='';
+        return view('expense.expensecat_add', compact('category','categories','exp_id','expense'));
+    }
+
+    public function storenew(Request $request){
+
+        $userId = $request->session()->get('user_id');
+        $method = $request->action_fun;
+        if($method == 'add'){
+            $expense = new Expense();
+            $timestamp = strtotime(date('Y-m-d')); // Convert string to timestamp
+            $expense->dateofexpense = date('Y-m-d',$timestamp);
+            $expense->expense_ref = $request->expense_no;
+            $expense->amount = $request->net_amount;
+            $expense->user_id = $userId;
+            $expense->exp_type = $request->expence_type;
+            $expense->cash_type = $request->cash_type;
+            $expense->description = $request->description;
+            $expense->save();
+            $expenseId = $expense->id;
+
+            if(!empty($expenseId)){
+                $business_id = Business::where('user_id', '=', $userId)->select('id')->first();
+                $invoice_id = PartyPayment::where('user_id', $userId)
+                ->where('debit', '!=', '0.00')
+                ->where('invoice_no', 'LIKE', "%PMT%") // Filter by prefix
+                ->orderBy('invoice_no', 'DESC')
+                ->first();
+
+            if ($invoice_id) {
+                    // Extract the numeric part from the last invoice number
+                    $lastInvoiceNumber = (int)str_replace('PMT', '', $invoice_id->invoice_no);
+                    $nextInvoiceNumber = $lastInvoiceNumber + 1;
+                } else {
+                    // Start from 1 if no previous invoice exists
+                    $nextInvoiceNumber = 1;
+                }
+
+            $invoice_no = $this->invoice_num($nextInvoiceNumber, 4, 'PMT');
+                $partyPaymentArr = [
+                    'user_id' => $userId,
+                    'party_id' => 0,
+                    'business_id' => $business_id->id,
+                    'transaction_type' => 'expense'.$expenseId,
+                    'invoice_no' => $invoice_no,
+                    'paid_date' => $request->expense_date,
+                    'debit' => $request->net_amount,
+                    'mode_of_payment' => $request->cash_type,
+                    'payment_type' => 'debit',
+                    'opening_balance' => 0,
+                    'closing_balance' => 0,
+                ];
+
+                PartyPayment::create($partyPaymentArr);
+            }
+            return redirect()->route('expense.category')->with('success', 'Expense Created successfully');
+        }else{
+            $expense = Expense::find($request->id);
+            $expense->amount = $request->net_amount;
+            $expense->description = $request->description;
+            $expense->exp_type = $request->expence_type;
+            $expense->cash_type = $request->cash_type;
+            $expense->save();
+
+            PartyPayment::where('transaction_type', 'expense' . $request->id)
+            ->update([
+                'debit' => $request->net_amount,
+                'mode_of_payment' => $request->cash_type,
+            ]);
+
+            return redirect()->route('expense.category')->with('success', 'Expense Updated successfully');
+        }
+
+
+
+    }
+
+    public function categorystore(Request $request)
+    {
+        $userId = $request->session()->get('user_id');
+        $category = new Expensecategory();
+
+        $method = $request->action_fun;
+        if($method == 'add' && !empty($request->name)){
+            $category->name = $request->name;
+            $category->description = $request->description;
+            $category->status = $request->status;
+            $category->user_id = $userId;
+            $category->save();
+            return redirect()->route('expense.category')
+            ->with('success', 'Expense Category Added successfully');
+        }elseif($method == 'update'  && !empty($request->name)){
+            $category = Expensecategory::find($request->id);
+            $category->name = $request->name;
+            $category->description = $request->description;
+            $category->status = $request->status;
+            $category->user_id = $userId;
+            $category->save();
+            return redirect()->route('expense.category')->with('success', 'Expense Category Updated successfully');
+        }
+
+
+        // return response()->json(['success' => 'Category added successfully']);
+
+    }
+
+    public function categoryedit(Request $request, $id)
+    {
+        $userId = $request->session()->get('user_id');
+        $category = Expensecategory::find($id);
+        $categories = Expensecategory::where('user_id', $userId)->get();
+        $expense = new Expense();
+        $lastid_expens = Expense::where('user_id', $userId)->orderBy('id', 'desc')->first();
+        $lastInvoiceNumber = (int)str_replace('EXPN', '', $lastid_expens->expense_ref);
+        if($lastid_expens == null){
+            $lastInvoiceNumber = 0;
+        }else{
+            $lastInvoiceNumber = $lastInvoiceNumber;
+        }
+        $exp_id = "EXPN" . str_pad($lastInvoiceNumber + 1, 4, "0", STR_PAD_LEFT);
+        $expense='';
+        return view('expense.expensecat_add', compact('category','categories','exp_id','expense'));
+    }
+
+    public function categorylist(Request $request)
+    {
+        if ($request->ajax()) {
             $data = Expensecategory::select('*')->where('user_id', $request->session()->get('user_id'))->get();
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -158,47 +339,15 @@ class ExpenseController extends Controller
                 ->rawColumns(['image', 'action'])
                 ->make(true);
         }
-        $categories = Expensecategory::where('user_id', $userId)->get();
-        $category = '';
-
-        return view('expense.expensecat_add', compact('category','categories'));
+        return view('expense.categorylist');
     }
 
-    public function categorystore(Request $request)
+    public function expenseedit(Request $request, $id)
     {
         $userId = $request->session()->get('user_id');
-        $category = new Expensecategory();
-
-        $method = $request->action_fun;
-        if($method == 'add'){
-            $category->name = $request->name;
-            $category->description = $request->description;
-            $category->status = $request->status;
-            $category->user_id = $userId;
-            $category->save();
-            return redirect()->route('expense.category')
-            ->with('success', 'Product Category Added successfully');
-        }elseif($method == 'update'){
-            $category = Expensecategory::find($request->id);
-            $category->name = $request->name;
-            $category->description = $request->description;
-            $category->status = $request->status;
-            $category->user_id = $userId;
-            $category->save();
-            return redirect()->route('expense.category')->with('success', 'Product Category Updated successfully');
-        }
-
-
-        // return response()->json(['success' => 'Category added successfully']);
-
-    }
-
-    public function categoryedit(Request $request, $id)
-    {
-        $userId = $request->session()->get('user_id');
-        $category = Expensecategory::find($id);
+        $expense = Expense::find($id);
         $categories = Expensecategory::where('user_id', $userId)->get();
-        return view('expense.expensecat_add', compact('category','categories'));
+        return view('expense.expensecat_add', compact('expense','categories'));
     }
 
     public function categorydestroy(Request $request)
@@ -209,8 +358,25 @@ class ExpenseController extends Controller
 
         $Expensecategory->delete();
         return redirect()->route('expense.category')
-            ->with('success', 'Product Category deleted successfully');
+            ->with('success', 'Expense Category deleted successfully');
     }
+
+    public function expensedestroy(Request $request)
+    {
+        //
+        $id = $request->id;
+
+        $ex_pay = PartyPayment::where('transaction_type', 'expense' . $id);
+        $ex_pay->delete();
+
+        $Expensecategory = Expense::find($id);
+        $Expensecategory->delete();
+
+
+        return redirect()->route('expense.category')
+            ->with('success', 'Expense deleted successfully');
+    }
+
 
     public function create(Request $request)
     {
@@ -220,20 +386,21 @@ class ExpenseController extends Controller
         $business = Business::where('user_id', $userId)->first();
         $expense = new Expense();
         // $count_expens = Expense::where('user_id', $userId)->count();
-        $lastid_expens = Expense::orderBy('id', 'desc')->first();
+        $lastid_expens = Expense::where('user_id', $userId)->orderBy('id', 'desc')->first();
+        $lastInvoiceNumber = (int)str_replace('EXPN', '', $lastid_expens->expense_ref);
         if($lastid_expens == null){
-            $lastid_expens = 0;
+            $lastInvoiceNumber = 0;
         }else{
-            $lastid_expens = $lastid_expens->id;
+            $lastInvoiceNumber = $lastInvoiceNumber;
         }
-        $exp_id = "EXPN" . str_pad($lastid_expens + 1, 4, "0", STR_PAD_LEFT);
+        $exp_id = "EXPN" . str_pad($lastInvoiceNumber + 1, 4, "0", STR_PAD_LEFT);
         return view('expense.add', compact('categories', 'parties', 'business','exp_id'));
     }
 
     public function store(Request $request)
     {
         $invoice_no = '';
-        // print_r($request->totQues); die();
+       if(!empty($request->input('expence_type1')) && !empty($request->input('amount1'))){
         $userId = $request->session()->get('user_id');
         $expense = new Expense();
         $timestamp = strtotime($request->expense_date); // Convert string to timestamp
@@ -244,10 +411,9 @@ class ExpenseController extends Controller
         $expense->cash_type = $request->cash_type;
         $expense->save();
         $expenseId = $expense->id;
-
         $totQues = $request->totQues;
         for ($i = 0; $i < $totQues; $i++) {
-
+            if(!empty($request->input('expence_type' . ($i + 1))) && !empty($request->input('product_id' . ($i + 1))) && !empty($request->input('amount' . ($i + 1)))){
             $expensedetail = new Expensedetails();
             $expensedetail->expense_id = $expenseId;
             $expensedetail->expensecategory_id = $request->input('expence_type' . ($i + 1));
@@ -255,6 +421,7 @@ class ExpenseController extends Controller
             $expensedetail->price = $request->input('amount' . ($i + 1));
             $expensedetail->description = $request->input('description' . ($i + 1));
             $expensedetail->save();
+            }
         }
 
         if(!empty($expenseId)){
@@ -292,7 +459,10 @@ class ExpenseController extends Controller
             PartyPayment::create($partyPaymentArr);
         }
 
-
+        }else{
+            return redirect()->route('expense.create')
+            ->with('error', 'Some Value Missing.');
+        }
         return redirect()->route('expense.index')
             ->with('success', 'Expense created successfully.');
     }

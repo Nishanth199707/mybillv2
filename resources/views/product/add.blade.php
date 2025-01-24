@@ -16,8 +16,7 @@
                         <h5 class="mb-0">Add New Product</h5>
                     </div>
                     <div class="card-body">
-                        <form id="product-form" method="POST" action="{{ route('product.store') }}"
-                            enctype="multipart/form-data">
+                        <form id="product-form" method="POST" action="{{ route('product.store') }}" enctype="multipart/form-data">
                             @csrf
 
                             <!-- Product Details -->
@@ -25,7 +24,7 @@
                             <div class="row">
                                 <div class="col-md-2 mb-1">
                                     <label class="form-label">Item Type</label>
-                                 
+
                                         @if($businessCategory->gstavailable == 'yes')
                                         <select name="item_type" id="item_type" class="form-select">
                                             <option value="sale" @if (old('item_type')=='sale' ) selected @endif>Sale
@@ -37,7 +36,7 @@
                                             <select name="item_type" id="item_type" class="form-select" disabled>
                                                 <option value="sale" @if (old('item_type')=='sale' ) selected @endif>Sale
                                                 </option>
-                                         
+
                                             </select>
                                             @endif
                                     @if ($errors->has('item_type'))
@@ -94,7 +93,7 @@
                                     @else
                                     <label class="form-label">HSN Code</label>
                                     @endif
-                                  
+
                                     {{-- <input type="text" class="form-control" name="hsn_code"
                                         value="{{ old('hsn_code') }}" /> --}}
                                         <select name="hsn_code" id="hsn_code" class="form-select">
@@ -180,6 +179,7 @@
                                         <option value="18">18 %</option>
                                         <option value="12">12 %</option>
                                         <option value="5">5 %</option>
+                                        <option value="0">0 %</option>
                                     </select>
 
                                     @if ($errors->has('gst_rate'))
@@ -390,7 +390,6 @@
     <div class="content-backdrop fade"></div>
 </div>
 <!-- Content wrapper -->
-
 <script>
     $(document).ready(function() {
 
@@ -444,14 +443,13 @@
         function updateSalesFields() {
             const selectedType = priceTypeSelect.value;
             const gstRate = parseFloat(gstRateField.value) || 0;
-
             if (selectedType === 'with_tax') {
                 includingTaxField.readOnly = false;
                 salePriceField.readOnly = true;
                 gstAmountField.readOnly = true;
 
                 const includingTax = parseFloat(includingTaxField.value) || 0;
-                if (gstRate > 0 && includingTax > 0) {
+                if ( includingTax > 0) {
                     const taxableAmount = includingTax / (1 + gstRate / 100);
                     const gstAmount = includingTax - taxableAmount;
 
@@ -464,7 +462,7 @@
                 gstAmountField.readOnly = true;
 
                 const taxableAmount = parseFloat(salePriceField.value) || 0;
-                if (gstRate > 0 && taxableAmount > 0) {
+                if ( taxableAmount > 0) {
                     const gstAmount = taxableAmount * (gstRate / 100);
                     const includingTax = taxableAmount + gstAmount;
 
@@ -484,7 +482,7 @@
                 purchaseGstAmountField.readOnly = true;
 
                 const includingTax = parseFloat(purchaseIncludingTaxField.value) || 0;
-                if (gstRate > 0 && includingTax > 0) {
+                if ( includingTax > 0) {
                     const taxableAmount = includingTax / (1 + gstRate / 100);
                     const gstAmount = includingTax - taxableAmount;
 
@@ -497,7 +495,7 @@
                 purchaseGstAmountField.readOnly = true;
 
                 const taxableAmount = parseFloat(purchasePriceField.value) || 0;
-                if (gstRate > 0 && taxableAmount > 0) {
+                if ( taxableAmount > 0) {
                     const gstAmount = taxableAmount * (gstRate / 100);
                     const includingTax = taxableAmount + gstAmount;
 
@@ -543,13 +541,21 @@ $(document).ready(function () {
     // Show modal when checkbox is checked
     $('#imeiCheckbox').change(function () {
         if ($(this).is(':checked')) {
-            $('#imeiModal').modal('show');
+            $('#imeiModal').modal('show'); // Show the modal
+
+            // Wait for the modal to be fully visible before focusing
+            $('#imeiModal').on('shown.bs.modal', function () {
+                var field = document.querySelector('.imei-field'); // Get the first input with class 'imei-field'
+                if (field) {
+                    field.focus(); // Focus on the input
+                }
+            });
+
             $('#stock').addClass('readonly');
-        }else{
+        } else {
             $('#stock').removeClass('readonly');
         }
     });
-
     // Add new IMEI field dynamically
     $(document).on('click', '.add-imei', function () {
         addImeiRow();
@@ -598,6 +604,18 @@ $(document).ready(function () {
             </div>
         `;
         $('.imei-fields-container').append(imeiGroup);
+        const inputs = document.querySelectorAll('.imei-field');
+                    inputs.forEach((input, index) => {
+                        input.addEventListener('keypress', function(event) {
+                        if (event.key === 'Enter') {
+                        event.preventDefault(); // Prevent form submission on Enter
+                            const nextInput = inputs[index + 1]; // Get the next input element
+                            if (nextInput) {
+                        nextInput.focus(); // Focus on the next input
+                    }
+                }
+                });
+            });
     }
 });
 

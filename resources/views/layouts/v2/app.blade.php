@@ -384,9 +384,9 @@
                         </div>
                     </li>
                     <li
-                        class="menu {{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.disablelis') || Request::routeIs('product.index') ? 'active' : '' }}">
+                        class="menu {{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.disablelis') || Request::routeIs('product.index') || Request::is('superadmin/product*') ? 'active' : '' }}">
                         <a href="#products" data-bs-toggle="collapse"
-                            aria-expanded="{{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index') ? 'true' : 'false' }}"
+                            aria-expanded="{{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index') || Request::is('superadmin/product*') || Request::routeIs('product.disablelist')  ? 'true' : 'false' }}"
                             class="dropdown-toggle">
                             <div class="">
                                 <svg width="800px" height="800px" viewBox="0 0 20 20"
@@ -413,7 +413,7 @@
                                 </svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index') ? 'show' : '' }}"
+                        <ul class="collapse submenu list-unstyled {{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index')  || Request::routeIs('product.disablelist')  || Request::is('superadmin/product*') ? 'show' : '' }}"
                             id="products" data-bs-parent="#accordionExample">
                             <li class="{{ Request::routeIs('productcategory.create') ? 'active' : '' }}"><a
                                     href="{{ route('productcategory.create') }}">Add Category</a></li>
@@ -425,7 +425,7 @@
                                     href="{{ route('productcategory.index') }}">View Category</a></li>
                             <li class="{{ Request::routeIs('productsubcategory.index') ? 'active' : '' }}"><a
                                     href="{{ route('productsubcategory.index') }}">View Sub Category</a></li>
-                            <li class="{{ Request::routeIs('product.index') ? 'active' : '' }}"><a
+                            <li class="{{ Request::routeIs('product.index') || Request::is('superadmin/product*') ? 'active' : '' }}"><a
                                     href="{{ route('product.index') }}">View Product</a></li>
                             <li class="{{ Request::routeIs('product.disablelist') ? 'active' : '' }}"><a
                                     href="{{ route('product.disablelist') }}">Disable Product</a></li>
@@ -686,9 +686,9 @@
                     @else
                     @endif
                     <!-- Expense Menu -->
-                    <li class="menu {{ Route::is('expense') || Route::is('expense') ? 'active' : '' }}">
+                    <li class="menu {{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') ? 'active' : '' }}">
                         <a href="#expense" data-bs-toggle="collapse"
-                            aria-expanded="{{ Route::is('expense') || Route::is('expense') ? 'true' : 'false' }}"
+                            aria-expanded="{{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') ? 'true' : 'false' }}"
                             class="dropdown-toggle">
                             <div class="d-flex align-items-center">
                                 <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px"
@@ -711,24 +711,29 @@
                                 </svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ Route::is('expense.category') || Route::is('expense.category') ? 'show' : '' }}"
+                        <ul class="collapse submenu list-unstyled {{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') || Route::is('expense.categorylist') ? 'show' : '' }}"
                             id="expense" data-bs-parent="#accordionExample">
 
                             <li class="{{ Route::is('expense.category') ? 'active' : '' }}">
                                 <a href="{{ route('expense.category') }}">
-                                    Expense Category
+                                    Expense
                                 </a>
                             </li>
 
-                            <li class="{{ Route::is('expense.create') ? 'active' : '' }}">
+                            {{-- <li class="{{ Route::is('expense.create') ? 'active' : '' }}">
                                 <a href="{{ route('expense.create') }}">
                                     Expense Create
                                 </a>
-                            </li>
+                            </li> --}}
 
                             <li class="{{ Route::is('expense.index') ? 'active' : '' }}">
                                 <a href="{{ route('expense.index') }}">
                                     Expense List
+                                </a>
+                            </li>
+                            <li class="{{ Route::is('expense.categorylist') ? 'active' : '' }}">
+                                <a href="{{ route('expense.categorylist') }}">
+                                    Expense Category List
                                 </a>
                             </li>
                         </ul>
