@@ -43,7 +43,7 @@
                                 <button class="btn btn-primary mt-3 filter">Filter</button>
 
                             </div>
-                            <div class="btn-group text-end"> 
+                            <div class="btn-group text-end">
                                 <button href="{{ route('gst.salereport') }}" class="btn btn-outline-primary mt-3 export">Excel</button>
                                 <button href="javascript:void(0);" class="btn btn-outline-primary btn-download contenttopdf1 mt-3">Pdf</button>
                                 <button href="#" class="btn btn-outline-success mt-3">Share</button>

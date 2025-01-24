@@ -142,7 +142,7 @@
 
                                 <div class="col-md-4 fv-plugins-icon-container">
                                     <label class="form-label" for="formValidationName">Quotation No</label>
-                                    <input type="text" id="formValidationName" class="form-control" readonly placeholder="John Doe" value="{{ $quotation_no }}" name="quotation_no">
+                                    <input type="text" id="formValidationName" class="form-control" readonly placeholder=" " value="{{ $quotation_no }}" name="quotation_no">
 
                                 </div>
                             </div>

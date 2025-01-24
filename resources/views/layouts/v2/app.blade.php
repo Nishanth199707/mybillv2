@@ -90,8 +90,8 @@
     padding: 5px;
     z-index:9999;
     position: relative;
-    right: 7px;
-    top: 325px;
+    right: 0px;
+    bottom: 40px;
     font-size: 21px;
   }
 
@@ -238,7 +238,7 @@
                                 <div class="media-body">
                                     @if (Auth::user())
                                         <h5 class="me-1">{{ Auth::user()->name }}</h5>
-                                        <h5 class="me-1">User Id : MDB{{ Auth::user()->id }}</h5>
+                                        <h5 class="me-1">User Id : MDB{{ session('user_id') }}</h5>
                                     @endif
                                 </div>
                             </div>
@@ -307,9 +307,13 @@
 
                 <ul class="list-unstyled menu-categories" id="accordionExample">
 
-
+                    @if(session()->get('user_type') == 'admin')
                     <li class="menu {{ Route::is('superadmin.home') ? 'active' : '' }}">
                         <a href="{{ route('superadmin.home') }}" class="dropdown-toggle">
+                    @else
+                    <li class="menu {{ Route::is('staff.home') ? 'active' : '' }}">
+                        <a href="{{ route('staff.home') }}" class="dropdown-toggle">
+                    @endif
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -999,7 +1003,7 @@
         <div id="content" class="main-content">
 
             <a href="javascript:void(0);" class="btn-toggle sidebarCollapse" data-placement="bottom"
-            style="color: #ffff;">&#9754;
+            style="color: #ffff;">&#9776;
         </a>
             {{-- <div class="container"> --}}
 
