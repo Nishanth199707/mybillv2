@@ -88,8 +88,7 @@
     width: 250px; /* Adjust width as needed */
     background-color: #ff7e6e;
     padding: 5px;
-    transition: transform 0.3s ease-in-out;
-    transform: translateX(-100%);
+    z-index:9999;
     position: relative;
     right: 7px;
     top: 325px;
@@ -1000,7 +999,7 @@
         <div id="content" class="main-content">
 
             <a href="javascript:void(0);" class="btn-toggle sidebarCollapse" data-placement="bottom"
-            style="color: #ffff;">&#9776;
+            style="color: #ffff;">&#9754;
         </a>
             {{-- <div class="container"> --}}
 
