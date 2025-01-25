@@ -299,8 +299,8 @@ if(!empty($permissions)){
                                             <th>Voucher</th>
                                             <th style="max-width: 100px; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;">Remark</th>
                                             <th>Payment Type</th>
-                                            <th>Credit</th>
                                             <th>Debit</th>
+                                            <th>Credit</th>
                                             <th>Balance</th>
                                         </tr>
                                     </thead>
@@ -310,7 +310,7 @@ if(!empty($permissions)){
                                             <td>-</td>
                                             <td>-</td>
                                             <td>-</td>
-                                            <td>-</td>
+                                            <td>{{ number_format($data->opening_balance, 2) }}</td>
                                             <td>-</td>
                                             <td>₹ {{ number_format($data->opening_balance, 2) }}</td>
                                         </tr>
@@ -322,8 +322,8 @@ if(!empty($permissions)){
                                                     {{ $payment->remark }}
                                                 </td>
                                                 <td>{{ $payment->mode_of_payment }}</td>
-                                                <td>{{ number_format($payment->credit, 2) }}</td>
                                                 <td>{{ number_format($payment->debit, 2) }}</td>
+                                                <td>{{ number_format($payment->credit, 2) }}</td>
                                                 <td>{{ number_format($payment->closing_balance, 2) }}</td>
                                             </tr>
                                         @endforeach

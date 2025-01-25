@@ -30,6 +30,7 @@
                                         <option value="waiting_for_spare">Waiting for Spare</option>
                                         <option value="returned">Returned</option>
                                         <option value="completed">Completed</option>
+                                        <option value="delivered">Delivered</option>
                                     </select>
                                 </div>
                                 <div class="col-md-2">
@@ -198,7 +199,7 @@
                     row.date ,
                     row.customer_name ,
                     row.phone ,
-                    row.complaint_remark 
+                    row.complaint_remark
                 ]);
 
                 // Add PDF Title
@@ -240,6 +241,9 @@
                     },
                     success: function(response) {
                         table.ajax.reload();
+                        if(status == 'delivered'){
+                            $(".edit"+repairId).hide();
+                        }
                         alert(response.message);
                     },
                     error: function(error) {

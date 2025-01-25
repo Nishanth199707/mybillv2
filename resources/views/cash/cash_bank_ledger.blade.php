@@ -57,7 +57,14 @@
                                     <tr>
                                         <td>{{ \Carbon\Carbon::parse($transaction->date)->format('d M, Y') }}</td>
                                         <td>{{ $transaction->invoice }}</td>
-                                        <td>@if(!empty($transaction->party_name)){{ $transaction->party_name }}@else{{ 'Expense' }} @endif</td>
+                                        <td>@if(!empty($transaction->party_name)){{ $transaction->party_name }}@else
+                                            @if(!empty($transaction->debit))
+                                                {{ 'Expense' }}
+                                            @else
+                                            {{'Service'}}
+                                            @endif
+                                            @endif
+                                            </td>
                                         <td>{{ $transaction->debit }}</td>
                                         <td>{{ $transaction->credit }}</td>
                                         @php

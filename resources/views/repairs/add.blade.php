@@ -26,8 +26,12 @@
                                 <h5 class="mb-4">Customer Details</h5>
                                 <div class="row">
                                     <div class="col-md-3 mb-1">
-                                        <label class="form-label">Customer Name</label>
-                                        <input type="text" class="form-control" name="customer_name" value="{{ old('customer_name') }}" required />
+                                        <label class="form-label">Party Name</label>
+                                        {{-- <input type="text" class="form-control" name="customer_name" value="{{ old('customer_name') }}" required /> --}}
+                                            <input type="text" required class="form-control party" id="party"
+                                                required name="party" value="">
+                                            <input type="hidden" required class="party" id="partyid" required
+                                                name="customer_name" value="">
                                         @if ($errors->has('customer_name'))
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $errors->first('customer_name') }}</strong>
@@ -225,6 +229,58 @@
         <div class="content-backdrop fade"></div>
     </div>
 
+    <script type="text/javascript">
+        var path = "{{ route('autocomplete') }}";
+        var partypath = "{{ route('partyautocomplete') }}";
+        $(document).ready(function() {
+            // Initialize autocomplete only once
+            $('.party').autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: partypath,
+                        type: 'GET',
+                        dataType: "json",
+                        data: {
+                            partysearch: request.term,
+                            type: "sale"
+                        },
+                        success: function(data) {
+                            if (data.length > 0) {
+                                response(data.map(function(party) {
+                                    $("#party_gst").val(party.gst_profile);
+                                    return {
+                                        label: party.name,
+                                        id: party.id,
+                                        party_detail: [
+                                            party.billing_address_1,
+                                            party.billing_address_2,
+                                            party.billing_pincode
+                                        ].filter(Boolean).join(', '),
+                                        partyphone: party.phone_no,
+                                        state: party.state
+                                    };
+                                }));
+                            } else {
+                                console.log("No matching party found.");
+                                response([]); // Send an empty response
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error fetching data: ", status, error);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $(this).val(ui.item.label);
+                    $('#partyid').val(ui.item.id);
+                    $('#party_detail').val(ui.item.party_detail);
+                    $('#partyphone').val(ui.item.partyphone);
+                    $('#state').val(ui.item.state);
+                    return false; // Prevent default behavior
+                }
+            });
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const batteryYes = document.getElementById('battery_yes');

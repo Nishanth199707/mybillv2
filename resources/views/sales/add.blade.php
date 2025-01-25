@@ -739,7 +739,7 @@
                                             class="form-control">
                                     </div>
                                     <div class="col-md-2 form-group">
-                                        <label for="emi" class="form-label">EMI</label>
+                                        <label for="emi" class="form-label">Monthly EMI</label>
                                         <input type="text" name="emi" id="emi" class="form-control">
                                     </div>
                                     <div class="col-md-1 form-group">

@@ -119,8 +119,8 @@ class PartyController extends Controller
             'business_id' => $business_id->id,
             'party_id' => $party->id,
             'transaction_type' => $request->transaction_type,
-            'credit' => $request->opening_balance,
-            'payment_type' => 'credit',
+            'debit' => $request->opening_balance,
+            'payment_type' => 'debit',
             'opening_balance' => $request->opening_balance,
             'closing_balance' => $request->opening_balance,
         ];
@@ -522,7 +522,7 @@ class PartyController extends Controller
         // } else {
         // Retrieve the first payment record for the party
         $partyPayment = PartyPayment::where('party_id', $party->id)
-            ->where('payment_type', 'credit')
+            ->where('payment_type', 'debit')
             ->where('invoice_no', NULL)
             ->first();
 
@@ -536,8 +536,8 @@ class PartyController extends Controller
             'business_id' => $business_id->id,
             'party_id' => $party->id,
             'transaction_type' => $request->transaction_type,
-            'credit' => $request->opening_balance,
-            'payment_type' => 'credit',
+            'debit' => $request->opening_balance,
+            'payment_type' => 'debit',
             'opening_balance' => $request->opening_balance,
             'closing_balance' => $request->opening_balance,
         ];

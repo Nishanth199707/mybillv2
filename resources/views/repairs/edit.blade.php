@@ -30,8 +30,11 @@
                                 <h5 class="mb-4">Customer Details</h5>
                                 <div class="row">
                                     <div class="col-md-3 mb-1">
-                                        <label class="form-label">Customer Name</label>
-                                        <input type="text" class="form-control" name="customer_name" value="{{ old('customer_name', $repair->customer_name) }}" required />
+                                        <label class="form-label">Party Name</label>
+                                        <input type="text" required class="form-control party" id="party"
+                                        required name="party" value="{{ $repair_det->name }}">
+                                    <input type="hidden" required class="party" id="partyid" required
+                                        name="customer_name" value="{{ old('customer_name', $repair->customer_name) }}">
                                         @if ($errors->has('customer_name'))
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $errors->first('customer_name') }}</strong>
@@ -216,6 +219,18 @@
                                                 <strong>{{ $errors->first('pattern_image') }}</strong>
                                             </span>
                                         @endif
+                                    </div>
+                                    <div class="col-md-4 mb-1">
+                                        <label class="form-label">Delivered</label>
+                                        {{-- <select id="repair-status-filter" class="form-select" name="status">
+                                            <option value="">All Status</option>
+                                            <option value="in_progress">In Progress</option>
+                                            <option value="waiting_for_spare">Waiting for Spare</option>
+                                            <option value="returned">Returned</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="delivered">Delivered</option>
+                                        </select> --}}
+                                        <input type="checkbox" id="status" name="status">
                                     </div>
                                 </div>
 

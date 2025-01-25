@@ -58,32 +58,34 @@
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
+                                                <th>Date</th>
                                                 <th>Party</th>
                                                 <th>Loan No</th>
+                                                <th>Loan No</th>
                                                 <th>Amount Due</th>
-                                                <th>Date</th>
                                                 <th>Status</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($pendings as $payment)
-                                            @if($payment->credit != 0)
+                                            @if($payment->debit != 0)
                                             <tr>
-                                                <td>{{ $payment->party }}</td>
-                                                <td>{{ $payment->loan_no }}</td>
-                                                <td>₹ {{ number_format($payment->credit, 2) }}</td>
                                                 <td>{{ $payment->invoice_date }}</td>
+                                                <td>{{ $payment->party }}</td>
+                                                <td>{{ $payment->invoice_no }}</td>
+                                                <td>{{ $payment->loan_no }}</td>
+                                                <td>₹ {{ number_format($payment->debit, 2) }}</td>
                                                 <td>{{ $payment->status }}</td>
                                                 <td>
-                                                    @if($payment->status == "unpaid")
+                                                    @if($payment->status == "notpaid")
                                                     <form action="{{ route('emi-received.update', $payment->id) }}" method="POST">
                                                         @csrf
                                                         @method('PUT')
                                                         <input type="hidden" name="sale_id" value="{{ $payment->sale_id }}">
                                                         <input type="hidden" name="financier_id" value="{{ $payment->financier_id }}">
                                                         <input type="hidden" name="loan_no" value="{{ $payment->loan_no }}">
-                                                        <input type="hidden" name="credit" value="{{ $payment->credit }}">
+                                                        <input type="hidden" name="credit" value="{{ $payment->debit }}">
                                                         <input type="hidden" name="opening_balance" value="{{ $payment->opening_balance }}">
                                                         {{-- <input type="hidden" name="status" value="{{ $payment->status }}"> --}}
                                                         <button type="submit" class="btn btn-danger ">
@@ -105,7 +107,7 @@
                             <div class="tab-pane fade" id="pills-ledger" role="tabpanel"
                                 aria-labelledby="pills-ledger-tab">
                                 <section>
-                                    <h3 class="mt-4">EMI Received Ledger</h3>
+                                    <h3 class="mt-4">Financier Ledger</h3>
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                             <tr>

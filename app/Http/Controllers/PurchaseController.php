@@ -227,8 +227,7 @@ class PurchaseController extends Controller
             'invoice_no' => $request->purchase_no,
             'paid_date' => $request->purchase_date,
             'credit' => $request->net_amount,
-            'payment_type' => 'debit',
-            'mode_of_payment' => $request->cash_type,
+            'payment_type' => 'credit',
         ];
 
         // Get the latest party payment for opening balance
