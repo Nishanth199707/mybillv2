@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Business;
 use App\Models\Repair;
 use Illuminate\Http\Request;
+use App\Models\PartyPayment;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 
@@ -21,15 +22,16 @@ class RepairController extends Controller
                 $fromDate = $request->input('date_from') . ' 00:00:00';
                 $toDate = $request->input('date_to') . ' 23:59:59';
 
-                $repairs = Repair::select('id', 'service_no', 'customer_name', 'date', 'phone', 'complaint_remark', 'user_id', 'status')
-                    ->where('user_id', $request->session()->get('user_id'))
+                $repairs = Repair::select('repairs.id', 'repairs.service_no', 'parties.name as customer_name', 'repairs.date', 'repairs.phone', 'repairs.complaint_remark', 'repairs.user_id', 'repairs.status')
+                    ->leftjoin('parties','parties.id','=','repairs.customer_name')
+                    ->where('repairs.user_id', $request->session()->get('user_id'))
                     ->when($request->status, function ($query) use ($request) {
-                        $query->where('status', $request->status);
+                        $query->where('repairs.status', $request->status);
                     })
-                    ->when($request->filled('date_from') && $request->filled('date_to'), function ($query) use ($fromDate, $toDate) {
-                        $query->whereBetween('created_at', [$fromDate, $toDate]);
+                    ->when($request->filled('repairs.date_from') && $request->filled('repairs.date_to'), function ($query) use ($fromDate, $toDate) {
+                        $query->whereBetween('repairs.created_at', [$fromDate, $toDate]);
                     })
-                    ->orderBy('id', 'DESC')
+                    ->orderBy('repairs.id', 'DESC')
                     ->get();
 
 
@@ -37,7 +39,7 @@ class RepairController extends Controller
 
                 return DataTables::of($repairs)
                     ->addColumn('status', function ($row) {
-                        $statuses = ['in_progress', 'waiting_for_spare', 'returned', 'completed'];
+                        $statuses = ['in_progress', 'waiting_for_spare', 'returned', 'completed','delivered'];
                         $options = '';
                         foreach ($statuses as $status) {
                             $selected = $row->status === $status ? 'selected' : '';
@@ -46,11 +48,15 @@ class RepairController extends Controller
                         return '<select class=" status-select btn btn-secondary"  data-id="' . $row->id . '">' . $options . '</select>';
                     })
                     ->addColumn('action', function ($row) {
+                        if($row->status != 'delivered'){
+                          $az ='<a class="btn btn-primary btn-sm edit'.$row->id.'" href="' . route('repairs.edit', $row->id) . '">
+                            <i class="fa fa-edit"></i> Edit
+                        </a>';
+                        }else{
+                            $az =' ';
+                        }
                         return '
-                            <a class="btn btn-info btn-sm" href="' . route('repairs.show', $row->id) . '">View</a>
-                            <a class="btn btn-primary btn-sm" href="' . route('repairs.edit', $row->id) . '">
-                                <i class="fa fa-edit"></i> Edit
-                            </a>
+                            <a class="btn btn-info btn-sm" href="' . route('repairs.show', $row->id) . '">View</a>'.$az.'
                             <form action="' . route('repairs.destroy', $row->id) . '" method="POST" style="display:inline;" onsubmit="return confirm(\'Are you sure you want to delete this Service Bill?\')">
                                 ' . csrf_field() . method_field("DELETE") . '
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -147,16 +153,54 @@ class RepairController extends Controller
             'cash_received' => $request->cash_received,
         ]);
         // PartyPayment
+
+        $partyPaymentArr = [
+            'user_id' => $request->session()->get('user_id'),
+            'business_id' => $business->id,
+            'party_id' => $request->customer_name,
+            'transaction_type' => 'service-'.$repair->id.'',
+            'invoice_no' => $request->service_no,
+            'paid_date' => $request->repair_date,
+            'debit' => $request->cash_received,
+            'payment_type' => 'debit',
+            'opening_balance' => $request->cash_received,
+            'closing_balance' =>$request->cash_received,
+        ];
+
+        PartyPayment::create($partyPaymentArr);
+
+                $latestPayment = PartyPayment::where('party_id', $request->partyid)
+                ->orderBy('id', 'DESC')
+                ->latest('paid_date')
+                ->first();
+
+
+
+            $invoice_id = PartyPayment::where('user_id', $request->session()->get('user_id'))
+                ->where('credit', '!=', '0.00')
+                ->where('invoice_no', 'LIKE', "REC")
+                ->orderBy('id', 'DESC')
+                ->first();
+            if ($invoice_id) {
+                $lastInvoiceNumber = (int) str_replace($prefix, '', $invoice_id->invoice_no);
+                $nextInvoiceNumber = $lastInvoiceNumber + 1;
+            } else {
+                $nextInvoiceNumber = 1;
+            }
+
+            $invoice_no = $this->invoice_num($nextInvoiceNumber, 4, 'REC');
             $partyPaymentArr = [
                 'user_id' => $request->session()->get('user_id'),
-                'business_id' => $business_id->id,
+                'business_id' => $business->id,
+                'party_id' => $request->customer_name,
                 'transaction_type' =>  'service-'.$repair->id.'',
-                'invoice_no' => $request->service_no,
+                'invoice_no' => $invoice_no,
                 'paid_date' => $request->repair_date,
                 'credit' => $request->cash_received,
                 'payment_type' => 'credit',
                 'opening_balance' => $request->cash_received,
-                'closing_balance' => $request->net_amount,
+                'closing_balance' => $request->cash_received,
+                'mode_of_payment' => 'cash',
             ];
             PartyPayment::create($partyPaymentArr);
 
@@ -169,16 +213,20 @@ class RepairController extends Controller
     public function show(Request $request, Repair $repair)
     {
         $business = Business::where('user_id', $request->session()->get('user_id'))->first();
+        $repair_det = Repair::leftjoin('parties','parties.id','=','repairs.customer_name')->where('repairs.id',$repair->id)->where('repairs.user_id', $request->session()->get('user_id'))->first();
 
-        return view('repairs.show', compact('repair', 'business'));
+        return view('repairs.show', compact('repair', 'business','repair_det'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Repair $repair)
+    public function edit(Request $request, Repair $repair)
     {
-        return view('repairs.edit', compact('repair'));
+
+        $repair_det = Repair::leftjoin('parties','parties.id','=','repairs.customer_name')->where('repairs.id',$repair->id)->where('repairs.user_id', $request->session()->get('user_id'))->first();
+
+        return view('repairs.edit', compact('repair','repair_det'));
     }
 
     /**
@@ -219,19 +267,28 @@ class RepairController extends Controller
             'received_by' => $request->received_by,
             'model' => $request->model,
             'cash_received' => $request->cash_received,
+            'status' => $request->status,
         ]);
+
+        $partyPaymentArr1 = [
+            'paid_date' => $request->repair_date,
+            'debit' => $request->cash_received,
+            'payment_type' => 'debit',
+            'opening_balance' => $request->cash_received,
+            'closing_balance' =>$request->cash_received,
+        ];
+        $updated = PartyPayment::where('transaction_type', 'service-' . $repair->id)->where('payment_type','debit')->update($partyPaymentArr1);
+
+
         $partyPaymentArr = [
-            'user_id' => $request->session()->get('user_id'),
-            'business_id' => $business_id->id,
-            'transaction_type' =>  'service-'.$repair->id.'',
-            'invoice_no' => $request->service_no,
             'paid_date' => $request->repair_date,
             'credit' => $request->cash_received,
             'payment_type' => 'credit',
             'opening_balance' => $request->cash_received,
-            'closing_balance' => $request->net_amount,
+            'closing_balance' => $request->cash_received,
         ];
-        $updated = PartyPayment::where('transaction_type', 'service-' . $repair->id)->update($partyPaymentArr);
+        $updated = PartyPayment::where('transaction_type', 'service-' . $repair->id)->where('payment_type','credit')->update($partyPaymentArr);
+
         return redirect()->route('repairs.index')->with('success', 'Repair request updated successfully.');
     }
 

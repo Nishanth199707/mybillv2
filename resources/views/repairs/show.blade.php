@@ -154,7 +154,7 @@
             <table class="info-table">
                 <tr>
                     <td><strong>Customer Name:</strong></td>
-                    <td>{{ $repair->customer_name }}</td>
+                    <td>{{ $repair_det->name }}</td>
                     <td><strong>Address:</strong></td>
                     <td >{{ $repair->address }}</td>
                     <td><strong>Service No:</strong></td>

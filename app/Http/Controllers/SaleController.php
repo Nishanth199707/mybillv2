@@ -413,8 +413,8 @@ class SaleController extends Controller
                 'transaction_type' => 'sale-'.$saleInsert->id.'',
                 'invoice_no' => $request->invoice_no,
                 'paid_date' => $request->invoice_date,
-                'credit' => $request->net_amount,
-                'payment_type' => 'credit',
+                'debit' => $request->net_amount,
+                'payment_type' => 'debit',
                 'opening_balance' => $opening_balance + $request->net_amount,
                 'closing_balance' => $opening_balance + $request->net_amount,
             ];
@@ -447,11 +447,10 @@ class SaleController extends Controller
             $prefix = ($transactionType === 'sale') ? 'REC' : 'PMT';
 
             $invoice_id = PartyPayment::where('user_id', $user_id)
-                ->where('debit', '!=', '0.00')
+                ->where('credit', '!=', '0.00')
                 ->where('invoice_no', 'LIKE', "$prefix%")
                 ->orderBy('id', 'DESC')
                 ->first();
-
             if ($invoice_id) {
                 $lastInvoiceNumber = (int) str_replace($prefix, '', $invoice_id->invoice_no);
                 $nextInvoiceNumber = $lastInvoiceNumber + 1;
@@ -476,7 +475,7 @@ class SaleController extends Controller
                 'transaction_type' =>  'sale-'.$saleInsert->id.'',
                 'invoice_no' => $invoice_no,
                 'paid_date' => $request->invoice_date,
-                'debit' => $request->cash_received,
+                'credit' => $request->cash_received,
                 'payment_type' => 'credit',
                 'mode_of_payment' => $request->cash_type,
                 'opening_balance' => $opening_balance,
@@ -496,7 +495,7 @@ class SaleController extends Controller
             $prefix = ($transactionType === 'sale') ? 'REC' : 'PMT';
 
             $invoice_id = PartyPayment::where('user_id', $user_id)
-                ->where('debit', '!=', '0.00')
+                ->where('credit', '!=', '0.00')
                 ->where('invoice_no', 'LIKE', "$prefix%")
                 ->orderBy('id', 'DESC')
                 ->first();
@@ -525,7 +524,7 @@ class SaleController extends Controller
                 'transaction_type' => 'sale',
                 'invoice_no' => $invoice_no,
                 'paid_date' => $request->invoice_date,
-                'debit' => $request->initial_payment,
+                'credit' => $request->initial_payment,
                 'payment_type' => 'credit',
                 'mode_of_payment' => $request->cash_type,
                 'opening_balance' => $opening_balance,
@@ -565,10 +564,10 @@ class SaleController extends Controller
                     'sale_id' => $saleInsert->id,
                     'financier_id' => $financier->id,
                     'loan_no' => $request->loan_no,
-                    'paid_date' => $request->paid_date,
-                    'credit' => $balance,
-                    'payment_type' => 'credit',
-                    'mode_of_payment' => 'credit',
+                    'paid_date' =>  $request->invoice_date,
+                    'debit' => $balance,
+                    'payment_type' => 'debit',
+                    'mode_of_payment' => 'debit',
                     'receipt_type' => 'notpaid',
                     'opening_balance' => $openingBalance,
                     'closing_balance' => $closingBalance,
