@@ -227,7 +227,7 @@ class PurchaseController extends Controller
             'invoice_no' => $request->purchase_no,
             'paid_date' => $request->purchase_date,
             'credit' => $request->net_amount,
-            'payment_type' => 'credit',
+            'payment_type' => 'debit',
             'mode_of_payment' => $request->cash_type,
         ];
 
@@ -238,7 +238,7 @@ class PurchaseController extends Controller
         ->value('closing_balance') ?? 0;
 
 
-// dd( $opening_balance);
+        // dd( $opening_balance);
 
         // $opening_balance = $latestPartyPayment ? $latestPartyPayment->closing_balance : 0;
         $partyPaymentData['opening_balance'] = $opening_balance + $request->net_amount;
