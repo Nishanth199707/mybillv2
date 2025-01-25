@@ -106,10 +106,10 @@
         }
         $business = Business::select('*')->where('user_id', $user_id)->first();
         $permission = SubUser::select('permissions')->where('user_id', $user_id)->first();
-        if(!empty($permissions)){
+        if (!empty($permissions)) {
             $permissionsd = json_decode($permission->permissions);
-        }else{
-            $permissionsd ="";
+        } else {
+            $permissionsd = '';
         }
         // dd($permission);
     @endphp
@@ -386,7 +386,7 @@
                     <li
                         class="menu {{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.disablelis') || Request::routeIs('product.index') || Request::is('superadmin/product*') ? 'active' : '' }}">
                         <a href="#products" data-bs-toggle="collapse"
-                            aria-expanded="{{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index') || Request::is('superadmin/product*') || Request::routeIs('product.disablelist')  ? 'true' : 'false' }}"
+                            aria-expanded="{{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index') || Request::is('superadmin/product*') || Request::routeIs('product.disablelist') ? 'true' : 'false' }}"
                             class="dropdown-toggle">
                             <div class="">
                                 <svg width="800px" height="800px" viewBox="0 0 20 20"
@@ -413,7 +413,7 @@
                                 </svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index')  || Request::routeIs('product.disablelist')  || Request::is('superadmin/product*') ? 'show' : '' }}"
+                        <ul class="collapse submenu list-unstyled {{ Request::routeIs('productcategory.create') || Request::routeIs('productsubcategory.create') || Request::routeIs('product.create') || Request::routeIs('productcategory.index') || Request::routeIs('productsubcategory.index') || Request::routeIs('product.index') || Request::routeIs('product.disablelist') || Request::is('superadmin/product*') ? 'show' : '' }}"
                             id="products" data-bs-parent="#accordionExample">
                             <li class="{{ Request::routeIs('productcategory.create') ? 'active' : '' }}"><a
                                     href="{{ route('productcategory.create') }}">Add Category</a></li>
@@ -425,8 +425,9 @@
                                     href="{{ route('productcategory.index') }}">View Category</a></li>
                             <li class="{{ Request::routeIs('productsubcategory.index') ? 'active' : '' }}"><a
                                     href="{{ route('productsubcategory.index') }}">View Sub Category</a></li>
-                            <li class="{{ Request::routeIs('product.index') || Request::is('superadmin/product*') ? 'active' : '' }}"><a
-                                    href="{{ route('product.index') }}">View Product</a></li>
+                            <li
+                                class="{{ Request::routeIs('product.index') || Request::is('superadmin/product*') ? 'active' : '' }}">
+                                <a href="{{ route('product.index') }}">View Product</a></li>
                             <li class="{{ Request::routeIs('product.disablelist') ? 'active' : '' }}"><a
                                     href="{{ route('product.disablelist') }}">Disable Product</a></li>
                         </ul>
@@ -557,8 +558,10 @@
                                     href="{{ route('sale.create') }}">Add Sale</a></li>
                             <li class="{{ Route::is('sale.index') ? 'active' : '' }}"><a
                                     href="{{ route('sale.index') }}">View Sale</a></li>
-                            <li class="{{ Route::is('salereturns.index') ? 'active' : '' }}"><a
-                                    href="{{ route('salereturns.index') }}">Sales Return</a></li>
+                            @if ($business->business_category == 'Accounting & CA')
+                                <li class="{{ Route::is('salereturns.index') ? 'active' : '' }}"><a
+                                        href="{{ route('salereturns.index') }}">Sales Return</a></li>
+                            @endif
                         </ul>
                     </li>
 
@@ -582,65 +585,72 @@
 
                     @if ($business != null)
                         @if ($business->business_category == 'Mobile & Accessories')
-                                <li
-                                    class="menu {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'active' : '' }}">
-                                    <a href="#service" data-bs-toggle="collapse"
-                                        aria-expanded="{{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'true' : 'false' }}"
-                                        class="dropdown-toggle">
-                                        <div class="">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-box">
-                                                <path
-                                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                                                </path>
-                                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                                <line x1="12" y1="22.08" x2="12" y2="12">
-                                                </line>
-                                            </svg>
-                                            <span>Service</span>
-                                        </div>
-                                        <div>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-chevron-right">
-                                                <polyline points="9 18 15 12 9 6"></polyline>
-                                            </svg>
-                                        </div>
-                                    </a>
-                                    <ul class="collapse submenu list-unstyled {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'show' : '' }}"
-                                        id="service" data-bs-parent="#accordionExample">
-                                        <li class="{{ Route::is('repairs.create') ? 'active' : '' }}">
-                                            <a href="{{ route('repairs.create') }}">
-                                                Add Service
-                                            </a>
-                                        </li>
-                                        <li class="{{ Route::is('repairs.index') ? 'active' : '' }}">
-                                            <a href="{{ route('repairs.index') }}">
-                                                View Service
-                                            </a>
-                                        </li>
-                                        @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permission && isset($permission->permissions['service']) && $permission->permissions['service'] === 'true'))
+                            <li
+                                class="menu {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'active' : '' }}">
+                                <a href="#service" data-bs-toggle="collapse"
+                                    aria-expanded="{{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'true' : 'false' }}"
+                                    class="dropdown-toggle">
+                                    <div class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-box">
+                                            <path
+                                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                                            </path>
+                                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                            <line x1="12" y1="22.08" x2="12" y2="12">
+                                            </line>
+                                        </svg>
+                                        <span>Service</span>
+                                    </div>
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-chevron-right">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </div>
+                                </a>
+                                <ul class="collapse submenu list-unstyled {{ Route::is('repairs.index') || Route::is('repairs.create') || Route::is('repairs.cashReceived') ? 'show' : '' }}"
+                                    id="service" data-bs-parent="#accordionExample">
+                                    <li class="{{ Route::is('repairs.create') ? 'active' : '' }}">
+                                        <a href="{{ route('repairs.create') }}">
+                                            Add Service
+                                        </a>
+                                    </li>
+                                    <li class="{{ Route::is('repairs.index') ? 'active' : '' }}">
+                                        <a href="{{ route('repairs.index') }}">
+                                            View Service
+                                        </a>
+                                    </li>
+                                    @if (
+                                        $authUser->usertype === 'superadmin' ||
+                                            ($subuser !== null &&
+                                                $permission &&
+                                                isset($permission->permissions['service']) &&
+                                                $permission->permissions['service'] === 'true'))
                                         <li class="{{ Route::is('repairs.cashReceived') ? 'active' : '' }}">
                                             <a href="{{ route('repairs.cashReceived') }}">
                                                 Service Cash
                                             </a>
                                         </li>
-                                        @endif
-                                    </ul>
-                                </li>
-                            @else
-                            @endif
-
+                                    @endif
+                                </ul>
+                            </li>
+                        @else
                         @endif
+
+                    @endif
 
                     <!-- Payments Menu -->
 
                     {{-- {{$authUser->usertype}}     --}}
-                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permissionsd && isset($permissionsd->payment) && $permissionsd->payment == 'true'))
-                    <li
+                    @if (
+                        $authUser->usertype === 'superadmin' ||
+                            ($subuser !== null && $permissionsd && isset($permissionsd->payment) && $permissionsd->payment == 'true'))
+                        <li
                             class="menu {{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'active' : '' }}">
                             <a href="#payments" data-bs-toggle="collapse"
                                 aria-expanded="{{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.cheque') ? 'true' : 'false' }}"
@@ -662,7 +672,7 @@
                                     </svg>
                                 </div>
                             </a>
-                            <ul class="collapse submenu list-unstyled {{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('payment.receiptdet') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.paymentdet')  || Route::is('payment.cheque') ? 'show' : '' }}"
+                            <ul class="collapse submenu list-unstyled {{ Route::is('partypayment.receivePayment') || Route::is('payment.receipt') || Route::is('payment.receiptdet') || Route::is('partypayment.addPayment') || Route::is('payment.payment') || Route::is('payment.paymentdet') || Route::is('payment.cheque') ? 'show' : '' }}"
                                 id="payments" data-bs-parent="#accordionExample">
                                 <li><b class="pl-3">INWARD</b></li>
                                 <li class="{{ Route::is('partypayment.receivePayment') ? 'active' : '' }}"><a
@@ -686,7 +696,8 @@
                     @else
                     @endif
                     <!-- Expense Menu -->
-                    <li class="menu {{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') ? 'active' : '' }}">
+                    <li
+                        class="menu {{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') ? 'active' : '' }}">
                         <a href="#expense" data-bs-toggle="collapse"
                             aria-expanded="{{ Route::is('expense.category') || Route::is('expense.create') || Route::is('expense.index') ? 'true' : 'false' }}"
                             class="dropdown-toggle">
@@ -740,7 +751,9 @@
                     </li>
 
                     <!-- Cash & Bank Menu -->
-                    @if ($authUser->usertype === 'superadmin' || ($subuser !== null &&  $permissionsd && isset($permissionsd->cash_bank) && $permissionsd->cash_bank == 'true'))
+                    @if (
+                        $authUser->usertype === 'superadmin' ||
+                            ($subuser !== null && $permissionsd && isset($permissionsd->cash_bank) && $permissionsd->cash_bank == 'true'))
                         <li
                             class="menu {{ Route::is('sales.cash_received_ledger') || Route::is('sales.bankLedger') ? 'active' : '' }}">
                             <a href="#cashBank" data-bs-toggle="collapse"
@@ -821,8 +834,9 @@
                         @endif
                     @endif
                     <!-- Reports Menu -->
-                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permissionsd && isset($permissionsd->report) && $permissionsd->report == 'true'))
-
+                    @if (
+                        $authUser->usertype === 'superadmin' ||
+                            ($subuser !== null && $permissionsd && isset($permissionsd->report) && $permissionsd->report == 'true'))
                         <li
                             class="menu {{ Route::is('sale.gstreport') || Route::is('purchase.gstreport') ? 'active' : '' }}">
                             <a href="#reports" data-bs-toggle="collapse"
@@ -926,55 +940,57 @@
                     </li>
 
                     <!-- Settings Menu -->
-                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permissionsd && isset($permissionsd->settings) && $permissionsd->settings == 'true'))
-                    <li
-                        class="menu {{ Route::is('settings.index') || Route::is('business.indexshow') ? 'active' : '' }}">
-                        <a href="#settings" data-bs-toggle="collapse"
-                            aria-expanded="{{ Route::is('settings.index') || Route::is('settings.invoice') || Route::is('settings.profile') ? 'true' : 'false' }}"
-                            class="dropdown-toggle">
-                            <div class="">
-                                <svg width="800" height="800" viewBox="0 0 36 36"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path class="clr-i-outline clr-i-outline-path-1"
-                                        d="M18.1 11c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7m0 12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5" />
-                                    <path class="clr-i-outline clr-i-outline-path-2"
-                                        d="m32.8 14.7-2.8-.9-.6-1.5 1.4-2.6c.3-.6.2-1.4-.3-1.9l-2.4-2.4c-.5-.5-1.3-.6-1.9-.3l-2.6 1.4-1.5-.6-.9-2.8C21 2.5 20.4 2 19.7 2h-3.4c-.7 0-1.3.5-1.4 1.2L14 6c-.6.1-1.1.3-1.6.6L9.8 5.2c-.6-.3-1.4-.2-1.9.3L5.5 7.9c-.5.5-.6 1.3-.3 1.9l1.3 2.5c-.2.5-.4 1.1-.6 1.6l-2.8.9c-.6.2-1.1.8-1.1 1.5v3.4c0 .7.5 1.3 1.2 1.5l2.8.9.6 1.5-1.4 2.6c-.3.6-.2 1.4.3 1.9l2.4 2.4c.5.5 1.3.6 1.9.3l2.6-1.4 1.5.6.9 2.9c.2.6.8 1.1 1.5 1.1h3.4c.7 0 1.3-.5 1.5-1.1l.9-2.9 1.5-.6 2.6 1.4c.6.3 1.4.2 1.9-.3l2.4-2.4c.5-.5.6-1.3.3-1.9l-1.4-2.6.6-1.5 2.9-.9c.6-.2 1.1-.8 1.1-1.5v-3.4c0-.7-.5-1.4-1.2-1.6m-.8 4.7-3.6 1.1-.1.5-.9 2.1-.3.5 1.8 3.3-2 2-3.3-1.8-.5.3q-1.05.6-2.1.9l-.5.1-1.1 3.6h-2.8l-1.1-3.6-.5-.1-2.1-.9-.5-.3-3.3 1.8-2-2 1.8-3.3-.3-.5Q8 22.05 7.7 21l-.1-.5L4 19.4v-2.8l3.4-1 .2-.5c.2-.8.5-1.5.9-2.2l.3-.5-1.7-3.3 2-2 3.2 1.8.5-.3c.7-.4 1.4-.7 2.2-.9l.5-.2L16.6 4h2.8l1.1 3.5.5.2q1.05.3 2.1.9l.5.3 3.3-1.8 2 2-1.8 3.3.3.5q.6 1.05.9 2.1l.1.5 3.6 1.1z" />
-                                    <path fill="none" d="M0 0h36v36H0z" />
-                                </svg>
-                                <span>Settings</span>
-                            </div>
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-chevron-right">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="collapse submenu list-unstyled {{ Route::is('settings.index') || Route::is('business.indexshow') ? 'show' : '' }}"
-                            id="settings" data-bs-parent="#accordionExample">
-                            <li class="{{ Route::is('settings.index') ? 'active' : '' }}">
-                                <a href="{{ route('settings.index') }}">
+                    @if (
+                        $authUser->usertype === 'superadmin' ||
+                            ($subuser !== null && $permissionsd && isset($permissionsd->settings) && $permissionsd->settings == 'true'))
+                        <li
+                            class="menu {{ Route::is('settings.index') || Route::is('business.indexshow') ? 'active' : '' }}">
+                            <a href="#settings" data-bs-toggle="collapse"
+                                aria-expanded="{{ Route::is('settings.index') || Route::is('settings.invoice') || Route::is('settings.profile') ? 'true' : 'false' }}"
+                                class="dropdown-toggle">
+                                <div class="">
+                                    <svg width="800" height="800" viewBox="0 0 36 36"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path class="clr-i-outline clr-i-outline-path-1"
+                                            d="M18.1 11c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7m0 12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5" />
+                                        <path class="clr-i-outline clr-i-outline-path-2"
+                                            d="m32.8 14.7-2.8-.9-.6-1.5 1.4-2.6c.3-.6.2-1.4-.3-1.9l-2.4-2.4c-.5-.5-1.3-.6-1.9-.3l-2.6 1.4-1.5-.6-.9-2.8C21 2.5 20.4 2 19.7 2h-3.4c-.7 0-1.3.5-1.4 1.2L14 6c-.6.1-1.1.3-1.6.6L9.8 5.2c-.6-.3-1.4-.2-1.9.3L5.5 7.9c-.5.5-.6 1.3-.3 1.9l1.3 2.5c-.2.5-.4 1.1-.6 1.6l-2.8.9c-.6.2-1.1.8-1.1 1.5v3.4c0 .7.5 1.3 1.2 1.5l2.8.9.6 1.5-1.4 2.6c-.3.6-.2 1.4.3 1.9l2.4 2.4c.5.5 1.3.6 1.9.3l2.6-1.4 1.5.6.9 2.9c.2.6.8 1.1 1.5 1.1h3.4c.7 0 1.3-.5 1.5-1.1l.9-2.9 1.5-.6 2.6 1.4c.6.3 1.4.2 1.9-.3l2.4-2.4c.5-.5.6-1.3.3-1.9l-1.4-2.6.6-1.5 2.9-.9c.6-.2 1.1-.8 1.1-1.5v-3.4c0-.7-.5-1.4-1.2-1.6m-.8 4.7-3.6 1.1-.1.5-.9 2.1-.3.5 1.8 3.3-2 2-3.3-1.8-.5.3q-1.05.6-2.1.9l-.5.1-1.1 3.6h-2.8l-1.1-3.6-.5-.1-2.1-.9-.5-.3-3.3 1.8-2-2 1.8-3.3-.3-.5Q8 22.05 7.7 21l-.1-.5L4 19.4v-2.8l3.4-1 .2-.5c.2-.8.5-1.5.9-2.2l.3-.5-1.7-3.3 2-2 3.2 1.8.5-.3c.7-.4 1.4-.7 2.2-.9l.5-.2L16.6 4h2.8l1.1 3.5.5.2q1.05.3 2.1.9l.5.3 3.3-1.8 2 2-1.8 3.3.3.5q.6 1.05.9 2.1l.1.5 3.6 1.1z" />
+                                        <path fill="none" d="M0 0h36v36H0z" />
+                                    </svg>
+                                    <span>Settings</span>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-chevron-right">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </div>
+                            </a>
+                            <ul class="collapse submenu list-unstyled {{ Route::is('settings.index') || Route::is('business.indexshow') ? 'show' : '' }}"
+                                id="settings" data-bs-parent="#accordionExample">
+                                <li class="{{ Route::is('settings.index') ? 'active' : '' }}">
+                                    <a href="{{ route('settings.index') }}">
 
-                                    Invoice Settings
-                                </a>
-                            </li>
-                            <li class="{{ Route::is('business.indexshow') ? 'active' : '' }}">
-                                <a href="{{ route('business.indexshow') }}">
-
-                                    Profile Settings
-                                </a>
-                            </li>
-                            @if ($business->gstavailable == 'yes')
-                                <li class="{{ Route::is('ebill.settings') ? 'active' : '' }}">
-                                    <a href="{{ route('ebill.settings') }}">
-                                        E-way Bill Settings
+                                        Invoice Settings
                                     </a>
                                 </li>
-                            @endif
-                        </ul>
-                    </li>
+                                <li class="{{ Route::is('business.indexshow') ? 'active' : '' }}">
+                                    <a href="{{ route('business.indexshow') }}">
+
+                                        Profile Settings
+                                    </a>
+                                </li>
+                                @if ($business->gstavailable == 'yes')
+                                    <li class="{{ Route::is('ebill.settings') ? 'active' : '' }}">
+                                        <a href="{{ route('ebill.settings') }}">
+                                            E-way Bill Settings
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </li>
                     @endif
                     <div class="ps__rail-y" style="top: 932px; height: 666px; right: 0px;">
                         <div class="ps__thumb-y" tabindex="0" style="top: 372px; height: 265px;"></div>

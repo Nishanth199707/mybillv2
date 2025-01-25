@@ -1,153 +1,161 @@
 @extends('layouts.v2.app')
 @section('content')
-<style>
-    .invalid-feedback {
-        display: block;
-    }
+    <style>
+        .invalid-feedback {
+            display: block;
+        }
 
-    .totalstyle1 {
-        width: 50%;
-        border: 0;
-        /* height: 100%; */
-        /* margin-left: 20px; */
-    }
+        .totalstyle1 {
+            width: 50%;
+            border: 0;
+            /* height: 100%; */
+            /* margin-left: 20px; */
+        }
 
-    .totalstyle {
-        /* width: 50%; */
-        border: 0;
-        /* height: 100%; */
-        /* margin-left: 20px; */
-        /* overflow: hidden; */
-        position: relative;
-        padding: 0;
-        background: inherit;
-        font-weight: bolder;
-        font-size: 30px;
-    }
+        .totalstyle {
+            /* width: 50%; */
+            border: 0;
+            /* height: 100%; */
+            /* margin-left: 20px; */
+            /* overflow: hidden; */
+            position: relative;
+            padding: 0;
+            background: inherit;
+            font-weight: bolder;
+            font-size: 30px;
+        }
 
-    .totalstyle1:focus,
-    .totalstyle:focus {
-        outline: none;
-        /* This removes the focus outline */
-        /* Your other styles */
-    }
+        .totalstyle1:focus,
+        .totalstyle:focus {
+            outline: none;
+            /* This removes the focus outline */
+            /* Your other styles */
+        }
 
-    .totalstyle--input:focus {
-        outline: none;
-        /* Removes the default focus outline */
-        /* Additional styles if needed */
-    }
+        .totalstyle--input:focus {
+            outline: none;
+            /* Removes the default focus outline */
+            /* Additional styles if needed */
+        }
 
-    .gsttable tr,
-    .gsttable {
-        width: 100%;
-    }
+        .gsttable tr,
+        .gsttable {
+            width: 100%;
+        }
 
-    /* .gsttable td:nth-child(1) {
-                width: 10%;
-            } */
+        /* .gsttable td:nth-child(1) {
+                    width: 10%;
+                } */
 
-    .gsttable td {
-        width: 17%;
-        display: inline-block;
-        /* overflow: hidden; */
-        margin: 5px;
-        text-align: center;
-        /* display: inline-flex; */
-    }
+        .gsttable td {
+            width: 17%;
+            display: inline-block;
+            /* overflow: hidden; */
+            margin: 5px;
+            text-align: center;
+            /* display: inline-flex; */
+        }
 
 
-    .avl_stock {
-        padding: 0 10px;
-    }
+        .avl_stock {
+            padding: 0 10px;
+        }
 
-    /* .card {
-                background-color: #114b3a;
-                color: #fff !important;
-            } */
-    .border {
-        border: solid 1px #dee2e6 !important;
-    }
+        /* .card {
+                    background-color: #114b3a;
+                    color: #fff !important;
+                } */
+        .border {
+            border: solid 1px #dee2e6 !important;
+        }
 
-    #addrow {
-        font-size: 12px;
-    }
-</style>
-<!-- Content wrapper -->
-<div class="content-wrapper">
-    <script type="text/javascript">
-        $(document).ready(function() {
+        #addrow {
+            font-size: 12px;
+        }
+    </style>
+    <!-- Content wrapper -->
+    <div class="content-wrapper">
+        <script type="text/javascript">
+            $(document).ready(function() {
 
-            $('.twentyeight').css({
-                'display': 'none'
+                $('.twentyeight').css({
+                    'display': 'none'
+                });
+                $('.eighteen').css({
+                    'display': 'none'
+                });
+                $('.twelve').css({
+                    'display': 'none'
+                });
+                $('.five').css({
+                    'display': 'none'
+                });
             });
-            $('.eighteen').css({
-                'display': 'none'
-            });
-            $('.twelve').css({
-                'display': 'none'
-            });
-            $('.five').css({
-                'display': 'none'
-            });
-        });
-    </script>
-    <!-- Content -->
-    @if(session()->has('success'))
-    <div class="alert alert-success">
-        {{ session()->get('success') }}
-    </div>
-    @endif
-    <div class="container-xxl flex-grow-1 container-p-y">
-        <!-- <h4 class="py-3 mb-4"><span class="text-muted fw-light"></span> Add Sale no gst</h4> -->
+        </script>
+        <!-- Content -->
+        @if (session()->has('success'))
+            <div class="alert alert-success">
+                {{ session()->get('success') }}
+            </div>
+        @endif
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <!-- <h4 class="py-3 mb-4"><span class="text-muted fw-light"></span> Add Sale no gst</h4> -->
 
-        <!-- Basic Layout -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="mb-0"> Add Quotation</h5>
-                        <!-- <small class="text-muted float-end">Default label</small> -->
-                    </div>
-                    <div id="validation-errors-sale"></div>
-                    <form class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework" method="POST" action="{{ route('quotations.store') }}" id="saleForm" enctype="multipart/form-data">
-                        @csrf
-                        <div class="card-body p-32" id="tblData">
+            <!-- Basic Layout -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0"> Add Quotation</h5>
+                            <!-- <small class="text-muted float-end">Default label</small> -->
+                        </div>
+                        <div id="validation-errors-sale"></div>
+                        <form class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework" method="POST"
+                            action="{{ route('quotations.store') }}" id="saleForm" enctype="multipart/form-data">
+                            @csrf
+                            <div class="card-body p-32" id="tblData">
 
 
 
-                            <div class="row mb-3">
+                                <div class="row mb-3">
 
 
 
 
-                                <div class="col-md-4 fv-plugins-icon-container" id="tblDataparty">
-                                    <label class="form-label">Party</label>
-                                    <div class="border p-2 input-group col-md-4">
-                                        <input type="text" required class="form-control party" id="party" required name="party" value="">
-                                        <input type="hidden" required class="party" id="partyid" required name="partyid" value="">
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal1">+</button>
+                                    <div class="col-md-4 fv-plugins-icon-container" id="tblDataparty">
+                                        <label class="form-label">Party</label>
+                                        <div class="border p-2 input-group col-md-4">
+                                            <input type="text" required class="form-control party" id="party"
+                                                required name="party" value="">
+                                            <input type="hidden" required class="party" id="partyid" required
+                                                name="partyid" value="">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#basicModal1">+</button>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-4 fv-plugins-icon-container">
-                                    <label class="form-label" for="formValidationName">Quotation Date</label>
-                                    <input type="text" class="form-control" id="datetimepicker9" required name="quotation_date" value="{{ date('d-m-Y') }}">
-                                    @if ($errors->has('quotation_date'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('invoice_date') }}</strong>
-                                    </span>
-                                    @enderror
+                                    <div class="col-md-4 fv-plugins-icon-container">
+                                        <label class="form-label" for="formValidationName">Quotation Date</label>
+                                        <input type="text" class="form-control" id="datetimepicker9" required
+                                            name="quotation_date" value="{{ date('d-m-Y') }}">
+                                        @if ($errors->has('quotation_date'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('invoice_date') }}</strong>
+                                            </span>
+                                        @enderror
                                 </div>
 
                                 <div class="col-md-4 fv-plugins-icon-container">
                                     <label class="form-label" for="formValidationName">Quotation No</label>
-                                    <input type="text" id="formValidationName" class="form-control" readonly placeholder="John Doe" value="{{ $quotation_no }}" name="quotation_no">
+                                    <input type="text" id="formValidationName" class="form-control" readonly
+                                        placeholder="John Doe" value="{{ $quotation_no }}" name="quotation_no">
 
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><button type="button" class="btn btn-primary addrowcontainer float-right mb-2">Add New Row</button></div>
+                                <div class="col-6"><button type="button"
+                                        class="btn btn-primary addrowcontainer float-right mb-2">Add New Row</button>
+                                </div>
 
                                 <div class="col-6">
                                     <span id="alertentries"></span>
@@ -184,15 +192,19 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description1" />
                                     </div> -->
                                     <div class="border p-2 input-group col-md-6" style="width: 50%;">
-                                        <input class="form-control product_name" tabindex="1" name="item_description1" />
+                                        <input class="form-control product_name" tabindex="1"
+                                            name="item_description1" />
                                         <input type="hidden" class="form-control product_id" name="product_id1" />
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#basicModal">+</button>
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control uprice" type="number" dataid="1" name="rpqty1" id="rpqty1">
+                                        <input class="form-control uprice" type="number" dataid="1" name="rpqty1"
+                                            id="rpqty1">
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control qtybox" tabindex="1" type="number" dataid="1" name="qty1" id="qty1">
+                                        <input class="form-control qtybox" tabindex="1" type="number" dataid="1"
+                                            name="qty1" id="qty1">
                                     </div>
 
                                     <!-- <div class="col-md-2 border p-2">
@@ -205,7 +217,8 @@
                                     </div> -->
 
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control" type="number" readonly="readonly" id="total_amount1" name="total_amount1">
+                                        <input class="form-control" type="number" readonly="readonly"
+                                            id="total_amount1" name="total_amount1">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -213,15 +226,19 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description2" />
                                     </div> -->
                                     <div class="border p-2 input-group col-md-6" style="width: 50%;">
-                                        <input class="form-control product_name" tabindex="1" name="item_description2" />
+                                        <input class="form-control product_name" tabindex="1"
+                                            name="item_description2" />
                                         <input type="hidden" class="form-control product_id" name="product_id2" />
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#basicModal">+</button>
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control uprice" type="text" dataid="2" name="rpqty2" id="rpqty2">
+                                        <input class="form-control uprice" type="text" dataid="2"
+                                            name="rpqty2" id="rpqty2">
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control qtybox" tabindex="1" type="number" dataid="2" name="qty2" id="qty2">
+                                        <input class="form-control qtybox" tabindex="1" type="number"
+                                            dataid="2" name="qty2" id="qty2">
                                     </div>
 
                                     <!-- <div class="col-md-2 border p-2">
@@ -233,7 +250,8 @@
                                         <input class="gstvaldata" type="hidden" dataid="2" name="gstvaldata2" id="gstvaldata2">
                                     </div> -->
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control" type="number" readonly="readonly" id="total_amount2" name="total_amount2">
+                                        <input class="form-control" type="number" readonly="readonly"
+                                            id="total_amount2" name="total_amount2">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -241,15 +259,19 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description3" />
                                     </div> -->
                                     <div class="border p-2 input-group col-md-6" style="width: 50%;">
-                                        <input class="form-control product_name" tabindex="1" name="item_description3" />
+                                        <input class="form-control product_name" tabindex="1"
+                                            name="item_description3" />
                                         <input type="hidden" class="form-control product_id" name="product_id3" />
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#basicModal">+</button>
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control uprice" type="text" dataid="3" name="rpqty3" id="rpqty3">
+                                        <input class="form-control uprice" type="text" dataid="3"
+                                            name="rpqty3" id="rpqty3">
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control qtybox" tabindex="1" type="number" dataid="3" name="qty3" id="qty3">
+                                        <input class="form-control qtybox" tabindex="1" type="number"
+                                            dataid="3" name="qty3" id="qty3">
                                     </div>
 
                                     <!-- <div class="col-md-2 border p-2">
@@ -261,7 +283,8 @@
                                         <input class="gstvaldata" type="hidden" dataid="3" name="gstvaldata3" id="gstvaldata3">
                                     </div> -->
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control" type="number" readonly="readonly" id="total_amount3" name="total_amount3">
+                                        <input class="form-control" type="number" readonly="readonly"
+                                            id="total_amount3" name="total_amount3">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -269,16 +292,21 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description4" />
                                     </div> -->
                                     <div class="border p-2 input-group col-md-6" style="width: 50%;">
-                                        <input class="form-control product_name" tabindex="1" name="item_description4" />
+                                        <input class="form-control product_name" tabindex="1"
+                                            name="item_description4" />
                                         <input type="hidden" class="form-control product_id" name="product_id4" />
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#basicModal">+</button>
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control uprice" type="text" dataid="4" name="rpqty4" id="rpqty4">
+                                        <input class="form-control uprice" type="text" dataid="4"
+                                            name="rpqty4" id="rpqty4">
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control qtybox" tabindex="1" type="number" dataid="4" name="qty4" id="qty4">
-                                        <input class="gstvaldata" type="hidden" dataid="4" name="gstvaldata4" id="gstvaldata4">
+                                        <input class="form-control qtybox" tabindex="1" type="number"
+                                            dataid="4" name="qty4" id="qty4">
+                                        <input class="gstvaldata" type="hidden" dataid="4" name="gstvaldata4"
+                                            id="gstvaldata4">
                                     </div>
                                     <!-- <div class="col-md-2 border p-2">
                                         <input class="form-control amountbox" tabindex="1" type="number" dataid="4" name="amount4" id="taxableamount4">
@@ -288,7 +316,8 @@
                                         <input class="form-control gstperc" dataid="4" type="text" name="gst4" id="gst4">
                                     </div> -->
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control" type="number" readonly="readonly" id="total_amount4" name="total_amount4">
+                                        <input class="form-control" type="number" readonly="readonly"
+                                            id="total_amount4" name="total_amount4">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -296,15 +325,19 @@
                                         <input class="form-control product_name" tabindex="1" name="item_description5" />
                                     </div> -->
                                     <div class="border p-2 input-group col-md-6" style="width: 50%;">
-                                        <input class="form-control product_name" tabindex="1" name="item_description5" />
+                                        <input class="form-control product_name" tabindex="1"
+                                            name="item_description5" />
                                         <input type="hidden" class="form-control product_id" name="product_id5" />
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#basicModal">+</button>
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control uprice" type="text" dataid="5" name="rpqty5" id="rpqty5">
+                                        <input class="form-control uprice" type="text" dataid="5"
+                                            name="rpqty5" id="rpqty5">
                                     </div>
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control qtybox" tabindex="1" type="number" dataid="5" name="qty5" id="qty5">
+                                        <input class="form-control qtybox" tabindex="1" type="number"
+                                            dataid="5" name="qty5" id="qty5">
                                     </div>
 
                                     <!-- <div class="col-md-2 border p-2">
@@ -316,7 +349,8 @@
                                         <input class="gstvaldata" type="hidden" dataid="5" name="gstvaldata5" id="gstvaldata5">
                                     </div> -->
                                     <div class="col-md-2 border p-2">
-                                        <input class="form-control" type="number" readonly="readonly" id="total_amount5" name="total_amount5">
+                                        <input class="form-control" type="number" readonly="readonly"
+                                            id="total_amount5" name="total_amount5">
                                     </div>
                                 </div>
                             </div>
@@ -329,7 +363,8 @@
                                     <div class="col-md-2 border p-2"></div>
 
                                     <div class="col-md-3 border p-2">
-                                        <b class="mt-1">Net Amount: ₹</b> <input readonly type="text" class="totalstyle" value="0" name="net_amount" id="netAmount">
+                                        <b class="mt-1">Net Amount: ₹</b> <input readonly type="text"
+                                            class="totalstyle" value="0" name="net_amount" id="netAmount">
 
 
 
@@ -385,499 +420,528 @@
 
                                         <div class="col-md-4 fv-plugins-icon-container">
                                             <label class="form-label">Cash Type</label>
-                                            <select name="cash_type" required id="cash_type" class="form-select">
+                                            {{-- <select name="cash_type" required id="cash_type" class="form-select">
                                                 <option value="">Select Cash Type</option>
-                                                <option value="quotation" @if (old('cash_type')=='quotation' ) selected @endif>
+                                                <option value="quotation" @if (old('cash_type') == 'quotation') selected @endif>
                                                     Quotation</option>
 
-                                            </select>
+                                            </select> --}}
+                                            <input type="text" readonly name="cash_type" required id="cash_type"
+                                                class="form-control" value="quotation">
                                             @if ($errors->has('cash_type'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('cash_type') }}</strong>
-                                            </span>
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $errors->first('cash_type') }}</strong>
+                                                </span>
                                             @enderror
-                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
+
+
+                        <div style="text-align: right;">
 
                             <!-- <button type="submit" class="btn btn-primary">Send</button> -->
-                            <button id="saleFormSubmit" type="submit" class="btn btn-primary float-right mb-2">Bill</button>
-
-                    </form>
-                </div>
+                            <button id="saleFormSubmit" type="submit"
+                                class="btn btn-primary float-right mb-2">Bill</button>
+                        </div>
+                </form>
             </div>
         </div>
-
     </div>
+
+</div>
 </div>
 <!-- / Content -->
 
 
 
 <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel1">Add Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="validation-errors-product"></div>
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">Add Product</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div id="validation-errors-product"></div>
 
-                <form method="POST" id="productForm" action="{{ route('product.ajaxsave') }}" enctype="multipart/form-data">
-                    @csrf
-                    <div class="mb-3">
-                        <label class="form-label">Image</label>
-                        <input type="file" class="form-control" name="image" value="{{ old('image') }}" />
-                        @if ($errors->has('image'))
+            <form method="POST" id="productForm" action="{{ route('product.ajaxsave') }}"
+                enctype="multipart/form-data">
+                @csrf
+                <div class="mb-3">
+                    <label class="form-label">Image</label>
+                    <input type="file" class="form-control" name="image" value="{{ old('image') }}" />
+                    @if ($errors->has('image'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('image') }}</strong>
                         </span>
-                        @enderror
-                    </div>
-
-
-
-                    <div class="col-md mb-3">
-                        <!-- <small class="fw-medium d-block">Item Type</small> -->
-                        <label class="form-label pl-5">Item Type</label>
-                        <div class="form-check form-check-inline pl-5 mt-3">
-                            <input class="form-check-input" type="radio" checked name="item_type" id="inlineRadio1" value="sale">
-                            <label class="form-check-label" for="inlineRadio1">Sale</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="item_type" id="inlineRadio2" value="service">
-                            <label class="form-check-label" for="inlineRadio2">Service</label>
-                        </div>
-                        @if ($errors->has('item_type'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('item_type') }}</strong>
-                        </span>
-                        @enderror
-
-                    </div>
-
-
-
-
-                    <div class="mb-3">
-                        <label class="form-label">Product Category</label>
-                        <select name="category" id="category" class="form-select">
-
-                            @foreach ($productcategory as $val)
-                            <option @if(old('category')==$val->name) selected @endif
-                                value="{{$val->name}}">{{$val->name}}</option>
-                            @endforeach
-                        </select>
-                        @if ($errors->has('category'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('category') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-
-                    <div class="mb-3">
-                        <label class="form-label">Item Code/Barcode</label>
-                        <input type="text" class="form-control" name="item_code_barcode" value="{{ old('item_code_barcode') }}" />
-                        @if ($errors->has('item_code_barcode'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('item_code_barcode') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Item Name</label>
-                        <input type="text" class="form-control" name="item_name" value="{{ old('item_name') }}" />
-                        @if ($errors->has('item_name'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('item_name') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-
-                    <div class="mb-3">
-                        <label class="form-label">Sale Price</label>
-                        <input type="text" class="form-control" name="sale_price" value="{{ old('sale_price') }}" />
-                        @if ($errors->has('sale_price'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('sale_price') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">GST Rate</label>
-                        <input type="text" class="form-control" name="gst_rate" value="{{ old('gst_rate') }}" />
-                        @if ($errors->has('gst_rate'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('gst_rate') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select name="units" id="units" class="form-select">
-                            @php
-                            $unitArr = [
-                            'pcs' => 'Pieces',
-                            'packets' => 'Packets',
-                            'g' => 'Grams',
-                            'kg' => 'Kilogram',
-                            'l' => 'Liter',
-                            'ml' => 'Milli Liter',
-                            ];
-                            @endphp
-                            @foreach ($unitArr as $key => $val)
-                            <option @if(old('units')==$val) selected @endif value="{{$key}}">{{$val}}</option>
-                            @endforeach
-                        </select>
-                        @if ($errors->has('units'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('units') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Stock</label>
-                        <input type="text" class="form-control" name="stock" value="{{ old('stock') }}" />
-                        @if ($errors->has('stock'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('stock') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">HSN Code</label>
-                        <input type="text" class="form-control" name="hsn_code" value="{{ old('hsn_code') }}" />
-                        @if ($errors->has('hsn_code'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('hsn_code') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" name="description" value="{{ old('description') }}" rows="4" cols="10" placeholder="Enter the description"></textarea>
-                        @if ($errors->has('description'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('description') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-
-
-                    <button type="submit" id="saveBtn" class="btn btn-primary">Send</button>
-                </form>
+                    @enderror
             </div>
-            <!-- <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div> -->
+
+
+
+            <div class="col-md mb-3">
+                <!-- <small class="fw-medium d-block">Item Type</small> -->
+                <label class="form-label pl-5">Item Type</label>
+                <div class="form-check form-check-inline pl-5 mt-3">
+                    <input class="form-check-input" type="radio" checked name="item_type"
+                        id="inlineRadio1" value="sale">
+                    <label class="form-check-label" for="inlineRadio1">Sale</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="item_type" id="inlineRadio2"
+                        value="service">
+                    <label class="form-check-label" for="inlineRadio2">Service</label>
+                </div>
+                @if ($errors->has('item_type'))
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('item_type') }}</strong>
+                    </span>
+                @enderror
+
         </div>
+
+
+
+
+        <div class="mb-3">
+            <label class="form-label">Product Category</label>
+            <select name="category" id="category" class="form-select">
+
+                @foreach ($productcategory as $val)
+                    <option @if (old('category') == $val->name) selected @endif value="{{ $val->name }}">
+                        {{ $val->name }}</option>
+                @endforeach
+            </select>
+            @if ($errors->has('category'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('category') }}</strong>
+                </span>
+            @enderror
     </div>
+
+
+    <div class="mb-3">
+        <label class="form-label">Item Code/Barcode</label>
+        <input type="text" class="form-control" name="item_code_barcode"
+            value="{{ old('item_code_barcode') }}" />
+        @if ($errors->has('item_code_barcode'))
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $errors->first('item_code_barcode') }}</strong>
+            </span>
+        @enderror
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Item Name</label>
+    <input type="text" class="form-control" name="item_name"
+        value="{{ old('item_name') }}" />
+    @if ($errors->has('item_name'))
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $errors->first('item_name') }}</strong>
+        </span>
+    @enderror
+</div>
+
+
+<div class="mb-3">
+<label class="form-label">Sale Price</label>
+<input type="text" class="form-control" name="sale_price"
+    value="{{ old('sale_price') }}" />
+@if ($errors->has('sale_price'))
+    <span class="invalid-feedback" role="alert">
+        <strong>{{ $errors->first('sale_price') }}</strong>
+    </span>
+@enderror
+</div>
+
+<div class="mb-3">
+<label class="form-label">GST Rate</label>
+<input type="text" class="form-control" name="gst_rate" value="{{ old('gst_rate') }}" />
+@if ($errors->has('gst_rate'))
+<span class="invalid-feedback" role="alert">
+    <strong>{{ $errors->first('gst_rate') }}</strong>
+</span>
+@enderror
+</div>
+
+<div class="mb-3">
+<label class="form-label">Status</label>
+<select name="units" id="units" class="form-select">
+@php
+    $unitArr = [
+        'pcs' => 'Pieces',
+        'packets' => 'Packets',
+        'g' => 'Grams',
+        'kg' => 'Kilogram',
+        'l' => 'Liter',
+        'ml' => 'Milli Liter',
+    ];
+@endphp
+@foreach ($unitArr as $key => $val)
+<option @if (old('units') == $val) selected @endif
+    value="{{ $key }}">{{ $val }}</option>
+@endforeach
+</select>
+@if ($errors->has('units'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('units') }}</strong>
+</span>
+@enderror
+</div>
+
+<div class="mb-3">
+<label class="form-label">Stock</label>
+<input type="text" class="form-control" name="stock" value="{{ old('stock') }}" />
+@if ($errors->has('stock'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('stock') }}</strong>
+</span>
+@enderror
+</div>
+
+<div class="mb-3">
+<label class="form-label">HSN Code</label>
+<input type="text" class="form-control" name="hsn_code" value="{{ old('hsn_code') }}" />
+@if ($errors->has('hsn_code'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('hsn_code') }}</strong>
+</span>
+@enderror
+</div>
+
+
+<div class="mb-3">
+<label class="form-label">Description</label>
+<textarea class="form-control" name="description" value="{{ old('description') }}" rows="4" cols="10"
+    placeholder="Enter the description"></textarea>
+@if ($errors->has('description'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('description') }}</strong>
+</span>
+@enderror
+</div>
+
+
+
+<button type="submit" id="saveBtn" class="btn btn-primary">Send</button>
+</form>
+</div>
+<!-- <div class="modal-footer">
+<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+Close
+</button>
+<button type="button" class="btn btn-primary">Save changes</button>
+</div> -->
+</div>
+</div>
 </div>
 
 <div class="modal fade" id="basicModal1" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel1">Add Party</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="validation-errors-party"></div>
-                <form method="POST" id="partyForm" action="{{ route('party.ajaxsave') }}" enctype="multipart/form-data">
-                    @csrf
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel1">Add Party</h5>
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+<div id="validation-errors-party"></div>
+<form method="POST" id="partyForm" action="{{ route('party.ajaxsave') }}"
+enctype="multipart/form-data">
+@csrf
 
-                    <div class="mb-3">
-                        <label class="form-label">Party Type</label>
-                        <select name="party_type" id="party_type" class="form-select">
-                            @php
-                            $party_type = [
-                            'registered' => 'Registered',
-                            'unregistered' => 'Un Registered'
-                            ];
-                            @endphp
-                            @foreach ($party_type as $key => $val)
-                            <option @if(old('party_type')==$key) selected @endif value="{{$key}}">{{$val}}</option>
-                            @endforeach
-                        </select>
-                        @if ($errors->has('party_type'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('party_type') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-
-
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" />
-                        @if ($errors->has('name'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('name') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">GSTIN</label>
-                        <input type="text" class="form-control" name="gstin" value="{{ old('gstin') }}" />
-                        @if ($errors->has('gstin'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('gstin') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Phone No</label>
-                        <input type="text" class="form-control" name="phone_no" value="{{ old('phone_no') }}" />
-                        @if ($errors->has('phone_no'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('phone_no') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="text" class="form-control" name="email" value="{{ old('email') }}" />
-                        @if ($errors->has('email'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('email') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Business Address 1</label>
-                        <input type="text" class="form-control" name="billing_address_1" value="{{ old('billing_address_1') }}" />
-                        @if ($errors->has('billing_address_1'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('billing_address_1') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Business Address 2</label>
-                        <input type="text" class="form-control" name="billing_address_2" value="{{ old('billing_address_2') }}" />
-                        @if ($errors->has('billing_address_2'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('billing_address_2') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Business Pincode</label>
-                        <input type="text" class="form-control" name="billing_pincode" value="{{ old('billing_pincode') }}" />
-                        @if ($errors->has('billing_pincode'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('billing_pincode') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-
-                    <div class="mb-3">
-                        <label class="form-label">Shipping Address 1</label>
-                        <input type="text" class="form-control" name="shipping_address_1" value="{{ old('shipping_address_1') }}" />
-                        @if ($errors->has('shipping_address_1'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('shipping_address_1') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Shipping Address 2</label>
-                        <input type="text" class="form-control" name="shipping_address_2" value="{{ old('shipping_address_2') }}" />
-                        @if ($errors->has('shipping_address_2'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('shipping_address_2') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Shipping Pincode</label>
-                        <input type="text" class="form-control" name="shipping_pincode" value="{{ old('shipping_pincode') }}" />
-                        @if ($errors->has('shipping_pincode'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('shipping_pincode') }}</strong>
-                        </span>
-                        @enderror
-                    </div>
+<div class="mb-3">
+<label class="form-label">Party Type</label>
+<select name="party_type" id="party_type" class="form-select">
+@php
+    $party_type = [
+        'registered' => 'Registered',
+        'unregistered' => 'Un Registered',
+    ];
+@endphp
+@foreach ($party_type as $key => $val)
+<option @if (old('party_type') == $key) selected @endif
+value="{{ $key }}">{{ $val }}</option>
+@endforeach
+</select>
+@if ($errors->has('party_type'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('party_type') }}</strong>
+</span>
+@enderror
+</div>
 
 
 
+<div class="mb-3">
+<label class="form-label">Name</label>
+<input type="text" class="form-control" name="name" value="{{ old('name') }}" />
+@if ($errors->has('name'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('name') }}</strong>
+</span>
+@enderror
+</div>
+
+<div class="mb-3">
+<label class="form-label">GSTIN</label>
+<input type="text" class="form-control" name="gstin" value="{{ old('gstin') }}" />
+@if ($errors->has('gstin'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('gstin') }}</strong>
+</span>
+@enderror
+</div>
+
+<div class="mb-3">
+<label class="form-label">Phone No</label>
+<input type="text" class="form-control" name="phone_no" value="{{ old('phone_no') }}" />
+@if ($errors->has('phone_no'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('phone_no') }}</strong>
+</span>
+@enderror
+</div>
+
+<div class="mb-3">
+<label class="form-label">Email</label>
+<input type="text" class="form-control" name="email" value="{{ old('email') }}" />
+@if ($errors->has('email'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('email') }}</strong>
+</span>
+@enderror
+</div>
+
+<div class="mb-3">
+<label class="form-label">Business Address 1</label>
+<input type="text" class="form-control" name="billing_address_1"
+value="{{ old('billing_address_1') }}" />
+@if ($errors->has('billing_address_1'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('billing_address_1') }}</strong>
+</span>
+@enderror
+</div>
+
+<div class="mb-3">
+<label class="form-label">Business Address 2</label>
+<input type="text" class="form-control" name="billing_address_2"
+value="{{ old('billing_address_2') }}" />
+@if ($errors->has('billing_address_2'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('billing_address_2') }}</strong>
+</span>
+@enderror
+</div>
+
+<div class="mb-3">
+<label class="form-label">Business Pincode</label>
+<input type="text" class="form-control" name="billing_pincode"
+value="{{ old('billing_pincode') }}" />
+@if ($errors->has('billing_pincode'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('billing_pincode') }}</strong>
+</span>
+@enderror
+</div>
 
 
-                    <button type="submit" id="partysaveBtn" class="btn btn-primary">Send</button>
-                </form>
-            </div>
+<div class="mb-3">
+<label class="form-label">Shipping Address 1</label>
+<input type="text" class="form-control" name="shipping_address_1"
+value="{{ old('shipping_address_1') }}" />
+@if ($errors->has('shipping_address_1'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('shipping_address_1') }}</strong>
+</span>
+@enderror
+</div>
 
-        </div>
-    </div>
+<div class="mb-3">
+<label class="form-label">Shipping Address 2</label>
+<input type="text" class="form-control" name="shipping_address_2"
+value="{{ old('shipping_address_2') }}" />
+@if ($errors->has('shipping_address_2'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('shipping_address_2') }}</strong>
+</span>
+@enderror
+</div>
+
+<div class="mb-3">
+<label class="form-label">Shipping Pincode</label>
+<input type="text" class="form-control" name="shipping_pincode"
+value="{{ old('shipping_pincode') }}" />
+@if ($errors->has('shipping_pincode'))
+<span class="invalid-feedback" role="alert">
+<strong>{{ $errors->first('shipping_pincode') }}</strong>
+</span>
+@enderror
+</div>
+
+
+
+
+
+<button type="submit" id="partysaveBtn" class="btn btn-primary">Send</button>
+</form>
+</div>
+
+</div>
+</div>
 </div>
 
 <div class="modal fade" id="basicModal2" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel1">Add Party</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="validation-errors-party"></div>
+<div class="modal-dialog modal-xl" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel1">Add Party</h5>
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+<div id="validation-errors-party"></div>
 
 
-                <div class="container-fluid invoice-container">
-                    <!-- Header -->
-                    <header>
-                        <div class="row gy-3">
-                            <div class="col-12 text-center">
-                                <h2 class="text-4">Tax Invoice</h4>
-                            </div>
-                            <div class="col-sm-3">
-                                <img id="logo" src="bill/logo.png" title="MyDailyBill" alt="MyDailyBill" />
-                            </div>
-                            <div class="col-sm-7">
-                                <h4 class="text-4 mb-1">Sold By: MyDailyBill Inc.</h4>
-                                <p class="lh-base mb-0">Ship-from Address: MyDailyBill Inc, 2705 N. Enterprise St, Orange, CA 92865</p>
-                            </div>
-                            <div class="col-sm-2">
-                                <strong>Invoice No:</strong> 16835
-                            </div>
-                        </div>
-                        <hr>
-                    </header>
+<div class="container-fluid invoice-container">
+<!-- Header -->
+<header>
+<div class="row gy-3">
+<div class="col-12 text-center">
+<h2 class="text-4">Tax Invoice</h4>
+</div>
+<div class="col-sm-3">
+<img id="logo" src="bill/logo.png" title="MyDailyBill" alt="MyDailyBill" />
+</div>
+<div class="col-sm-7">
+<h4 class="text-4 mb-1">Sold By: MyDailyBill Inc.</h4>
+<p class="lh-base mb-0">Ship-from Address: MyDailyBill Inc, 2705 N. Enterprise St,
+Orange, CA 92865</p>
+</div>
+<div class="col-sm-2">
+<strong>Invoice No:</strong> 16835
+</div>
+</div>
+<hr>
+</header>
 
-                    <!-- Main Content -->
-                    <main>
-                        <div class="row gy-3">
-                            <div class="col-sm-4">
-                                <p class="mb-1"><strong>Order ID:</strong> OD223244238</p>
-                                <p class="mb-1"><strong>Order Date:</strong> 05/12/2022</p>
-                                <p class="mb-1"><strong>Invoice Date:</strong> 05/12/2022</p>
-                                <p class="mb-1"><strong>PAN:</strong> AGGC30K44E</p>
-                                <p><strong>CIN:</strong> U5260910KA2017PTC0306</p>
-                            </div>
-                            <div class="col-sm-4"> <strong>Bill To:</strong>
-                                <address>
-                                    Smith Rhodes<br />
-                                    15 Hodges Mews, High Wycombe<br />
-                                    HP12 3JL<br />
-                                    United Kingdom
-                                </address>
-                            </div>
-                            <div class="col-sm-4"> <strong>Ship To:</strong>
-                                <address>
-                                    Smith Rhodes<br />
-                                    15 Hodges Mews, High Wycombe<br />
-                                    HP12 3JL<br />
-                                    United Kingdom
-                                </address>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table border mb-0">
-                                <thead>
-                                    <tr class="bg-light">
-                                        <td class="col-5"><strong>Product</strong></td>
-                                        <td class="col-1 text-center"><strong>QTY</strong></td>
-                                        <td class="col-2 text-center"><strong>Price</strong></td>
-                                        <td class="col-2 text-center"><strong>Discount</strong></td>
-                                        <td class="col-2 text-end"><strong>Total</strong></td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="col-5">
-                                            NUUVO C11 2023 (Cool Blue, 128 GB)
-                                            <p class="text-0 text-black-50 lh-base mb-0">Warranty: 1 Year Warranty for Mobile and 6
-                                                Months for Accessories</p>
-                                            <p class="text-1 mb-0">1. [IMEI/Serial No: 862065058646712 ]</p>
-                                        </td>
-                                        <td class="col-1 text-center">1</td>
-                                        <td class="col-2 text-center">$299</td>
-                                        <td class="col-2 text-center">$25.00</td>
-                                        <td class="col-2 text-end">$274.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-5">
-                                            Flip Cover for NUUVO C11 2023
-                                            <p class="text-0 text-black-50 lh-base mb-0">Brown, Pack of: 1</p>
-                                        </td>
-                                        <td class="col-1 text-center">1</td>
-                                        <td class="col-2 text-center">$3</td>
-                                        <td class="col-2 text-center">$0.00</td>
-                                        <td class="col-2 text-end">$3.00</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table border border-top-0 mb-0">
-                                <tr class="bg-light">
-                                    <td class="text-end"><strong>Sub Total:</strong></td>
-                                    <td class="col-sm-2 text-end">$277.00</td>
-                                </tr>
-                                <tr class="bg-light">
-                                    <td class="text-end"><strong>Tax:</strong></td>
-                                    <td class="col-sm-2 text-end">$15.00</td>
-                                </tr>
-                                <tr class="bg-light">
-                                    <td class="text-end"><strong>Grand Total:</strong></td>
-                                    <td class="col-sm-2 text-end">$292.00</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </main>
-                    <!-- Footer -->
-                    <footer class="mt-5">
+<!-- Main Content -->
+<main>
+<div class="row gy-3">
+<div class="col-sm-4">
+<p class="mb-1"><strong>Order ID:</strong> OD223244238</p>
+<p class="mb-1"><strong>Order Date:</strong> 05/12/2022</p>
+<p class="mb-1"><strong>Invoice Date:</strong> 05/12/2022</p>
+<p class="mb-1"><strong>PAN:</strong> AGGC30K44E</p>
+<p><strong>CIN:</strong> U5260910KA2017PTC0306</p>
+</div>
+<div class="col-sm-4"> <strong>Bill To:</strong>
+<address>
+Smith Rhodes<br />
+15 Hodges Mews, High Wycombe<br />
+HP12 3JL<br />
+United Kingdom
+</address>
+</div>
+<div class="col-sm-4"> <strong>Ship To:</strong>
+<address>
+Smith Rhodes<br />
+15 Hodges Mews, High Wycombe<br />
+HP12 3JL<br />
+United Kingdom
+</address>
+</div>
+</div>
+<div class="table-responsive">
+<table class="table border mb-0">
+<thead>
+<tr class="bg-light">
+<td class="col-5"><strong>Product</strong></td>
+<td class="col-1 text-center"><strong>QTY</strong></td>
+<td class="col-2 text-center"><strong>Price</strong></td>
+<td class="col-2 text-center"><strong>Discount</strong></td>
+<td class="col-2 text-end"><strong>Total</strong></td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="col-5">
+NUUVO C11 2023 (Cool Blue, 128 GB)
+<p class="text-0 text-black-50 lh-base mb-0">Warranty: 1 Year Warranty for
+Mobile and 6
+Months for Accessories</p>
+<p class="text-1 mb-0">1. [IMEI/Serial No: 862065058646712 ]</p>
+</td>
+<td class="col-1 text-center">1</td>
+<td class="col-2 text-center">$299</td>
+<td class="col-2 text-center">$25.00</td>
+<td class="col-2 text-end">$274.00</td>
+</tr>
+<tr>
+<td class="col-5">
+Flip Cover for NUUVO C11 2023
+<p class="text-0 text-black-50 lh-base mb-0">Brown, Pack of: 1</p>
+</td>
+<td class="col-1 text-center">1</td>
+<td class="col-2 text-center">$3</td>
+<td class="col-2 text-center">$0.00</td>
+<td class="col-2 text-end">$3.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-responsive">
+<table class="table border border-top-0 mb-0">
+<tr class="bg-light">
+<td class="text-end"><strong>Sub Total:</strong></td>
+<td class="col-sm-2 text-end">$277.00</td>
+</tr>
+<tr class="bg-light">
+<td class="text-end"><strong>Tax:</strong></td>
+<td class="col-sm-2 text-end">$15.00</td>
+</tr>
+<tr class="bg-light">
+<td class="text-end"><strong>Grand Total:</strong></td>
+<td class="col-sm-2 text-end">$292.00</td>
+</tr>
+</table>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-5">
 
 
-                        <div class="text-end mb-4">
-                            <img id="logo" src="bill/logo-sm.png" title="MyDailyBill" alt="MyDailyBill" /><br>
-                            <div class="lh-1 text-black-50">Thank You!</div>
-                            <div class="lh-1 text-black-50 text-0"><small>For Shopping with us</small></div>
-                        </div>
+<div class="text-end mb-4">
+<img id="logo" src="bill/logo-sm.png" title="MyDailyBill" alt="MyDailyBill" /><br>
+<div class="lh-1 text-black-50">Thank You!</div>
+<div class="lh-1 text-black-50 text-0"><small>For Shopping with us</small></div>
+</div>
 
-                        <p class="text-0 mb-0"><strong>Returns Policy:</strong> At MyDailyBill we try to deliver perfectly each and every
-                            time. But in the off-chance that you need to return the item, please do so with the original Brand
-                            box/price
-                            tag, original packing and invoice without which it will be really difficult for us to act on your
-                            request. Please help us in helping you. Terms and conditions apply.</p>
-                        <hr class="my-2">
-                        <p class="text-center">Helpline: 1800 222 9888</p>
-                        <div class="text-center">
-                            <div class="btn-group btn-group-sm d-print-none"> <a href="javascript:window.print()" class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-print"></i> Print &
-                                    Download</a> </div>
-                        </div>
-                    </footer>
-                </div>
+<p class="text-0 mb-0"><strong>Returns Policy:</strong> At MyDailyBill we try to deliver
+perfectly each and every
+time. But in the off-chance that you need to return the item, please do so with the original
+Brand
+box/price
+tag, original packing and invoice without which it will be really difficult for us to act on
+your
+request. Please help us in helping you. Terms and conditions apply.</p>
+<hr class="my-2">
+<p class="text-center">Helpline: 1800 222 9888</p>
+<div class="text-center">
+<div class="btn-group btn-group-sm d-print-none"> <a href="javascript:window.print()"
+class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-print"></i>
+Print &
+Download</a> </div>
+</div>
+</footer>
+</div>
 
-            </div>
+</div>
 
-        </div>
-    </div>
+</div>
+</div>
 </div>
 
 
@@ -1211,7 +1275,8 @@
                                 response(data.map(function(product) {
                                     return {
                                         label: product.item_name,
-                                        sale_price: product.purchase_price,
+                                        sale_price: product
+                                            .purchase_price,
                                         id: product.id,
                                         stock: product.stock,
 
@@ -1221,8 +1286,10 @@
                                 var default_val = 0;
                                 // $(this).val(ui.item.label);
                                 // console.log($(this).closest("div").parent().find('.uprice').val());
-                                $(this).closest("div").parent().find('.uprice').val('0');
-                                $(this).closest("div").parent().find('.gstperc').val('0');
+                                $(this).closest("div").parent().find('.uprice')
+                                    .val('0');
+                                $(this).closest("div").parent().find('.gstperc')
+                                    .val('0');
                                 // Handle case where response is empty
                                 // For example, display a message or take appropriate action
                                 console.log("No matching products found.");
@@ -1235,7 +1302,8 @@
                     $(this).closest("div").parent().find('.uprice').val(ui.item.sale_price);
                     $(this).closest("div").parent().find('.gstperc').val(ui.item.gst_rate);
                     $(this).closest("div").parent().find('.product_id').val(ui.item.id);
-                    $(this).closest("div").parent().find('.qtybox').attr('data-avail-qty', ui.item.stock);
+                    $(this).closest("div").parent().find('.qtybox').attr('data-avail-qty',
+                        ui.item.stock);
 
                     return false;
                 }
@@ -1353,7 +1421,9 @@
                     $('#saveBtn').html('Save Changes');
                     $('#validation-errors-product').html('');
                     $.each(xhr.responseJSON.errors, function(key, value) {
-                        $('#validation-errors-product').append('<div class="alert alert-danger">' + value + '</div');
+                        $('#validation-errors-product').append(
+                            '<div class="alert alert-danger">' + value + '</div'
+                            );
                     });
 
                 }
@@ -1396,7 +1466,9 @@
 
                     $('#validation-errors-party').html('');
                     $.each(xhr.responseJSON.errors, function(key, value) {
-                        $('#validation-errors-party').append('<div class="alert alert-danger">' + value + '</div');
+                        $('#validation-errors-party').append(
+                            '<div class="alert alert-danger">' + value + '</div'
+                            );
                     });
 
                 }
@@ -1407,5 +1479,4 @@
 
     });
 </script>
-
 @endsection

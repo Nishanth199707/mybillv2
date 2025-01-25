@@ -315,13 +315,21 @@
                                                     @endif
                                                     <div class="col-sm-4" style="border-right: 0.5pt solid #303030;">
                                                         @if ($setting->purchase_order_date == 'yes')
-                                                            <p class="mb-1"><strong>PO Date:</strong>
+                                                        @if ($business->business_category != 'Accounting & CA')
+                                                        <p class="mb-1"><strong>PO Date:</strong>
+                                                            @else
+                                                            <p class="mb-1"><strong>Q Date:</strong>
+                                                                @endif
                                                                 {{ $sale->purchase_order_date }}
                                                             </p>
                                                         @else
                                                         @endif
                                                         @if ($setting->purchase_order_number == 'yes')
-                                                            <p class="mb-1"><strong>PO No:</strong>
+                                                        @if ($business->business_category != 'Accounting & CA')
+                                                        <p class="mb-1"><strong>Q No:</strong>   
+                                                                     @else
+                                                            <p class="mb-1"><strong>Q No:</strong>         
+                                                                   @endif
                                                                 {{ $sale->purchase_order_number }}
                                                             </p>
                                                         @else
