@@ -1819,9 +1819,11 @@
                             $('.five').show();
                             document.getElementById("taxable5Amount").value = total_Amount;
                         }
-                        if (gstValue == 0) {
+                        if (gstValue == 0 && total_Amount > 0) {
                             $('.zero').show();
                             document.getElementById("taxable0Amount").value = total_Amount;
+                        }else{
+                            $('.zero').hide();
                         }
                     }
                 });
