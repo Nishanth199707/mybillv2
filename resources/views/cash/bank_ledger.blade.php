@@ -60,7 +60,7 @@
                                         <td>{{ $transaction->debit }}</td>
                                         <td>{{ $transaction->credit }}</td>
                                         @php
-                                        $line_total = $transaction->credit - $transaction->debit; // Correct calculation
+                                        $line_total = $transaction->credit - $transaction->debit;  // Correct calculation
                                         $total += $line_total; // Correct assignment
                                         @endphp
                                         <td>₹ {{ number_format($total, 2) }}</td>

@@ -102,6 +102,7 @@ class PurchaseReturnController extends Controller
                 "party_id" => $request->partyid,
                 "purchase_date" => $request->purchase_date,
                 "purchase_no" => $request->purchase_no,
+                "taxable0Amount" => $request->taxable0Amount,
                 "totalAmountDisplay" => $request->totalAmountDisplay,
                 "tax_amount_18_cgst" => $request->tax_amount_18_cgst,
                 "tax_amount_18_sgst" => $request->tax_amount_18_sgst,
@@ -118,21 +119,21 @@ class PurchaseReturnController extends Controller
             ];
 
             $purchaseReturn = PurchaseReturn::create($purchaseReturnData);
-
             for ($i = 1; $i <= $request->totQues; $i++) {
                 if ($request->input("product_id{$i}") && $request->input("qty{$i}")) {
+
                   Product::where('id', $request->input("product_id{$i}"))
                     ->decrement('stock', $request->input("qty{$i}"));
-
                     $code = $request->input("imei{$i}");
                     $product_retun =  PurchaseCustomDetails::where('user_id', $user_id)->where('field_value', '=', $code)->first();
                     if(!empty($product_retun->stock)){
                         $product_current_stock = $product_retun->stock - $request->input("qty{$i}");
                     }
-                    PurchaseCustomDetails::where('user_id', $user_id)
-                    ->where('field_value', '=', $code)
-                    ->update(['stock' => $product_current_stock ]);
-
+                    if ($code) {
+                        PurchaseCustomDetails::where('user_id', $user_id)
+                        ->where('field_value', '=', $code)
+                        ->update(['stock' => $product_current_stock ]);
+                    }
                     $purchaseReturnDetailData = [
                         'user_id' => $user_id,
                         'business_id' => $business_id->id,
@@ -146,7 +147,6 @@ class PurchaseReturnController extends Controller
                         "gstvaldata" => $request->input("gstvaldata{$i}"),
                         "total_amount" => $request->input("total_amount{$i}"),
                     ];
-
                     PurchaseReturnDetail::create($purchaseReturnDetailData);
                 }
             }
@@ -191,7 +191,7 @@ class PurchaseReturnController extends Controller
                     'user_id' => $user_id,
                     'business_id' => $business_id->id,
                     'party_id' => $request->partyid,
-                    'transaction_type' => 'purchase',
+                    'transaction_type' => 'purchase-'.$purchaseReturn->id.'',
                     'invoice_no' => $invoice_no,
                     'paid_date' => $request->purchase_date,
                     'debit' => $request->net_amount,

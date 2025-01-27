@@ -139,7 +139,7 @@
                                     <div class="col-md-2 fv-plugins-icon-container">
                                         <label class="form-label" for="formValidationName">Invoice No</label>
                                         <input type="text" id="formValidationName" class="form-control" readonly
-                                            placeholder="John Doe" value="{{ $invoice_no }}" name="return_invoice_no">
+                                            placeholder=" " value="{{ $invoice_no }}" name="return_invoice_no">
 
                                     </div>
                                     <div class="col-md-2 fv-plugins-icon-container">
@@ -566,6 +566,21 @@
                                                                 class="totalstyle1" name="tax_amount_5_igst"
                                                                 id="taxAmount_5_igst"></td>
                                                 </tr>
+                                                <tr class="rate-0">
+                                                    <td>0%</td>
+                                                    <td>₹ <input type="text" readonly
+                                                            class="totalstyle1" name="taxable0Amount"
+                                                            id="taxable0Amount"></td>
+                                                    <td>₹ <input type="text" readonly
+                                                            class="totalstyle1" name="tax_amount_0_cgst"
+                                                            id="taxAmount_0_cgst"></td>
+                                                    <td>₹ <input type="text" readonly
+                                                            class="totalstyle1" name="tax_amount_0_sgst"
+                                                            id="taxAmount_0_sgst"></td>
+                                                            <td>₹ <input type="text" readonly
+                                                                class="totalstyle1" name="tax_amount_0_igst"
+                                                                id="taxAmount_0_igst"></td>
+                                                </tr>
                                             </table>
 
 
@@ -640,7 +655,7 @@
                         <div style="text-align: right;">
                             <!-- <button type="submit" class="btn btn-primary">Send</button> -->
                             <button id="saleFormSubmit" type="submit"
-                                class="btn btn-primary float-right mb-2">Save</button>
+                                class="btn btn-primary float-right mb-2">Bill</button>
                         </div>
 
                 </form>
@@ -1358,7 +1373,7 @@
     function updateTotals() {
         let totalPrice = 0;
         let gstAmount = 0;
-        const gstRates = [5, 12, 18, 28];
+        const gstRates = [0, 5, 12, 18, 28];
         const gstAmountElements = {};
 
         // Initialize GST Amount Elements
@@ -1422,7 +1437,13 @@
             if (taxableAmount > 0) {
                 if (row) row.style.display = '';
             } else {
-                if (row) row.style.display = 'none';
+                if(rate == 0 && totalPrice > 0){
+                const row = document.querySelector(`tr.rate-${rate}`);
+                if (row) row.style.display = '';
+                }else{
+                    const row = document.querySelector(`tr.rate-${rate}`);
+                    if (row) row.style.display = 'none';
+                }
             }
         });
 

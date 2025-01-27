@@ -165,6 +165,7 @@ class PurchaseController extends Controller
             "purchase_date" => $request->purchase_date,
             "purchase_no" => $request->purchase_no,
             "totalAmountDisplay" => $request->totalAmountDisplay,
+            "taxable0Amount" => $request->taxable0Amount,
             "tax_amount_28_cgst" => $request->tax_amount_28_cgst,
             "tax_amount_28_sgst" => $request->tax_amount_28_sgst,
             "tax_amount_18_cgst" => $request->tax_amount_18_cgst,
@@ -222,12 +223,11 @@ class PurchaseController extends Controller
             'user_id' => $user_id,
             'business_id' => $business_id,
             'party_id' => $request->partyid,
-            'transaction_type' => 'purchase',
+            'transaction_type' => 'purchase-'.$purchaseId.'',
             'invoice_no' => $request->purchase_no,
             'paid_date' => $request->purchase_date,
             'credit' => $request->net_amount,
             'payment_type' => 'credit',
-            'mode_of_payment' => $request->cash_type,
         ];
 
         // Get the latest party payment for opening balance
@@ -237,7 +237,7 @@ class PurchaseController extends Controller
         ->value('closing_balance') ?? 0;
 
 
-// dd( $opening_balance);
+        // dd( $opening_balance);
 
         // $opening_balance = $latestPartyPayment ? $latestPartyPayment->closing_balance : 0;
         $partyPaymentData['opening_balance'] = $opening_balance + $request->net_amount;
@@ -293,7 +293,7 @@ class PurchaseController extends Controller
                 'user_id' => $user_id,
                 'business_id' => $business_id,
                 'party_id' => $request->partyid,
-                'transaction_type' => 'purchase',
+                'transaction_type' => 'purchase-'.$purchaseId.'',
                 'invoice_no' => $invoice_no,
                 'paid_date' => $request->purchase_date,
                 'debit' => $request->net_amount,

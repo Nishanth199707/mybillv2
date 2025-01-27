@@ -575,13 +575,15 @@
                                                                             <td class="text-center">0</td>
                                                                         </tr>
                                                                         @endif
-                                                                        @if ($salereturn->tax_amount_0)
+                                                                        @if ($salereturn->taxable0Amount)
                                                                         <tr class="bg-light">
                                                                             <td class="text-center">0%</td>
                                                                             <td class="text-center">
                                                                                 {{ $salereturn->taxable0Amount }}
                                                                             </td>
-                                                                            <td class="text-center" colspan="3">0</td>
+                                                                            <td class="text-center">0</td>
+                                                                            <td class="text-center">0</td>
+                                                                            <td class="text-center">0</td>
                                                                         </tr>
                                                                         @endif
                                                                         <tr>

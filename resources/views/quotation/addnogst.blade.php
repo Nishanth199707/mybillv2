@@ -147,8 +147,12 @@
 
                                 <div class="col-md-4 fv-plugins-icon-container">
                                     <label class="form-label" for="formValidationName">Quotation No</label>
+<<<<<<< HEAD
                                     <input type="text" id="formValidationName" class="form-control" readonly
                                         placeholder="John Doe" value="{{ $quotation_no }}" name="quotation_no">
+=======
+                                    <input type="text" id="formValidationName" class="form-control" readonly placeholder=" " value="{{ $quotation_no }}" name="quotation_no">
+>>>>>>> 46525e7e4318e250fd100e186b46009d878e06fe
 
                                 </div>
                             </div>
@@ -1479,4 +1483,8 @@ Download</a> </div>
 
     });
 </script>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 46525e7e4318e250fd100e186b46009d878e06fe
 @endsection

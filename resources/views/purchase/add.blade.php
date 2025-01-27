@@ -565,6 +565,21 @@
                                                         class="totalstyle1" name="tax_amount_5_igst"
                                                         id="taxAmount_5_igst"></td>
                                                 </tr>
+                                                <tr class="rate-0">
+                                                    <td>0%</td>
+                                                    <td>₹ <input type="text" readonly value="0"
+                                                            class="totalstyle1" name="taxable0Amount"
+                                                            id="taxable0Amount"></td>
+                                                    <td>₹ <input type="text" readonly value="0"
+                                                            class="totalstyle1" name="tax_amount_0_cgst"
+                                                            id="taxAmount_0_cgst"></td>
+                                                    <td>₹ <input type="text" readonly value="0"
+                                                            class="totalstyle1" name="tax_amount_0_sgst"
+                                                            id="taxAmount_0_sgst"></td>
+                                                    <td>₹ <input type="text" readonly value="0"
+                                                        class="totalstyle1" name="tax_amount_0_igst"
+                                                        id="taxAmount_0_igst"></td>
+                                                </tr>
                                             </table>
 
 
@@ -1485,7 +1500,7 @@
         var gstValue = parseFloat(document.getElementById("gst" + dRecid).value) || 0;
 
         var totValue = qtyValue * uPriceVal;
-        var gstAmount = gstValue > 0 ? totValue * (gstValue / 100) : 0;
+        var gstAmount =  totValue * (gstValue / 100);
         var totalAmountWithGST = totValue + gstAmount;
 
         document.getElementById("taxableamount" + dRecid).value = totValue.toFixed(2);
@@ -1500,7 +1515,7 @@
     function updateTotals() {
     let totalPrice = 0;
     let gstAmount = 0;
-    const gstRates = [5, 12, 18, 28];
+    const gstRates = [0,5, 12, 18, 28];
     const gstAmountElements = {};
     const businessState = document.getElementById("state").value; // Get the business state (e.g., "Tamil Nadu")
 
@@ -1536,7 +1551,6 @@
         const cgstElement = document.getElementById(`taxAmount_${rate}_cgst`);
         const sgstElement = document.getElementById(`taxAmount_${rate}_sgst`);
         const igstElement = document.getElementById(`taxAmount_${rate}_igst`);
-
         const taxableAmount = gstAmountElements[rate] || 0;
 
         // Update taxable amount
@@ -1571,8 +1585,14 @@
             const row = document.querySelector(`tr.rate-${rate}`);
             if (row) row.style.display = '';  // Show the row if there is taxable amount
         } else {
-            const row = document.querySelector(`tr.rate-${rate}`);
-            if (row) row.style.display = 'none';  // Hide the row if there is no taxable amount
+            if(rate == 0 && totalPrice > 0){
+                const row = document.querySelector(`tr.rate-${rate}`);
+                if (row) row.style.display = '';
+                }else{
+                    const row = document.querySelector(`tr.rate-${rate}`);
+                    if (row) row.style.display = 'none';  // Hide the row if there is no taxable amount
+                }
+
         }
     });
 

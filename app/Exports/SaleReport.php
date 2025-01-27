@@ -73,10 +73,8 @@ class SaleReport implements FromCollection, WithHeadings
                 $this->from_date . ' 00:00:00',
                 $this->to_date . ' 23:59:59'
             ]);
-        }else{
-            $query->get();
         }
-
+        $query->groupBy('sale_details.id');
         return $query->get();
     }
 

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->float('taxable18Amount')->nullable();
             $table->float('taxable12Amount')->nullable();
             $table->float('taxable5Amount')->nullable();
+            $table->float('taxable0Amount')->nullable();
 
             $table->float('totalAmountDisplay')->nullable();
             $table->float('tax_amount_28_cgst')->nullable();
@@ -37,7 +38,7 @@ return new class extends Migration
             $table->float('tax_amount_18_igst')->nullable();
             $table->float('tax_amount_12_igst')->nullable();
             $table->float('tax_amount_5_igst')->nullable();
-            
+
             $table->float('tax_amount')->nullable();
             $table->float('net_amount');
             $table->string('totQues');

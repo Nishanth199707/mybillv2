@@ -133,7 +133,7 @@
                                 <div class="col-md-2 fv-plugins-icon-container">
                                     <label class="form-label" for="formValidationName">Invoice No</label>
                                     <input type="text" id="formValidationName" class="form-control" readonly
-                                        placeholder="John Doe" value="{{ $invoice_no }}" name="invoice_no">
+                                        placeholder=" " value="{{ $invoice_no }}" name="invoice_no">
 
                                 </div>
                                 <div class="col-md-2 fv-plugins-icon-container">
@@ -739,7 +739,7 @@
                                             class="form-control">
                                     </div>
                                     <div class="col-md-2 form-group">
-                                        <label for="emi" class="form-label">EMI</label>
+                                        <label for="emi" class="form-label">Monthly EMI</label>
                                         <input type="text" name="emi" id="emi" class="form-control">
                                     </div>
                                     <div class="col-md-1 form-group">
@@ -750,7 +750,7 @@
                             </div>
                             <div style="text-align: right;">
                                 <button id="saleFormSubmit" type="submit"
-                                    class="btn btn-primary float-right mb-2" style="background:linear-gradient(to right,#ff746e, #ff9e6f);border:none;">Save and Print</button>
+                                    class="btn btn-primary float-right mb-2" style="background:linear-gradient(to right,#ff746e, #ff9e6f);border:none;">Bill</button>
                             </div>
 
 
@@ -1819,9 +1819,11 @@
                             $('.five').show();
                             document.getElementById("taxable5Amount").value = total_Amount;
                         }
-                        if (gstValue == 0) {
+                        if (gstValue == 0 && total_Amount > 0) {
                             $('.zero').show();
                             document.getElementById("taxable0Amount").value = total_Amount;
+                        }else{
+                            $('.zero').hide();
                         }
                     }
                 });

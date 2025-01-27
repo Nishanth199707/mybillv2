@@ -119,8 +119,8 @@ class PartyController extends Controller
             'business_id' => $business_id->id,
             'party_id' => $party->id,
             'transaction_type' => $request->transaction_type,
-            'credit' => $request->opening_balance,
-            'payment_type' => 'credit',
+            'debit' => $request->opening_balance,
+            'payment_type' => 'debit',
             'opening_balance' => $request->opening_balance,
             'closing_balance' => $request->opening_balance,
         ];
@@ -522,7 +522,7 @@ class PartyController extends Controller
         // } else {
         // Retrieve the first payment record for the party
         $partyPayment = PartyPayment::where('party_id', $party->id)
-            ->where('payment_type', 'credit')
+            ->where('payment_type', 'debit')
             ->where('invoice_no', NULL)
             ->first();
 
@@ -536,8 +536,8 @@ class PartyController extends Controller
             'business_id' => $business_id->id,
             'party_id' => $party->id,
             'transaction_type' => $request->transaction_type,
-            'credit' => $request->opening_balance,
-            'payment_type' => 'credit',
+            'debit' => $request->opening_balance,
+            'payment_type' => 'debit',
             'opening_balance' => $request->opening_balance,
             'closing_balance' => $request->opening_balance,
         ];
@@ -672,8 +672,6 @@ class PartyController extends Controller
                 'transaction_type' => $data->transaction_type,
                 'remark' => $request->remark,
                 'paid_date' => $formattedDate,
-                'credit' => $request->cash_received,
-                'payment_type' => 'waiting',
                 'mode_of_payment' => $request->mode_of_payment,
                 'receipt_type' => $data->transaction_type,
                 'transaction_number' => $request->transaction_number,
@@ -681,6 +679,13 @@ class PartyController extends Controller
                 'opening_balance' => $latestPayment->closing_balance,
                 'closing_balance' => $latestPayment->closing_balance,
             ];
+            if($prefix == 'REC'){
+                $partyPaymentArr['credit'] = $request->cash_received;
+                $partyPaymentArr['payment_type'] = 'waiting';
+            }else{
+                    $partyPaymentArr['debit'] = $request->cash_received;
+                    $partyPaymentArr['payment_type'] = 'waiting';
+            }
         }elseif($request->has('cheque_amount')) {
 
             //  dd($request->all());
@@ -703,8 +708,6 @@ class PartyController extends Controller
                 'invoice_no' => $invoice_no,
                 'remark' => $request->remark,
                 'paid_date' => $formattedDate,
-                'debit' => $request->cheque_amount,
-                'payment_type' => 'debit',
                 'mode_of_payment' => 'cheque',
                 'receipt_type' => $request->transaction_type,
                 'transaction_number' => $request->transaction_number,
@@ -712,6 +715,13 @@ class PartyController extends Controller
                 'opening_balance' => $opening_balance,
                 'closing_balance' => $closing_balance,
             ];
+            if($prefix == 'REC'){
+                  $partyPaymentArr['credit'] = $request->cheque_amount;
+                     $partyPaymentArr['payment_type'] = 'credit';
+            }else{
+                     $partyPaymentArr['debit'] = $request->cheque_amount;
+                     $partyPaymentArr['payment_type'] = 'debit';
+            }
             $payment = PartyPayment::where('party_id', $request->partyid)->where('id', $request->paymentid)->first();
             $payment->update(['payment_type' => 'collected']);
         }elseif($request->mode_of_payment == 'scheme') {
@@ -756,12 +766,17 @@ class PartyController extends Controller
                 'transaction_type' => 'purchase',
                 'invoice_no' => $invoice_no,
                 'paid_date' => $formattedDate,
-                'debit' => $request->cash_received,
-                'payment_type' => 'debit',
                 'mode_of_payment' => $request->mode_of_payment,
                 'opening_balance' => $opening_balance,
                 'closing_balance' => $closing_balance,
             ];
+            if($prefix == 'REC'){
+                     $partyPaymentArr['credit'] = $request->cash_received;
+                     $partyPaymentArr['payment_type'] = 'credit';
+            }else{
+                     $partyPaymentArr['debit'] = $request->cash_received;
+                     $partyPaymentArr['payment_type'] = 'debit';
+            }
         }else{
 
             // dd($latestPayment->closing_balance);
@@ -786,8 +801,6 @@ class PartyController extends Controller
                 'invoice_no' => $invoice_no,
                 'remark' => $request->remark,
                 'paid_date' => $formattedDate,
-                'debit' => $request->cash_received,
-                'payment_type' => 'debit',
                 'mode_of_payment' => $request->mode_of_payment,
                 'receipt_type' => $data->transaction_type,
                 'transaction_number' => $request->transaction_number,
@@ -795,8 +808,14 @@ class PartyController extends Controller
                 'opening_balance' => $opening_balance,
                 'closing_balance' => $closing_balance,
             ];
+            if($prefix == 'REC'){
+                     $partyPaymentArr['credit'] = $request->cash_received;
+                     $partyPaymentArr['payment_type'] = 'credit';
+            }else{
+                     $partyPaymentArr['debit'] = $request->cash_received;
+                     $partyPaymentArr['payment_type'] = 'debit';
+            }
         }
-
         PartyPayment::create($partyPaymentArr);
         return redirect()->to('superadmin/party/' . $request->partyid);
     }

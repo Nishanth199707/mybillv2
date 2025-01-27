@@ -88,7 +88,7 @@ class LoginController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $input = $request->all();
-    
+
         // Validate input fields
         $validator = Validator::make($input, [
             'email' => 'required_without:otp|email',
@@ -96,25 +96,25 @@ class LoginController extends Controller
             'mobileno' => 'required_without:email|digits:10',
             'otp' => 'required_without:password|digits:6',
         ]);
-    
+
         if ($validator->fails()) {
             return redirect()->route('login')
                 ->withErrors($validator)
                 ->withInput($request->only('email', 'mobileno'));
         }
-    
+
         // Email and Password Login
         if (!empty($input['email']) && !empty($input['password'])) {
             if (Auth::attempt(['email' => $input['email'], 'password' => $input['password']])) {
                 $auth_user = Auth::user();
-                
+
                 return $this->redirectUser($auth_user);
             } else {
                 return redirect()->route('login')
                     ->with('error', 'Invalid email or password.');
             }
         }
-    
+
         // OTP and Mobile Number Login
         if (!empty($input['mobileno']) && !empty($input['otp'])) {
             $otpRecord = DB::table('otps')
@@ -122,10 +122,10 @@ class LoginController extends Controller
                 ->where('otp', $input['otp'])
                 ->where('expires_at', '>=', now())
                 ->first();
-    
+
             if ($otpRecord) {
                 $auth_user = User::where('phone', $input['mobileno'])->first();
-    
+
                 if ($auth_user) {
                     return $this->redirectUser($auth_user);
                 } else {
@@ -137,11 +137,11 @@ class LoginController extends Controller
                     ->with('error', 'Invalid or expired OTP.');
             }
         }
-    
+
         return redirect()->route('login')
             ->with('error', 'Invalid login credentials.');
     }
-    
+
     /**
      * Redirect the user based on their user type.
      *
@@ -164,7 +164,7 @@ class LoginController extends Controller
                 return redirect()->route('home');
         }
     }
-    
+
 
     public function logout(Request $request)
     {

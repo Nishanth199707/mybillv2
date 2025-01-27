@@ -226,9 +226,9 @@ class FinancierController extends Controller
             'financier_id' => $request->financier_id,
             'loan_no' => $request->loan_no,
             'paid_date' => $formattedToday,
-            'debit' => $request->credit,
-            'payment_type' => 'debit',
-            'mode_of_payment' => 'debit',
+            'credit' => $request->credit,
+            'payment_type' => 'credit',
+            'mode_of_payment' => 'credit',
             'receipt_type' => 'paid',
             'opening_balance' => $openingBalance,
             'closing_balance' => $closingBalance,
@@ -237,13 +237,17 @@ class FinancierController extends Controller
         ];
         EmiReceived::create($emireceivedarr);
 
-        $emiReceived = EmiReceived::findOrFail($id);
-        $emiReceived->status = 'paid';
-        $emiReceived->save();
+        $emiReceivedRecords = EmiReceived::where('sale_id', $request->sale_id)->get();
+        if ($emiReceivedRecords->isNotEmpty()) {
+            foreach ($emiReceivedRecords as $emiReceived) {
+                $emiReceived->status = 'paid';
+                $emiReceived->save();
+            }
+        }
 
         $emiparty = DB::table('emi_receiveds')
             ->join('sales', 'emi_receiveds.sale_id', '=', 'sales.id')
-            ->where('emi_receiveds.sale_id', $emiReceived->sale_id)
+            ->where('emi_receiveds.sale_id', $request->sale_id)
             ->where('emi_receiveds.user_id', $userId)
             ->select('sales.party_id')
             ->first();
@@ -258,7 +262,7 @@ class FinancierController extends Controller
         $prefix = ($transactionType === 'sale') ? 'REC' : 'PMT';
 
         $invoice_id = PartyPayment::where('user_id', $userId)
-            ->where('debit', '!=', '0.00')
+            ->where('credit', '!=', '0.00')
             ->where('invoice_no', 'LIKE', "$prefix%")
             ->orderBy('invoice_no', 'DESC')
             ->first();
@@ -287,8 +291,8 @@ class FinancierController extends Controller
             'transaction_type' => 'sale',
             'invoice_no' => $invoice_no,
             'paid_date' => $formattedToday,
-            'debit' => $request->credit,
-            'payment_type' => 'debit',
+            'credit' => $request->credit,
+            'payment_type' => 'credit',
             'mode_of_payment' => 'emi',
             'opening_balance' => $opening_balance,
             'closing_balance' => $closing_balance,

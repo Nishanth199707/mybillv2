@@ -28,7 +28,7 @@
                       @csrf
                         <div class="mb-3">
                           <label class="form-label">Full Name</label>
-                          <input type="text" class="form-control" name="name" value="{{ old('field_name') }}" placeholder="John Doe" />
+                          <input type="text" class="form-control" name="name" value="{{ old('field_name') }}" placeholder=" " />
                           @if ($errors->has('name'))
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('name') }}</strong>
@@ -92,7 +92,7 @@
             <!-- / Content -->
 
             <!-- Footer -->
-        
+
             <!-- / Footer -->
 
             <div class="content-backdrop fade"></div>

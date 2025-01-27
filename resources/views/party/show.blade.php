@@ -1,6 +1,28 @@
 @extends('layouts.v2.app')
 
 @section('content')
+@php
+use App\Models\Business;
+use App\Models\SubUser;
+use App\Models\User;
+
+$user_id = session('user_id');
+$subuser = session('sub_user');
+
+if ($subuser != null) {
+    $authUser = User::select('*')->where('id', $subuser)->first();
+} else {
+    $authUser = User::select('*')->where('id', $user_id)->first();
+}
+$business = Business::select('*')->where('user_id', $user_id)->first();
+$permission = SubUser::select('permissions')->where('user_id', $user_id)->first();
+if(!empty($permissions)){
+    $permissionsd = json_decode($permission->permissions);
+}else{
+    $permissionsd ="";
+}
+// dd($permission);
+@endphp
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
         <!-- Header -->
@@ -9,6 +31,7 @@
             <div class="card-body">
                 <header class="d-flex justify-content-between align-items-center mb-4">
                     <h1>{{ strtoupper($data->name) }}</h1>
+                    @if ($authUser->usertype === 'superadmin' ||($subuser !== null && $permissionsd && isset($permissionsd->payment) && $permissionsd->payment == 'true'))
                     <div>
                         <!-- Button to Open Modal -->
                         @if ($data->transaction_type == 'sale')
@@ -24,6 +47,7 @@
                         @endif
 
                     </div>
+                    @endif
                 </header>
 
                 <!-- Tabs navs -->
@@ -275,8 +299,8 @@
                                             <th>Voucher</th>
                                             <th style="max-width: 100px; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;">Remark</th>
                                             <th>Payment Type</th>
-                                            <th>Credit</th>
                                             <th>Debit</th>
+                                            <th>Credit</th>
                                             <th>Balance</th>
                                         </tr>
                                     </thead>
@@ -286,7 +310,7 @@
                                             <td>-</td>
                                             <td>-</td>
                                             <td>-</td>
-                                            <td>-</td>
+                                            <td>{{ number_format($data->opening_balance, 2) }}</td>
                                             <td>-</td>
                                             <td>₹ {{ number_format($data->opening_balance, 2) }}</td>
                                         </tr>
@@ -298,8 +322,8 @@
                                                     {{ $payment->remark }}
                                                 </td>
                                                 <td>{{ $payment->mode_of_payment }}</td>
-                                                <td>{{ number_format($payment->credit, 2) }}</td>
                                                 <td>{{ number_format($payment->debit, 2) }}</td>
+                                                <td>{{ number_format($payment->credit, 2) }}</td>
                                                 <td>{{ number_format($payment->closing_balance, 2) }}</td>
                                             </tr>
                                         @endforeach
