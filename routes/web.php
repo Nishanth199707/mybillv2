@@ -27,6 +27,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\SubUserController;
 use App\Http\Controllers\AuditAccessController;
+use App\Http\Controllers\TaskController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -264,6 +265,20 @@ Route::middleware(['auth',  UserAccess::class . ':superadmin,staff', 'is_verify_
     Route::get('/superadmin/purchasereturn', [PurchaseController::class, 'purchasereturnindex'])->name('purchasereturn.index');
     // Route::get('/superadmin/purchasereturn', [PurchaseController::class,'purchasereturnstore'])->name('purchasereturn.store');
 
+    //Task Manager
+
+    Route::get('/superadmin/task', [TaskController::class, 'index'])->name('task.index');
+    Route::get('/superadmin/coptask', [TaskController::class, 'copindex'])->name('task.copindex');
+    Route::post('/superadmin/taskstore', [TaskController::class, 'store'])->name('task.store');
+    Route::post('/superadmin/taskdistroy', [TaskController::class, 'distroy'])->name('task.distroy');
+    Route::get('/superadmin/taskedit/{id}', [TaskController::class, 'edit'])->name('task.edit');
+    Route::post('/task/{id}/update_status', [TaskController::class, 'updateStatus']);
+
+    Route::get('/superadmin/tasksettings', [SettingController::class, 'tasksettings'])->name('task.settings');
+    Route::post('/superadmin/statusdistroy', [SettingController::class, 'statusdistroy'])->name('task.statusdistroy');
+    Route::get('/superadmin/taskstatusedit/{id}', [SettingController::class, 'taskstatusedit'])->name('task.taskstatusedit');
+    Route::post('/superadmin/statusstore', [SettingController::class, 'ststusstore'])->name('task.statusstore');
+
     // Route::resource('/superadmin/gstreport', GstReportController::class);
     Route::get('/superadmin/salereport', [GstReportController::class, 'salereport'])->name('sale.gstreport');
     Route::get('/superadmin/purchasereport', [GstReportController::class, 'purchasereport'])->name('purchase.gstreport');
@@ -309,7 +324,7 @@ Route::middleware(['auth',  UserAccess::class . ':superadmin,staff', 'is_verify_
 
     Route::get('/ajax/auditors', [AuditAccessController::class, 'searchAuditors']);
     Route::get('/ajax/clients', [AuditAccessController::class, 'searchClients']);
-    
+
 });
 /*------------------------------------------
 --------------------------------------------

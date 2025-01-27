@@ -657,6 +657,30 @@
 
                     @endif
 
+
+                     <!-- Quotation Menu -->
+                     <li class="menu {{ Route::is('task.index')  ? 'active' : '' }}">
+                        <a href="" aria-expanded="false" class="dropdown-toggle">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-map">
+                                    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                                    <line x1="8" y1="2" x2="8" y2="18"></line>
+                                    <line x1="16" y1="6" x2="16" y2="22"></line>
+                                </svg>
+                                <span>Task Manager</span>
+                            </div>
+                        </a>
+                        <ul class="collapse submenu list-unstyled {{ Route::is('task.index') || Route::is('task.copindex') ? 'show' : '' }}"
+                        id="payments" data-bs-parent="#accordionExample">
+                        <li class="{{ Route::is('task.index') ? 'active' : '' }}"><a
+                                href="{{ route('task.index') }}"> Create Task </a></li>
+                        <li class="{{ Route::is('task.copindex') ? 'active' : '' }}"><a
+                                href="{{ route('task.copindex') }}"> Completed Task </a></li>
+                        </ul>
+                    </li>
+
                     <!-- Payments Menu -->
 
                     {{-- {{$authUser->usertype}}     --}}
@@ -912,8 +936,6 @@
                                         href="{{ route('purchase.gstreport') }}"> Purchase Report </a></li>
                                 <li class="{{ Route::is('stock.gstreport') ? 'active' : '' }}"><a
                                         href="{{ route('stock.gstreport') }}"> Stock Report </a></li>
-                                {{-- <li class="{{ Route::is('expense.profit') ? 'active' : '' }}"><a
-                                            href="{{ route('expense.profit') }}"> Profit Report </a></li> --}}
                             </ul>
                         </li>
                     @else
@@ -979,7 +1001,7 @@
                                 </svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ Route::is('settings.index') || Route::is('business.indexshow') || Request::is('settings/*') || Request::is('superadmin/business/*') ||  Route::is('ebill.settings') ? 'show' : '' }}"
+                        <ul class="collapse submenu list-unstyled {{ Route::is('settings.index') || Route::is('business.indexshow') || Request::is('settings/*') || Request::is('superadmin/business/*') ||  Route::is('ebill.settings') || Route::is('task.settings') ? 'show' : '' }}"
                             id="settings" data-bs-parent="#accordionExample">
                             <li class="{{ Route::is('settings.index') ? 'active' : '' }}">
                                 <a href="{{ route('settings.index') }}">
@@ -1000,6 +1022,12 @@
                                         </a>
                                     </li>
                                 @endif
+                                <li class="{{ Route::is('task.settings') ? 'active' : '' }}">
+                                    <a href="{{ route('task.settings') }}">
+
+                                        Task manager Settings
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     @endif
