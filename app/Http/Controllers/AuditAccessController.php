@@ -27,26 +27,58 @@ class AuditAccessController extends Controller
     }
 
     public function searchAuditors(Request $request)
-{
-    $searchTerm = $request->get('search');
-    $auditors = Business::where('business_category', 'Accounting & CA')
-        ->where('user_id', 'LIKE', "%$searchTerm%")
-        ->select('user_id', 'company_name')
-        ->get();
+    {
+        $searchTerm = $request->get('search');
+    
+        $auditors = Business::where('business_category', 'Accounting & CA')
+            ->when($searchTerm, function ($query, $searchTerm) {
+                return $query->where('user_id', $searchTerm);
+            })
+            ->select('user_id', 'company_name')
+            ->get();
+    
+        if ($auditors->isEmpty()) {
+            return response()->json([
+                'message' => 'No auditors found matching the search term.',
+                'auditors' => []
+            ], 401);
+        }
+    
+        return response()->json([
+            'message' => 'Auditors retrieved successfully.',
+            'auditors' => $auditors
+        ], 200);
+    }
+    
 
-    return response()->json($auditors);
-}
-
-public function searchClients(Request $request)
-{
-    $searchTerm = $request->get('search');
-    $clients = Business::where('business_category', '!=', 'Accounting & CA')
-        ->where('user_id', 'LIKE', "%$searchTerm%")
-        ->select('user_id', 'company_name')
-        ->get();
-
-    return response()->json($clients);
-}
+    public function searchClients(Request $request)
+    {
+        $searchTerm = $request->get('search');
+    
+        $existingClient = AuditAccess::where('target_user_id', $searchTerm)
+            ->where('status', 'approved')
+            ->exists();
+    
+        if ($existingClient) {
+            return response()->json([
+                'message' => 'An auditor is already assigned to this client.',
+                'clients' => []
+            ], 401);
+        }
+    
+        // Fetch clients based on search term or return all if not found
+        $clients = Business::where('business_category', '!=', 'Accounting & CA')
+            ->when($searchTerm, function ($query, $searchTerm) {
+                return $query->where('user_id', $searchTerm);
+            })
+            ->select('user_id', 'company_name')
+            ->get();
+    
+        return response()->json([
+            'clients' => $clients
+        ]);
+    }
+    
 
     public function create(Request $request)
     {
@@ -54,7 +86,7 @@ public function searchClients(Request $request)
         $loggedInUser = Business::where('user_id', $user_id)->first();
 
         if ($loggedInUser->business_category === 'Accounting & CA') {
-            $auditors = Business::where('user_id', $user_id)->where('business_category', 'Accounting & CA')->get();
+            $auditors = Business::where('user_id', $user_id)->where('business_category', 'Accounting & CA')->select('user_id', 'company_name')->first();
 
             $existinguserIds = AuditAccess::where('status', '!=', 'approved')
                 ->pluck('id')
@@ -66,6 +98,7 @@ public function searchClients(Request $request)
                     ->get();
             } else {
                 $users = Business::where('business_category', '!=', 'Accounting & CA')
+                    ->where('user_id', $user_id)
                     ->get();
             }
             // $users = Business::where('business_category', '!=', 'Accounting & CA')->get();
@@ -86,10 +119,10 @@ public function searchClients(Request $request)
                     ->get();
             }
 
-            $users = Business::where('user_id', $user_id)->get();
+            $users = Business::where('user_id', $user_id)->select('user_id', 'company_name')->first();
         }
-
-        return view('auditaccess.add', compact('auditors', 'users'));
+        // dd($auditors,$users);
+        return view('auditaccess.add', compact('auditors', 'users', 'loggedInUser'));
     }
 
 
@@ -232,7 +265,7 @@ public function searchClients(Request $request)
             ->join('businesses', 'businesses.id', '=', 'purchases.business_id')
             ->join('purchase_details', 'purchase_details.purchase_id', '=', 'purchases.id')
             ->join('products', 'products.id', '=', 'purchase_details.product_id')
-            ->where('purchases.user_id', $client); 
+            ->where('purchases.user_id', $client);
 
         if ($request->filled('from_date') && $request->filled('to_date')) {
             $fromDate = $request->input('from_date') . ' 00:00:00';

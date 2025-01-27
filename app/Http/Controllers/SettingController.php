@@ -109,7 +109,9 @@ class SettingController extends Controller
     {
         // dd($setting);
         $settingDetail = SettingDetail::where('user_id', $request->session()->get('user_id'))->where('settings_id', $setting->id)->select('signature_image','description_text')->first();
-        return view('settings.edit', compact('setting','settingDetail')); 
+        $business = Business::where('user_id', $request->session()->get('user_id'))->first();
+
+        return view('settings.edit', compact('setting','settingDetail','business')); 
     }
     /**
      * Update the specified setting in the database.

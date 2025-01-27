@@ -30,10 +30,13 @@
                         </div>
 
                         <div class="row mb-4">
+                            @if ($business->business_category != 'Accounting & CA')
+
                             <div class="col-md-4">
                                 <label class="form-label">Vehicle Number</label>
                                 <p>{{ $setting->vehicle_no === 'yes' ? 'Yes' : 'No' }}</p>
                             </div>
+                            @endif
 
                             <div class="col-md-4">
                                 <label class="form-label">Description (Yes/No)</label>
@@ -45,11 +48,12 @@
                                     </div>
                                 @endif
                             </div>
-
+                            @if ($business->business_category != 'Accounting & CA')
                             <div class="col-md-4">
                                 <label class="form-label">EMI</label>
                                 <p>{{ $setting->emi === 'yes' ? 'Yes' : 'No' }}</p>
                             </div>
+                            @endif
                         </div>
 
                         <div class="row mb-4">
@@ -63,10 +67,12 @@
                                     </div>
                                 @endif
                             </div>
+                            @if ($business->business_category != 'Accounting & CA')
                             <div class="col-md-4">
                                 <label class="form-label">Shipping Address</label>
                                 <p>{{ $setting->shipping_address === 'yes' ? 'Yes' : 'No' }}</p>
                             </div>
+                            @endif
                             <div class="col-md-4">
                                     <label for="watermark" class="form-label">Watermark</label>
                                     <p>{{ $setting->watermark === 'yes' ? 'Yes' : 'No' }}</p>

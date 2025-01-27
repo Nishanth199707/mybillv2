@@ -1495,7 +1495,7 @@ aria-hidden="true">
 
 
 
-        document.querySelectorAll('.qtybox').forEach(function(element) {
+        document.querySelectorAll('.qtybox, .uprice, .gstperc').forEach(function(element) {
             element.addEventListener('keyup', function() {
                 var dRecid = this.getAttribute("dataid");
                 var avlqty = this.getAttribute("data-avail-qty");
@@ -1933,11 +1933,12 @@ aria-hidden="true">
     });
 
     function triggerInitialCalculations() {
-        document.querySelectorAll('.qtybox').forEach(function(element) {
-            var event = new Event('keyup');
-            element.dispatchEvent(event);
-        });
-    }
+    document.querySelectorAll('.qtybox, .uprice, .gstperc').forEach(function(element) {
+        var event = new Event('keyup');
+        element.dispatchEvent(event);
+    });
+}
+
 </script>
 
 
