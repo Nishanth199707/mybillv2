@@ -39,7 +39,7 @@ class AuditAccessController extends Controller
     
         if ($auditors->isEmpty()) {
             return response()->json([
-                'message' => 'No auditors found matching the search term.',
+                'message' => 'No auditors found.',
                 'auditors' => []
             ], 401);
         }
@@ -138,6 +138,7 @@ class AuditAccessController extends Controller
         $targetUserId = $validatedData['target_user_id'];
         $reason = $validatedData['reason'];
 
+        // dd($validatedData);
         $auditAccess = new AuditAccess();
         $auditAccess->auditor_id = $auditorId;
         $auditAccess->target_user_id = $targetUserId;

@@ -301,11 +301,19 @@ Route::middleware(['auth',  UserAccess::class . ':superadmin,staff', 'is_verify_
     });
 
 
-    Route::resource('audit-access', AuditAccessController::class);
-    Route::get('audit-access/{auditAccess}/status/{status}', [AuditAccessController::class, 'changeStatus'])->name('audit-access.change-status');
-    Route::get('/audit-access/clients', [AuditAccessController::class, 'clientList'])->name('audit-access.client-list');
-    Route::get('/audit-access/{client}/sale-report', [AuditAccessController::class, 'downloadSaleReport'])->name('audit-access.download-sale-report');
-    Route::get('/audit-access/{client}/purchase-report', [AuditAccessController::class, 'downloadPurchaseReport'])->name('audit-access.download-purchase-report');
+    Route::prefix('audit-access')->group(function () {
+        Route::get('/', [AuditAccessController::class, 'index'])->name('audit-access.index');
+        Route::get('/create', [AuditAccessController::class, 'create'])->name('audit-access.create');
+        Route::post('/store', [AuditAccessController::class, 'store'])->name('audit-access.store');
+        Route::get('/{audit_access}', [AuditAccessController::class, 'show'])->name('audit-access.show');
+        Route::get('/{audit_access}/edit', [AuditAccessController::class, 'edit'])->name('audit-access.edit');
+        Route::put('/{audit_access}', [AuditAccessController::class, 'update'])->name('audit-access.update');
+        Route::delete('/{audit_access}', [AuditAccessController::class, 'destroy'])->name('audit-access.delete');
+        Route::get('/{auditAccess}/status/{status}', [AuditAccessController::class, 'changeStatus'])->name('audit-access.change-status');
+    Route::get('/clients', [AuditAccessController::class, 'clientList'])->name('audit-access.client-list');
+    Route::get('/{client}/sale-report', [AuditAccessController::class, 'downloadSaleReport'])->name('audit-access.download-sale-report');
+    Route::get('/{client}/purchase-report', [AuditAccessController::class, 'downloadPurchaseReport'])->name('audit-access.download-purchase-report');
+    });
 
     Route::get('/ajax/auditors', [AuditAccessController::class, 'searchAuditors']);
     Route::get('/ajax/clients', [AuditAccessController::class, 'searchClients']);
