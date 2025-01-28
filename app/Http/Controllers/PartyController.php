@@ -841,7 +841,7 @@ class PartyController extends Controller
         return view('party.AddPayment', compact('data'));
     }
 
-    public function viewReceipt(Request $request)
+   public function viewReceipt(Request $request)
     {
         $userId = $request->session()->get('user_id');
 

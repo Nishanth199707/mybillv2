@@ -230,7 +230,7 @@
                                             <option value="completed">Completed</option>
                                             <option value="delivered">Delivered</option>
                                         </select> --}}
-                                        <input type="checkbox" id="status" name="status">
+                                        <input type="checkbox" id="status" name="status" value="delivered">
                                     </div>
                                 </div>
 

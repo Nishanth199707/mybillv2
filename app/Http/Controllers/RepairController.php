@@ -196,10 +196,10 @@ class RepairController extends Controller
                 'transaction_type' =>  'service-'.$repair->id.'',
                 'invoice_no' => $invoice_no,
                 'paid_date' => $request->repair_date,
-                'credit' => $request->cash_received,
+                'credit' => $request->cash_received ? $request->cash_received : 0 ,
                 'payment_type' => 'credit',
-                'opening_balance' => $request->cash_received,
-                'closing_balance' => $request->cash_received,
+                'opening_balance' => $request->cash_received ? $request->cash_received : 0 ,
+                'closing_balance' => $request->cash_received ? $request->cash_received : 0 ,
                 'mode_of_payment' => 'cash',
             ];
             PartyPayment::create($partyPaymentArr);

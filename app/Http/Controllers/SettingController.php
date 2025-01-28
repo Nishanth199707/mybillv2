@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Business;
 use App\Models\Setting;
 use App\Models\SettingDetail;
+use App\Models\Status;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+
 
 class SettingController extends Controller
 {
@@ -34,7 +37,7 @@ class SettingController extends Controller
      */
     public function create()
     {
-        return view('settings.add'); 
+        return view('settings.add');
     }
 
     /**
@@ -111,25 +114,25 @@ class SettingController extends Controller
         $settingDetail = SettingDetail::where('user_id', $request->session()->get('user_id'))->where('settings_id', $setting->id)->select('signature_image','description_text')->first();
         $business = Business::where('user_id', $request->session()->get('user_id'))->first();
 
-        return view('settings.edit', compact('setting','settingDetail','business')); 
+        return view('settings.edit', compact('setting','settingDetail','business'));
     }
     /**
      * Update the specified setting in the database.
      */
     public function update(Request $request, Setting $setting)
     {
-       
+
         if (empty($request->session()->get('user_id'))) {
             return redirect()->route('login');
         }
-    
+
         // Find business associated with the user
         $business_id = Business::where('user_id', $request->session()->get('user_id'))->select('id')->first();
-    
+
         if (!$business_id) {
             return redirect()->route('settings.index')->with('error', 'Business not found.');
         }
-    
+
         // Update the setting
         $setting->update([
             'business_id' => $business_id->id,
@@ -147,31 +150,31 @@ class SettingController extends Controller
             'watermark' => $request->watermark,
 
         ]);
-    
+
         // Find the associated setting detail
         $settingDetail = SettingDetail::where('settings_id', $setting->id)->first();
-    
+
         // Handle file upload for signature_image if it exists
-        $signature_fileName = $settingDetail->signature_image; 
-    
+        $signature_fileName = $settingDetail->signature_image;
+
         if ($request->hasFile('signature_image')) {
             $signature_fileName = 'signature_' . time() . '.' . $request->file('signature_image')->extension();
             $request->file('signature_image')->move(public_path('settings_uploads'), $signature_fileName);
         }
-    
-     
+
+
         // Update the setting detail with file uploads and text values
         $settingDetail->update([
             'logo_image' => $request->hasFile('logo_image') ? $request->file('logo_image')->store('logos', 'public') : $settingDetail->logo_image,
             'logo_text' => $request->logo_text,
             'description_image' => $request->hasFile('description_image') ? $request->file('description_image')->store('descriptions', 'public') : $settingDetail->description_image,
             'description_text' => $request->description_text,
-            'signature_image' => $signature_fileName, 
+            'signature_image' => $signature_fileName,
         ]);
-    
+
         return redirect()->route('settings.index')->with('success', 'Setting updated successfully.');
     }
-    
+
 
     /**
      * Remove the specified setting from storage.
@@ -183,4 +186,69 @@ class SettingController extends Controller
         return redirect()->route('settings.index')->with('success', 'Setting deleted successfully.');
     }
 
+    public function tasksettings(Request $request)
+    {
+
+        if ($request->ajax()) {
+            $data = Status::where('user_id', $request->session()->get('user_id'))
+            ->get();
+            return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                $btn = '<form action="' . route('task.statusdistroy') . '" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this?\')">
+                            <input type="hidden" name="_token" value="' . csrf_token() . '">
+                            <input type="hidden" name="id" value="' . $row->id . '">
+                            <a class="btn btn-primary btn-sm" href="' . url('/superadmin/taskstatusedit/' . $row->id) . '"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
+                        </form>';
+                return $btn;
+            })
+            ->rawColumns(['action']) // Specify which columns allow raw HTML
+            ->make(true);
+        }
+
+        $status='';
+        return view('settings.task',compact('status'));
+
+    }
+
+    public function taskstatusedit(Request $request, $id)
+    {
+        $status = Status::find($id);
+        return view('settings.task',compact('status'));
+    }
+
+    public function ststusstore(Request $request)
+    {
+        $userId = $request->session()->get('user_id');
+        $task = new Status();
+        $method = $request->action_fun;
+        if($method == 'add' && !empty($request->status_name)){
+            $task->name = $request->status_name;
+            $task->status = $request->status;
+            $task->user_id = $userId;
+            $task->save();
+            return redirect()->route('task.settings')
+            ->with('success', 'Task Added successfully');
+        }elseif($method == 'update' && !empty($request->status_name)){
+            $task = Status::find($request->id);
+            $task->name = $request->status_name;
+            $task->status = $request->status;
+            $task->user_id = $userId;
+            $task->save();
+            return redirect()->route('task.settings')->with('success', 'Task Updated successfully');
+        }
+    }
+
+    public function statusdistroy(Request $request)
+    {
+        //
+        $id = $request->id;
+
+        $task = Status::find($id);
+        $task->delete();
+
+        return redirect()->route('task.settings')
+            ->with('success', 'Status deleted successfully');
+    }
 }
