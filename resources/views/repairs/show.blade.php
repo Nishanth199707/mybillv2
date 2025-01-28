@@ -15,9 +15,14 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('bill/bootstrap.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('bill/all.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('bill/stylesheet.css') }}" />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
 
     <style>
-        html, body {
+        html,
+        body {
             height: 100%;
             margin: 0;
             font-family: 'Poppins', sans-serif;
@@ -62,7 +67,6 @@
 
         body {
             display: flex;
-            flex-direction: column;
             word-wrap: break-word;
             font-size: 11px;
         }
@@ -86,12 +90,12 @@
 
         .dashed-border {
             border-top: 1px dashed #303030;
-            margin: 5px 0; /* Space around the dashed border */
+            margin: 5px 0;
         }
 
         .logo {
             text-align: center;
-            margin-bottom: 20px; /* Space below the logo */
+            margin-bottom: 20px;
         }
 
         @media print {
@@ -101,45 +105,82 @@
                 font-size: 10pt;
             }
 
-            .invoice-container, .invoice-container1 {
-                width: 210mm; /* A4 width */
+            .invoice-container {
+                width: 210mm;
                 height: auto;
                 overflow: hidden;
                 margin: 0 auto;
-                page-break-inside: avoid; /* Prevent breaks inside this div */
+                page-break-inside: avoid;
                 border: 1px solid #303030;
-                margin-bottom: 0; /* No margin at bottom for printing */
-            }
-
-            footer {
-                page-break-inside: avoid; /* Avoid breaks inside footer */
+                margin-bottom: 0;
             }
 
             .no-print {
-                display: none; /* Hide the print button in print mode */
+                display: none;
+            }
+
+            .button-container {
+                display: none;
             }
         }
 
-        .print-button {
-            margin: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
+        .button-container {
+            width: 20%;
+            max-width: 200px;
+            margin: auto;
+            float: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 5px;
+            padding: 15px;
+            margin-top: -10px;
         }
 
-        .print-button:hover {
+        .button-container .btn {
+            width: 100%;
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        .btn-print {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn-print:hover {
             background-color: #0056b3;
+        }
+
+        .btn-download {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn-download:hover {
+            background-color: #218838;
+        }
+
+        .btn-back {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn-back:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
 
 <body>
-    <button class="print-button no-print" onclick="window.print()">Print Invoice</button>
-
     <div class="container-fluid invoice-container" id="invoice_main">
         <main style="border:1px solid black;">
             <div class="logo">
@@ -309,6 +350,47 @@
         </main>
     </div>
 
+    <!-- Buttons aligned vertically on the right -->
+    <div class="button-container">
+        <a href="javascript:void(0);" onclick="window.print()" class="btn btn-print action-print">Print</a>
+        <a href="javascript:void(0);" class="btn btn-download" onclick="downloadPDF()">Download</a>
+        <a href="{{ route('repairs.index') }}" class="btn btn-back">Back</a>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+    
+            // Reference to the invoice container
+            const invoice = document.getElementById('invoice_main');
+    
+            // Generate a canvas from the invoice HTML
+            await html2canvas(invoice, { scale: 2 }).then((canvas) => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4'); // Portrait, millimeters, A4 size
+    
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+    
+                // Calculate dimensions to fit the content
+                const imgWidth = canvas.width * 0.264583; // px to mm
+                const imgHeight = canvas.height * 0.264583; // px to mm
+                const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+    
+                // Add image to PDF
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth * ratio, imgHeight * ratio);
+    
+                // Save the PDF
+                pdf.save('Service_Invoice.pdf');
+            });
+        }
+    </script>
+    
+        
+    
 </body>
 
 </html>
