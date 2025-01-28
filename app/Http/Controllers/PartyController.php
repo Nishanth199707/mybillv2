@@ -135,24 +135,23 @@ class PartyController extends Controller
 
     public function ajaxstore(Request $request)
     {
-        //
         if (empty($request->session()->get('user_id'))) {
-            return redirect()->route('login');
+            return response()->json(['error' => 'User not logged in.'], 401);
         }
 
-        $request->validate([
-            'party_type' => 'required',
-            'name' => 'required',
-            // 'gstin'=> 'required',
-            // 'phone_no'=> 'required',
-            // 'email'=> 'required',
-        ]);
+        try {
+            $request->validate([
+                'party_type' => 'required',
+                'name' => 'required',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
 
         $user_id = $request->session()->get('user_id');
         $business_id = Business::where('user_id', '=', $user_id)->select('id')->first();
 
         $partyArr = [
-
             'user_id' => $user_id,
             'business_id' => $business_id->id,
             'transaction_type' => $request->transaction_type,
@@ -171,8 +170,6 @@ class PartyController extends Controller
             'opening_balance' => $request->opening_balance,
         ];
 
-        // dd($partyArr);
-
         $party = Party::create($partyArr);
 
         $partyPaymentArr = [
@@ -188,9 +185,10 @@ class PartyController extends Controller
 
         PartyPayment::create($partyPaymentArr);
 
-        $party = Party::select('*')->where('user_id', $request->session()->get('user_id'))->get();
+        $party = Party::select('*')->where('user_id', $request->session()->get('user_id'))->where('id',$party->id)->get();
         return response()->json(['success' => 'Party created successfully.', 'party' => $party], 200);
     }
+
 
     public function partyautocomplete(Request $request): JsonResponse
     {

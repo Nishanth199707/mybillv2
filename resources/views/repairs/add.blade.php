@@ -36,7 +36,7 @@
                                         </div>
                                             <input type="hidden" required class="party" id="partyid" required
                                                 name="customer_name" value="">
-                                                
+
                                         @if ($errors->has('customer_name'))
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $errors->first('customer_name') }}</strong>
@@ -551,9 +551,11 @@
                     $('.modal-backdrop').hide();
                     // table.draw();
                     $('#party').html('<option value="">-- Select Party --</option>');
-                    $.each(data.party, function(key, value) {
-                        $("#party").append('<option value="' + value
-                            .id + '">' + value.name + '</option>');
+                    $.each(data.party, function (key, value) {
+                        $('.party').val(value.name);        // Set the value
+                        $('#partyid').val(value.id);
+                        $('#address').val(value.billing_address_1 + ' ,' + value.billing_address_2 + ' ,' + value.billing_address_3);
+                        $('#phone').val(value.phone_no);
                     });
 
 
@@ -606,7 +608,7 @@
             const saleRadio = document.getElementById('sale');
             const purchaseRadio = document.getElementById('purchase');
             const shippingAddressSection = document.getElementById('shipping-address-section');
-    
+
             function toggleGstinField() {
                 if (partyTypeSelect.value === 'registered') {
                     gstinField.style.display = 'block';
@@ -614,7 +616,7 @@
                     gstinField.style.display = 'none';
                 }
             }
-    
+
             function toggleAddressFields() {
                 if (saleRadio.checked) {
                     shippingAddressSection.style.display = 'block';
@@ -622,32 +624,32 @@
                     shippingAddressSection.style.display = 'none';
                 }
             }
-    
+
             // Initial checks
             toggleGstinField();
             toggleAddressFields();
-    
+
             // Add event listeners
             partyTypeSelect.addEventListener('change', toggleGstinField);
             saleRadio.addEventListener('change', toggleAddressFields);
             purchaseRadio.addEventListener('change', toggleAddressFields);
-    
+
             // Address copy functionality
             const sameAddressRadio = document.getElementById('same_address_yes');
             const differentAddressRadio = document.getElementById('same_address_no');
-    
+
             const billingAddressFields = {
                 address1: document.getElementById('billing_address_1'),
                 address2: document.getElementById('billing_address_2'),
                 pincode: document.getElementById('billing_pincode')
             };
-    
+
             const shippingAddressFields = {
                 address1: document.getElementById('shipping_address_1'),
                 address2: document.getElementById('shipping_address_2'),
                 pincode: document.getElementById('shipping_pincode')
             };
-    
+
             function copyAddress() {
                 if (sameAddressRadio.checked) {
                     shippingAddressFields.address1.value = billingAddressFields.address1.value;
@@ -659,7 +661,7 @@
                     shippingAddressFields.pincode.value = '';
                 }
             }
-    
+
             // Add event listeners for radio buttons
             sameAddressRadio.addEventListener('change', copyAddress);
             differentAddressRadio.addEventListener('change', copyAddress);

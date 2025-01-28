@@ -197,9 +197,6 @@
                                 </div>
 
                                 <div class="row">
-                                    <!-- <div class="col-md-4 border p-2">
-                                        <input class="form-control product_name" tabindex="1" name="item_description1" />
-                                    </div> -->
                                     <div class="border p-2 input-group col-md-3" style="width: 25%;">
                                         <div class="elemimei" style="width: 100%;">
                                             <div class="input-group mb-2">
@@ -207,11 +204,9 @@
                                                     name="item_description1" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id1" />
-
-
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
                                             </div>
-                                            {{-- @if ($businessCategory->business_category === 'Mobile & Accessories') --}}
-                                                <div id="imei-fields" style="display: none;">
+                                                <div class="imei-fields1" id="imei-fields" style="display: none;">
                                                     <br>
                                                     <div class="imei-fields-container" data-row="1">
                                                         <div class="input-group mb-2">
@@ -223,8 +218,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            {{-- @else
-                                            @endif --}}
                                         </div>
                                     </div>
                                     <div class="col-md-2 border p-2">
@@ -263,10 +256,9 @@
                                                     name="item_description2" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id2" />
-
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
                                             </div>
-                                            {{-- @if ($businessCategory->business_category === 'Mobile & Accessories') --}}
-                                                <div id="imei-fields" style="display: none;">
+                                                <div class="imei-fields2" id="imei-fields" style="display: none;">
                                                     <br>
                                                     <div class="imei-fields-container" data-row="2">
                                                         <div class="input-group mb-2">
@@ -278,7 +270,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            {{-- @endif --}}
                                         </div>
                                     </div>
                                     <div class="col-md-2 border p-2">
@@ -319,10 +310,9 @@
                                                     name="item_description3" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id3" />
-
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
                                             </div>
-                                            {{-- @if ($businessCategory->business_category === 'Mobile & Accessories') --}}
-                                                <div id="imei-fields" style="display: none;">
+                                                <div class="imei-fields3" id="imei-fields" style="display: none;">
                                                     <br>
                                                     <div class="imei-fields-container" data-row="3">
                                                         <div class="input-group mb-2">
@@ -334,7 +324,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            {{-- @endif --}}
                                         </div>
                                     </div>
                                     <div class="col-md-2 border p-2">
@@ -375,10 +364,10 @@
                                                     name="item_description4" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id4" />
-
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
                                             </div>
                                             {{-- @if ($businessCategory->business_category === 'Mobile & Accessories') --}}
-                                                <div id="imei-fields" style="display: none;">
+                                                <div class="imei-fields4" id="imei-fields" style="display: none;">
                                                     <br>
                                                     <div class="imei-fields-container" data-row="4">
                                                         <div class="input-group mb-2">
@@ -431,10 +420,10 @@
                                                     name="item_description5" />
                                                 <input type="hidden" class="form-control product_id"
                                                     name="product_id5" />
-
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
                                             </div>
                                             {{-- @if ($businessCategory->business_category === 'Mobile & Accessories') --}}
-                                                <div id="imei-fields" style="display: none;">
+                                                <div class="imei-fields5" id="imei-fields" style="display: none;">
                                                     <br>
                                                     <div class="imei-fields-container" data-row="5">
                                                         <div class="input-group mb-2">
@@ -701,7 +690,7 @@
             <form method="POST" id="productForm" action="{{ route('product.ajaxsave') }}"
                 enctype="multipart/form-data">
                 @csrf
-
+                <input type="hidden" id="row_value" value="">
                 <!-- Product Details -->
                 <h5 class="mb-4">Product Details</h5>
                 <div class="row">
@@ -828,6 +817,19 @@
                             </span>
                         @enderror
                     </div>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <input
+                        class="form-check-input"
+                        style="border-color: black;"
+                        type="checkbox"
+                        name="imeiCheckbox"
+                        id="imeiCheckbox"
+                        value="yes"
+                    >
+                    <label class="form-check-label" for="imeiCheckbox">
+                        Include IMEI
+                    </label>
                 </div>
 
                 <hr>
@@ -984,21 +986,7 @@
 
                 <!-- Type and Party Type -->
                 <div class="mb-3 row">
-                    <div class="col-md-3">
-                        <label class="form-label">Type</label>
-                        <div>
-                            <input type="radio" id="sale" name="transaction_type" value="sale"
-                                 />
-                            <label for="sale">Sale</label>
-                            <input type="radio" id="purchase" name="transaction_type" value="purchase" checked/>
-                            <label for="purchase">Purchase</label>
-                        </div>
-                        @if ($errors->has('transaction_type'))
-                            <span class="invalid-feedback d-block" role="alert">
-                                <strong>{{ $errors->first('transaction_type') }}</strong>
-                            </span>
-                        @endif
-                    </div>
+                        <input type="hidden" id="purchase" name="transaction_type" value="purchase">
                     <div class="col-md-3">
                         <label class="form-label">Party Type</label>
                         <select name="party_type" id="party_type" class="form-select">
@@ -1442,7 +1430,7 @@
                     `<input type="hidden" class="form-control product_id" name="product_id${cIncr}" />` +
                     `<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>` +
                     `</div>` +
-                        `<div id="imei-fields" style="display: none;">
+                        `<div class="imei-fields${cIncr}" id="imei-fields" style="display: none;">
                         <br>
                         <div class="imei-fields-container" data-row="${cIncr}">
                             <div class="input-group mb-2">
@@ -1744,19 +1732,39 @@
         });
 
         $('#productForm').submit(function(event) {
-            event.preventDefault();
-            var formData = $(this).serialize();
-            $.post('{{ route('product.store') }}', formData, function(data) {
-                if (data.success) {
-                    alert('Product added successfully.');
-                    $('#basicModal').modal('hide');
+    event.preventDefault();
+    var formData = $(this).serialize();
+    var row_value = $("#row_value").val();
+
+    $.post("{{ route('product.ajaxsave') }}", formData, function(data) {
+        if (data.success) {
+            $.each(data.product, function(key, value) {
+                var sale_price1 = (value.sale_price + value.sale_price * (value.gst_rate / 100)).toFixed(2);
+                $('[name="item_description' + row_value + '"]').val(value.item_name);
+                $('[name="product_id' + row_value + '"]').val(value.id);
+                $('#qtybox' + row_value).attr('data-avail-qty', value.stock);
+                $('#gst' + row_value).val(value.gst_rate);
+                $('#rpqty' + row_value).val(value.purchase_price);
+                $('#saleamount' + row_value).val(sale_price1);
+
+                if (value.imei == "yes") {
+                    $('.imei-fields'+ row_value).show();
                 } else {
-                    alert('Error: ' + data.message);
+                    $('.imei-fields'+ row_value).remove();
+                    $('.imei-fields'+ row_value).find('.add-imei').remove();
                 }
-            }).fail(function() {
-                alert('An error occurred while adding the product.');
+                alert(value.imei);
             });
-        });
+            $('#basicModal').modal('hide');
+        } else {
+            alert('Error: ' + data.message);
+        }
+    }).fail(function() {
+        alert('An error occurred while adding the product.');
+    });
+});
+
+
     });
 
 
@@ -1859,44 +1867,44 @@ $(document).on('keydown', '.imei-field', function (event) {
 
 
     // partyadd
-    $('#partysaveBtn').click(function(e) {
-        e.preventDefault();
-        $(this).html('Sending..');
+    $('#partysaveBtn').click(function (e) {
+    e.preventDefault();
+    $(this).html('Sending..');
 
-        $.ajax({
-            data: $('#partyForm').serialize(),
-            url: "{{ route('party.ajaxsave') }}",
-            type: "POST",
-            dataType: 'json',
-            success: function(data) {
+            $.ajax({
+                data: $('#partyForm').serialize(),
+                url: "{{ route('party.ajaxsave') }}",
+                type: "POST",
+                dataType: 'json',
+                success: function (data) {
+                    $('#partyForm').trigger("reset");
+                    $('#basicModal1').modal('hide');
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    $('#partysaveBtn').html('Save Changes');
 
-                $('#partyForm').trigger("reset");
-                $('#basicModal1').modal('hide');
-                $('.modal-backdrop').hide();
+                    $.each(data.party, function (key, value) {
+                        $('.party').val(value.name);        // Set the value
+                        $('#partyid').val(value.id);
+                        $('#party_detail').val(value.billing_address_1 + ' ,' + value.billing_address_2 + ' ,' + value.billing_address_3);
+                        $('#partyphone').val(value.phone_no);
+                        $('#state').val(value.state);
+                    });
+                },
+                error: function (xhr) {
+                    console.log('Error:', xhr);
+                    $('#partysaveBtn').html('Save Changes');
 
-                // table.draw();
-                $('#party').html('<option value="">-- Select Party --</option>');
-                $.each(data.party, function(key, value) {
-                    $("#party").append('<option value="' + value
-                        .id + '">' + value.name + '</option>');
-                });
-
-
-            },
-            error: function(xhr) {
-                console.log('Error:', xhr);
-                $('#partysaveBtn').html('Save Changes');
-
-                $('#validation-errors-party').html('');
-                $.each(xhr.responseJSON.errors, function(key, value) {
-                    $('#validation-errors-party').append(
-                        '<div class="alert alert-danger">' + value + '</div'
-                    );
-                });
-
-            }
+                    $('#validation-errors-party').html('');
+                    $.each(xhr.responseJSON.errors, function (key, value) {
+                        $('#validation-errors-party').append(
+                            '<div class="alert alert-danger">' + value + '</div>'
+                        );
+                    });
+                }
+            });
         });
-    });
+
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -1948,6 +1956,7 @@ $(document).on('keydown', '.imei-field', function (event) {
         };
 
         function copyAddress() {
+            alert('a');
             if (sameAddressRadio.checked) {
                 shippingAddressFields.address1.value = billingAddressFields.address1.value;
                 shippingAddressFields.address2.value = billingAddressFields.address2.value;
@@ -1959,9 +1968,15 @@ $(document).on('keydown', '.imei-field', function (event) {
             }
         }
 
-        // Add event listeners for radio buttons
-        sameAddressRadio.addEventListener('change', copyAddress);
-        differentAddressRadio.addEventListener('change', copyAddress);
+        document.querySelectorAll('input[name="same_address"]').forEach(function (element) {
+            element.addEventListener('change', function () {
+                if (this.value === 'yes') {
+                    copyBillingToShipping();
+                } else {
+                    clearShippingAddress();
+                }
+            });
+        });
     });
 </script>
 
@@ -2128,5 +2143,14 @@ $(document).on('keydown', '.imei-field', function (event) {
         // Initial call to set fields based on default selection
         updateFields();
     });
+</script>
+<script>
+    document.querySelectorAll('.btn-primary[data-bs-toggle="modal"]').forEach(button => {
+    button.addEventListener('click', function () {
+        const row = this.closest('.row');
+        const dataid = row.querySelector('.qtybox').getAttribute('dataid');
+        $("#row_value").val(dataid);
+    });
+});
 </script>
 @endsection

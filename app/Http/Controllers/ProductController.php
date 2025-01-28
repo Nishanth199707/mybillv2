@@ -403,6 +403,12 @@ class ProductController extends Controller
 
         // Process each item_code_barcode separately
         $itemCodeBarcodes = $request->input('item_code_barcode');
+        if($request->has('imeiCheckbox')){
+            $imei = 'yes';
+        }else{
+            $imei = 'no';
+
+        }
 
         // Prepare product data
         $productArr = [
@@ -422,8 +428,7 @@ class ProductController extends Controller
             'purchase_price' => $request->purchase_price,
             'hsn_code' => $request->hsn_code,
             'description' => $request->description,
-            'imei' => $request->imei,
-
+            'imei' => $imei,
         ];
 
         if ($request->hasFile('image')) {
@@ -433,11 +438,31 @@ class ProductController extends Controller
         }
 
 
-        Product::updateOrCreate($productArr);
+       $inser_data = Product::updateOrCreate($productArr);
 
-        // return redirect()->route('product.index')
-        //     ->with('success', 'Product created successfully.');
-        return response()->json(['success' => 'Product created successfully.'], 200);
+       if ($request->has('imei')) {
+        foreach ($request->input('imei') as $modalKey => $modalFields) {
+            foreach ($modalFields as $fieldKey => $imei) {
+                if (!empty($imei)) { // Ensure the IMEI field is not null or empty
+                    $imeiData = [
+                        'user_id' => $user_id,
+                        'business_id' => $business_id->id,
+                        'party_id' => '00',
+                        'purchase_id' => '00',
+                        'product_id' => $inser_data->id,
+                        'field_name' => 'IMEI',
+                        'field_value' => $imei,
+                        'stock' => 1,
+                    ];
+                    PurchaseCustomDetails::create($imeiData);
+                }
+            }
+        }
+    }
+
+       $product = Product::where('id',$inser_data->id)->get();
+
+        return response()->json(['success' => 'Product created successfully.', 'product' => $product], 200);
     }
 
 

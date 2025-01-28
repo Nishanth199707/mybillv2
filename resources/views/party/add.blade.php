@@ -68,7 +68,7 @@
                                 @else
                                 <input type="hidden" name="party_type" id="party_type" value="unregistered">
                                 {{-- <div class="col-md-3">
-                                    <label class="form-label">Party Type</label> 
+                                    <label class="form-label">Party Type</label>
                                         <select name="party_type" id="party_type" class="form-select">
                                         @php
                                         $party_type = [

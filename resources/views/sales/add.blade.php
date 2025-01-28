@@ -229,8 +229,7 @@
                                         <input class="form-control product_name" tabindex="1"
                                             name="item_description1" />
                                         <input type="hidden" class="form-control product_id" name="product_id1" />
-                                        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#basicModal">+</button> -->
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
                                     </div>
                                     <div class="col-md-2 border p-2">
                                         <input class="form-control uprice" type="text" dataid="1"
@@ -266,8 +265,7 @@
                                         <input class="form-control product_name" tabindex="1"
                                             name="item_description2" />
                                         <input type="hidden" class="form-control product_id" name="product_id2" />
-                                        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#basicModal">+</button> -->
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
                                     </div>
                                     <div class="col-md-2 border p-2">
                                         <input class="form-control uprice" type="text" dataid="2"
@@ -303,8 +301,7 @@
                                         <input class="form-control product_name" tabindex="1"
                                             name="item_description3" />
                                         <input type="hidden" class="form-control product_id" name="product_id3" />
-                                        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#basicModal">+</button> -->
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
                                     </div>
                                     <div class="col-md-2 border p-2">
                                         <input class="form-control uprice" type="text" dataid="3"
@@ -341,8 +338,7 @@
                                         <input class="form-control product_name" tabindex="1"
                                             name="item_description4" />
                                         <input type="hidden" class="form-control product_id" name="product_id4" />
-                                        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#basicModal">+</button> -->
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
                                     </div>
                                     <div class="col-md-2 border p-2">
                                         <input class="form-control uprice" type="text" dataid="4"
@@ -378,8 +374,7 @@
                                         <input class="form-control product_name" tabindex="1"
                                             name="item_description5" />
                                         <input type="hidden" class="form-control product_id" name="product_id5" />
-                                        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#basicModal">+</button> -->
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button>
                                     </div>
                                     <div class="col-md-2 border p-2">
                                         <input class="form-control uprice" type="text" dataid="5"
@@ -779,7 +774,7 @@
                 <form method="POST" id="productForm" action="{{ route('product.ajaxsave') }}"
                     enctype="multipart/form-data">
                     @csrf
-
+                    <input type="hidden" id="row_value" value="">
                     <!-- Product Details -->
                     <h5 class="mb-4">Product Details</h5>
                     <div class="row">
@@ -907,11 +902,54 @@
                             </span>
                             @enderror
                         </div>
+                        <div class="col-md-3 mb-1">
+                            <input
+                                class="form-check-input"
+                                style="border-color: black;"
+                                type="checkbox"
+                                name="imeiCheckbox"
+                                id="imeiCheckbox"
+                                value="yes"
+                            >
+                            <label class="form-check-label" for="imeiCheckbox">
+                                Include IMEI
+                            </label>
+                        </div>
+                         <!-- IMEI Modal -->
+                         <div id="imeiModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="imeiModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="imeiModalLabel">Add IMEI</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="imei-fields-container">
+                                            <div class="input-group mb-2">
+                                                <input type="text" class="form-control imei-field" name="imei[1][]" placeholder="ENTER IMEI"  />
+                                                <button type="button" class="btn btn-outline-danger remove-imei">Remove</button>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-primary add-imei" data-row="1">Add IMEI</button>
+                                    </div>
+                                    <div class="modal-footer" style="background-color: white;">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-success save-imei">Save IMEI</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                        <!-- Display IMEI Values Outside Modal -->
+                        <div class="col-md-3 mb-1">
+                            <div id="imeiDisplayContainer" >
+                                <h5>IMEI Values:</h5>
+                                <ul id="imeiList"></ul>
+                            </div>
+                        </div>
                         <div class="col-md-3 mb-1">
                             <label class="form-label">Stock</label>
                             <input type="text" class="form-control" name="stock"
-                                value="{{ old('stock', '0') }}" />
+                                value="{{ old('stock', '0') }}" id="stock"/>
                             @if ($errors->has('stock'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('stock') }}</strong>
@@ -1086,21 +1124,7 @@
 
                     <!-- Type and Party Type -->
                     <div class="mb-3 row">
-                        <div class="col-md-3">
-                            <label class="form-label">Type</label>
-                            <div>
-                                <input type="radio" id="sale" name="transaction_type" value="sale"
-                                    checked />
-                                <label for="sale">Sale</label>
-                                <input type="radio" id="purchase" name="transaction_type" value="purchase" />
-                                <label for="purchase">Purchase</label>
-                            </div>
-                            @if ($errors->has('transaction_type'))
-                            <span class="invalid-feedback d-block" role="alert">
-                                <strong>{{ $errors->first('transaction_type') }}</strong>
-                            </span>
-                            @endif
-                        </div>
+                        <input type="hidden" id="sale" name="transaction_type" value="sale" >
                         <div class="col-md-3">
                             <label class="form-label">Party Type</label>
                             <select name="party_type" id="party_type" class="form-select">
@@ -1712,7 +1736,7 @@
                 document.getElementById("totQues").value = parseInt(extCnt) + 1;
                 document.getElementById("addrow").insertAdjacentHTML('beforeend',
                     `<div class="row mb-3">` +
-                    `<div class="border p-2 input-group col-md-4" style="width:25%;"><input class="form-control product_name" tabindex="1" name="item_description${cIncr}" /><input type="hidden" class="form-control product_id" name="product_id${cIncr}" /></div>` +
+                    `<div class="border p-2 input-group col-md-4" style="width:25%;"><input class="form-control product_name" tabindex="1" name="item_description${cIncr}" /><input type="hidden" class="form-control product_id" name="product_id${cIncr}" /><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">+</button></div>` +
                     `<div class="col-md-2 border p-2"><input class="form-control uprice" type="text" dataid="${cIncr}" name="rpqty${cIncr}" id="rpqty${cIncr}"></div>` +
                     `<div class="col-md-1 border p-2"><input class="form-control qtybox" tabindex="1" type="number" dataid="${cIncr}" name="qty${cIncr}" id="qty${cIncr}"></div>` +
                     `<div class="col-md-1 border p-2"><input class="form-control discount"  type="text" dataid="${cIncr}" name="dis${cIncr}" id="dis${cIncr}"></div>` +
@@ -2197,18 +2221,32 @@
         $('#saveBtn').click(function(e) {
             e.preventDefault();
             $(this).html('Sending..');
-
+            var row_value = $("#row_value").val();
             $.ajax({
                 data: $('#productForm').serialize(),
                 url: "{{ route('product.ajaxsave') }}",
                 type: "POST",
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data);
-                    $('#productForm').trigger("reset");
-                    $('#basicModal').modal('hide');
-                    // table.draw();
+                    if (data.success) {
+                        $.each(data.product, function(key, value) {
+                            if (value.imei == "no") {
+                            var sale_price1 = (value.sale_price + value.sale_price * (value.gst_rate / 100)).toFixed(2);
+                            $('[name="item_description' + row_value + '"]').val(value.item_name);
+                            $('[name="product_id' + row_value + '"]').val(value.id);
+                            $('#qtybox' + row_value).attr('data-avail-qty', value.stock);
+                            $('#gst' + row_value).val(value.gst_rate);
+                            $('#rpqty' + row_value).val(value.purchase_price);
+                            $('#total_amount' + row_value).val(sale_price1);
+                            }else{
+                                location.reload();
+                            }
 
+                        });
+                        $('#basicModal').modal('hide');
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
                 },
                 error: function(xhr) {
                     console.log('Error:', xhr);
@@ -2247,10 +2285,12 @@
                     $('#basicModal1').modal('hide');
                     $('.modal-backdrop').hide();
                     // table.draw();
-                    $('#party').html('<option value="">-- Select Party --</option>');
-                    $.each(data.party, function(key, value) {
-                        $("#party").append('<option value="' + value
-                            .id + '">' + value.name + '</option>');
+                    $.each(data.party, function (key, value) {
+                        $('.party').val(value.name);        // Set the value
+                        $('#partyid').val(value.id);
+                        $('#party_detail').val(value.billing_address_1 + ' ,' + value.billing_address_2 + ' ,' + value.billing_address_3);
+                        $('#partyphone').val(value.phone_no);
+                        $('#state').val(value.state);
                     });
 
 
@@ -2582,6 +2622,99 @@
         updateSalesFields();
         updatePurchaseFields();
     });
+</script>
+<script>
+    $(document).ready(function () {
+    // Show modal when checkbox is checked
+    $('#imeiCheckbox').change(function () {
+        if ($(this).is(':checked')) {
+            $('#imeiModal').modal('show'); // Show the modal
+
+            // Wait for the modal to be fully visible before focusing
+            $('#imeiModal').on('shown.bs.modal', function () {
+                var field = document.querySelector('.imei-field'); // Get the first input with class 'imei-field'
+                if (field) {
+                    field.focus(); // Focus on the input
+                }
+            });
+
+            $('#stock').addClass('readonly');
+        } else {
+            $('#stock').removeClass('readonly');
+        }
+    });
+    // Add new IMEI field dynamically
+    $(document).on('click', '.add-imei', function () {
+        addImeiRow();
+    });
+
+    // Remove an IMEI field
+    $(document).on('click', '.remove-imei', function () {
+        $(this).closest('.input-group').remove();
+    });
+
+    $('.save-imei').click(function () {
+        var imeiValues = [];
+        $('.imei-field').each(function () {
+            var imei = $(this).val().trim();
+            if (imei) {
+                imeiValues.push(imei);
+            }
+        });
+        var imeiCount = imeiValues.length;
+        $('#stock').val(imeiCount);
+        var imeiList = $('#imeiList');
+        imeiList.empty(); // Clear existing list
+        imeiValues.forEach(function (imei) {
+            imeiList.append(`<li>${imei}</li>`);
+        });
+
+        $('#imeiModal').modal('hide');
+    });
+
+    // Automatically open the next row when the current row is filled
+    $(document).on('input', '.imei-field', function () {
+        if ($(this).val().trim() !== '') {
+            var nextRow = $(this).closest('.input-group').next('.input-group');
+            if (nextRow.length === 0) {
+                addImeiRow();
+            }
+        }
+    });
+
+    function addImeiRow() {
+        var rowId = $('.imei-fields-container').data('row') || 0;
+        var imeiGroup = `
+            <div class="input-group mb-2">
+                <input type="text" class="form-control imei-field" name="imei[${rowId}][]" placeholder="ENTER IMEI" />
+                <button type="button" class="btn btn-outline-danger remove-imei">Remove</button>
+            </div>
+        `;
+        $('.imei-fields-container').append(imeiGroup);
+        const inputs = document.querySelectorAll('.imei-field');
+                    inputs.forEach((input, index) => {
+                        input.addEventListener('keypress', function(event) {
+                        if (event.key === 'Enter') {
+                        event.preventDefault(); // Prevent form submission on Enter
+                            const nextInput = inputs[index + 1]; // Get the next input element
+                            if (nextInput) {
+                        nextInput.focus(); // Focus on the next input
+                    }
+                }
+                });
+            });
+    }
+});
+</script>
+<script>
+    document.querySelectorAll('.btn-primary[data-bs-toggle="modal"]').forEach(button => {
+    button.addEventListener('click', function () {
+        const row = this.closest('.row');
+        const dataid = row.querySelector('.qtybox').getAttribute('dataid');
+        $("#row_value").val(dataid);
+        $('#imeiList').append('');
+    });
+});
 </script>
 @endpush
 @push('stylecss')

@@ -161,10 +161,10 @@ class RepairController extends Controller
             'transaction_type' => 'service-'.$repair->id.'',
             'invoice_no' => $request->service_no,
             'paid_date' => $request->repair_date,
-            'debit' => $request->cash_received,
+            'debit' => $request->cash_received ?? 0,
             'payment_type' => 'debit',
-            'opening_balance' => $request->cash_received,
-            'closing_balance' =>$request->cash_received,
+            'opening_balance' => $request->cash_received ?? 0,
+            'closing_balance' =>$request->cash_received ?? 0,
         ];
 
         PartyPayment::create($partyPaymentArr);
